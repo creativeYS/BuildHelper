@@ -23,7 +23,7 @@ public:
 
 	// CONSOLE : 콘솔창에 프린트 됨.
 	// MSGBOX : 메시지 박스가 뜬다.
-	void SetType(OutputControl::EN_TYPE enType) { m_enType = enType; }
+	void SetType(OutputControl::EN_TYPE enType);
 
 protected:
 	OutputControl();

@@ -7,6 +7,7 @@
 #include "BuildHelperDlg.h"
 #include "FileCopy.h"
 #include <locale.h>
+#include "OutputControl.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -18,7 +19,7 @@ BEGIN_MESSAGE_MAP(CBuildHelperApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 // CBuildHelperApp 생성
 
@@ -41,6 +42,8 @@ CBuildHelperApp theApp;
 
 
 // CBuildHelperApp 초기화
+
+bool ConsoleMode();
 
 BOOL CBuildHelperApp::InitInstance()
 {
@@ -75,19 +78,11 @@ BOOL CBuildHelperApp::InitInstance()
 	// 적절한 내용으로 수정해야 합니다.
 	SetRegistryKey(_T("로컬 응용 프로그램 마법사에서 생성된 응용 프로그램"));
 	
-	_wsetlocale(LC_ALL, _T("korean"));
+	if (ConsoleMode())
+	{
+		return FALSE;
+	}
 
-	//////////////////////////////////////////////////////////////////////////
-	//
-	// TESTCODE
-	FileCopy test;
-	test.SetSourcePath(L"D:\\_Temp\\test\\*");
-	test.SetTargetFilter(L"*.txt");
-	test.SetDestPath(L"D:\\_Temp\\NEW");
-	test.SetIncludeSubFolder(true);
-	test.Copy();
-	//
-	//////////////////////////////////////////////////////////////////////////
 	CBuildHelperDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
@@ -122,3 +117,29 @@ BOOL CBuildHelperApp::InitInstance()
 	return FALSE;
 }
 
+bool ConsoleMode()
+{
+	int iCnt = __argc;
+	if (iCnt <= 1) return false;
+
+	AllocConsole();
+
+	std::vector<CString> params;
+	params.reserve(iCnt);
+
+	for (int i = 1; i < iCnt; i++)
+	{
+		LPCTSTR pszParam = __targv[i];
+		params.push_back(CString(pszParam));
+	}
+
+	OutputControl::Instance()->SetType(OutputControl::EN_TYPE_CONSOLE);
+
+	FileCopy test;
+	test.SetSourcePath(L"D:\\_Temp\\test\\*");
+	test.SetTargetFilter(L"*.txt");
+	test.SetDestPath(L"D:\\_Temp\\NEW");
+	test.SetIncludeSubFolder(true);
+	test.Copy();
+	return true;
+}
