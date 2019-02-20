@@ -6,11 +6,11 @@
 #include "BuildHelper.h"
 #include "BuildHelperDlg.h"
 #include "FileCopy.h"
+#include <locale.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
 
 // CBuildHelperApp
 
@@ -74,14 +74,17 @@ BOOL CBuildHelperApp::InitInstance()
 	// TODO: 이 문자열을 회사 또는 조직의 이름과 같은
 	// 적절한 내용으로 수정해야 합니다.
 	SetRegistryKey(_T("로컬 응용 프로그램 마법사에서 생성된 응용 프로그램"));
+	
+	_wsetlocale(LC_ALL, _T("korean"));
 
 	//////////////////////////////////////////////////////////////////////////
 	//
 	// TESTCODE
 	FileCopy test;
-	test.SetSourcePath(L"D:\\_Temp\\test");
+	test.SetSourcePath(L"D:\\_Temp\\test\\*");
 	test.SetTargetFilter(L"*.txt");
-	test.SetDestPath(L"D:\\_Temp\\test");
+	test.SetDestPath(L"D:\\_Temp\\NEW");
+	test.SetIncludeSubFolder(true);
 	test.Copy();
 	//
 	//////////////////////////////////////////////////////////////////////////
