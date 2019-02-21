@@ -15,7 +15,7 @@ FileCopy::FileCopy()
 {
 }
 
-bool FileCopy::Copy()
+bool FileCopy::Run()
 {
 	if (m_strSourcePath.GetLength() <= 0)	DEF_OUT_RETURN_FALSE(L"원본 폴더 경로를 확인할 수 없습니다.");
 	if (m_strDestPath.GetLength() <= 0)		DEF_OUT_RETURN_FALSE(L"목표 폴더 경로를 확인할 수 없습니다.");
@@ -52,6 +52,24 @@ bool FileCopy::Copy()
 	}
 	FileUtils::FolderDelete(L"D:\\_Temp\\test\\새 폴더");
 
+	return true;
+}
+
+bool FileCopy::Load(FILE* pFile)
+{
+	m_strSourcePath = rdString(pFile);
+	m_strDestPath = rdString(pFile);
+	m_strTargetFilter = rdString(pFile);
+	m_bIncludeSubFolder = rdInt(pFile) == 1 ? true : false;
+	return true;
+}
+
+bool FileCopy::Save(FILE* pFile)
+{
+	wrString(pFile, m_strSourcePath);
+	wrString(pFile, m_strDestPath);
+	wrString(pFile, m_strTargetFilter);
+	wrInt(pFile, m_bIncludeSubFolder ? 1 : 0);
 	return true;
 }
 

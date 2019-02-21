@@ -16,6 +16,15 @@
     <Filter Include="BuildHelper">
       <UniqueIdentifier>{0e58b87f-96a9-4c83-9c30-f77adfc520b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="BuildHelper\Struct">
+      <UniqueIdentifier>{e0772dc5-bdbd-4b4f-af0b-653ec7906cfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BuildHelper\Jobs">
+      <UniqueIdentifier>{4093fe52-ceed-4e8d-9e6a-f189c98a246e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BuildHelper\Util">
+      <UniqueIdentifier>{df1f695a-9f06-4d33-97b5-7575c08f5d3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BuildHelper.h">
@@ -33,14 +42,23 @@
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="FileCopy.h">
-      <Filter>BuildHelper</Filter>
+    <ClInclude Include="Job.h">
+      <Filter>BuildHelper\Struct</Filter>
     </ClInclude>
-    <ClInclude Include="FileUtils.h">
-      <Filter>BuildHelper</Filter>
+    <ClInclude Include="FileCopy.h">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="FileExecute.h">
+      <Filter>BuildHelper\Jobs</Filter>
     </ClInclude>
     <ClInclude Include="OutputControl.h">
-      <Filter>BuildHelper</Filter>
+      <Filter>BuildHelper\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtils.h">
+      <Filter>BuildHelper\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="JobBase.h">
+      <Filter>BuildHelper\Struct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -53,14 +71,23 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="FileCopy.cpp">
-      <Filter>BuildHelper</Filter>
+    <ClCompile Include="Job.cpp">
+      <Filter>BuildHelper\Struct</Filter>
     </ClCompile>
-    <ClCompile Include="FileUtils.cpp">
-      <Filter>BuildHelper</Filter>
+    <ClCompile Include="FileCopy.cpp">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="FileExecute.cpp">
+      <Filter>BuildHelper\Jobs</Filter>
     </ClCompile>
     <ClCompile Include="OutputControl.cpp">
-      <Filter>BuildHelper</Filter>
+      <Filter>BuildHelper\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtils.cpp">
+      <Filter>BuildHelper\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="JobBase.cpp">
+      <Filter>BuildHelper\Struct</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -140,6 +140,6 @@ bool ConsoleMode()
 	test.SetTargetFilter(L"*.txt");
 	test.SetDestPath(L"D:\\_Temp\\NEW");
 	test.SetIncludeSubFolder(true);
-	test.Copy();
+	test.Run();
 	return true;
 }
