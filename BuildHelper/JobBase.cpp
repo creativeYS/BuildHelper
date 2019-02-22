@@ -7,6 +7,7 @@
 #include "OutputControl.h"
 #include "FileCopy.h"
 #include "FileExecute.h"
+#include "FileBatch.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -25,10 +26,40 @@ JobBase* JobBase::CreateImpl(int enType)
 	case EN_JOB_TYPE_FILEEXECUTE:
 		pImpl = new FileExecute();
 		break;
+	case EN_JOB_TYPE_FILEBATCH:
+		pImpl = new FileBatch();
 	default:
 		ASSERT(0);
 	}
 	return pImpl;
+}
+
+CString JobBase::GetJobName(int enType)
+{
+	CString strTemp;
+	switch (enType)
+	{
+	case EN_JOB_TYPE_FILECOPY:
+		strTemp = L"FILECOPY";
+		break;
+	case EN_JOB_TYPE_FILEEXECUTE:
+		strTemp = L"FILEEXECUTE";
+		break;
+	case EN_JOB_TYPE_FILEBATCH:
+		strTemp = L"FILEBATCH";
+	default:
+		ASSERT(0);
+	}
+	return strTemp;
+}
+
+int JobBase::GetJobCode(const CString& strName)
+{
+	for (int i = 0; i < EN_JOB_TYPE_NUMBER; i++)
+	{
+		if (GetJobName(i) == strName) return i;
+	}
+	return EN_JOB_TYPE_NUMBER;
 }
 
 FILE* JobBase::Open(const TCHAR* pFilePath, bool bWrite)

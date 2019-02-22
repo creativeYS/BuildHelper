@@ -15,8 +15,12 @@ public:
 	{
 		EN_JOB_TYPE_FILECOPY,
 		EN_JOB_TYPE_FILEEXECUTE,
+		EN_JOB_TYPE_FILEBATCH,
+		EN_JOB_TYPE_NUMBER,
 	};
 	static JobBase* CreateImpl(int enType);
+	static CString	GetJobName(int enType);
+	static int		GetJobCode(const CString& strName);
 
 	static FILE*	Open(const TCHAR* pFilePath, bool bWrite);
 	static void		Close(FILE* pFile);

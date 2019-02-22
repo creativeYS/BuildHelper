@@ -60,6 +60,9 @@
     <ClInclude Include="JobBase.h">
       <Filter>BuildHelper\Struct</Filter>
     </ClInclude>
+    <ClInclude Include="FileBatch.h">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BuildHelper.cpp">
@@ -88,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="JobBase.cpp">
       <Filter>BuildHelper\Struct</Filter>
+    </ClCompile>
+    <ClCompile Include="FileBatch.cpp">
+      <Filter>BuildHelper\Jobs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
