@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include <map>
 
 class Job;
 
@@ -26,8 +27,9 @@ protected:
 
 // 구현입니다.
 protected:
-	HICON	m_hIcon;
-	Job*	m_pSetting = NULL;
+	HICON		m_hIcon;
+	CListCtrl	m_List;
+	Job*		m_pSetting = NULL;
 
 	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();
@@ -37,9 +39,20 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 
 	DECLARE_MESSAGE_MAP()
+
+	void UpdateList();
+	void UpdateJobs();
+
+private:
+	std::map<CString, Job*> m_Jobs;
+
 public:
 	afx_msg void OnBnClickedCheck4();
 	afx_msg void OnBnClickedClose();
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedOk();
+	afx_msg void OnBnClickedButton4();
+	afx_msg void OnBnClickedCheck1();
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnEnChangeEdit1();
 };

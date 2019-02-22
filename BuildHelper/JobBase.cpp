@@ -39,22 +39,22 @@ JobBase* JobBase::CreateImpl(int enType)
 	return pImpl;
 }
 
-CString JobBase::GetJobName(int enType)
+CString JobBase::GetJobName(int enType, bool bDisplay)
 {
 	CString strTemp;
 	switch (enType)
 	{
 	case EN_JOB_TYPE_FILECOPY:
-		strTemp = L"FILECOPY";
+		strTemp = bDisplay ? L"복사 작업" : L"FILECOPY";
 		break;
 	case EN_JOB_TYPE_FILEEXECUTE:
-		strTemp = L"FILEEXECUTE";
+		strTemp = bDisplay ? L"실행 작업" : L"FILEEXECUTE";
 		break;
 	case EN_JOB_TYPE_FILEBATCH:
-		strTemp = L"FILEBATCH";
+		strTemp = bDisplay ? L"연속 실행" : L"FILEBATCH";
 		break;
 	case EN_JOB_TYPE_JOBSETTING:
-		strTemp = L"JOBSETTING";
+		strTemp = bDisplay ? L"설정" : L"JOBSETTING";
 		break;
 	default:
 		ASSERT(0);

@@ -11,7 +11,7 @@
 #endif
 
 
-void FileUtils::FileList(TCHAR* pPath, TCHAR* pExt, VecStr& vecTarget, bool bSubFolder)
+void FileUtils::FileList(const TCHAR* pPath, const TCHAR* pExt, VecStr& vecTarget, bool bSubFolder)
 {
 	HANDLE hSrch;
 	WIN32_FIND_DATA wfd;
@@ -19,7 +19,7 @@ void FileUtils::FileList(TCHAR* pPath, TCHAR* pExt, VecStr& vecTarget, bool bSub
 	TCHAR drive[_MAX_DRIVE];
 	TCHAR dir[MAX_PATH];
 
-	TCHAR* path = pPath;
+	const TCHAR* path = pPath;
 	hSrch = FindFirstFile(path, &wfd);
 	if (hSrch != INVALID_HANDLE_VALUE && bSubFolder)
 	{
@@ -150,7 +150,7 @@ bool FileUtils::FolderDelete(const TCHAR* pPath)
 	return false;
 }
 
-CString FileUtils::GetOnlyFileName(const CString& strPath, bool bRevSlash)
+CString FileUtils::GetOnlyFileName(const CString& strPath, bool bRevSlash, bool bWithOutExt)
 {
 	int nPos = strPath.ReverseFind('\\');
 	CString strTemp = strPath.Right(strPath.GetLength() - nPos - 1);
@@ -160,6 +160,11 @@ CString FileUtils::GetOnlyFileName(const CString& strPath, bool bRevSlash)
 		CString strNewPath = strTemp;
 		nPos = strNewPath.ReverseFind('/');
 		strTemp = strNewPath.Right(strNewPath.GetLength() - nPos - 1);
+	}
+	if(bWithOutExt)
+	{
+		CString strFileNameOnly = strTemp;
+		strTemp = strFileNameOnly.Left(strFileNameOnly.ReverseFind('.'));
 	}
 
 	return strTemp;
@@ -200,4 +205,11 @@ CString FileUtils::GetCurrentModulePath()
 	CString strTemp = tmpStr;
 	return strTemp.Left(strTemp.ReverseFind('\\') + 1);
 
+}
+
+CString FileUtils::GetSettingPath()
+{
+	CString strTemp;
+	strTemp.Format(_T("%sSetting\\"), GetCurrentModulePath());
+	return strTemp;
 }

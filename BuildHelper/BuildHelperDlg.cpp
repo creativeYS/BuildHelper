@@ -66,6 +66,7 @@ CBuildHelperDlg::CBuildHelperDlg(CWnd* pParent /*=nullptr*/)
 void CBuildHelperDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST1, m_List);
 }
 
 bool CBuildHelperDlg::Dlg2Data()
@@ -93,6 +94,8 @@ void CBuildHelperDlg::Data2Dlg()
 	if (pSetting->GetShowSubJob()) ((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(TRUE);
 	if (pSetting->GetUseProgramPath()) ((CButton*)GetDlgItem(IDC_CHECK4))->SetCheck(TRUE);
 	GetDlgItem(IDC_EDIT2)->SetWindowText(pSetting->GetWorkingPath());
+
+	UpdateList();
 }
 
 BEGIN_MESSAGE_MAP(CBuildHelperDlg, CDialogEx)
@@ -103,6 +106,10 @@ BEGIN_MESSAGE_MAP(CBuildHelperDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON5, &CBuildHelperDlg::OnBnClickedClose)
 	ON_BN_CLICKED(IDC_BUTTON1, &CBuildHelperDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDOK, &CBuildHelperDlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_BUTTON4, &CBuildHelperDlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_CHECK1, &CBuildHelperDlg::OnBnClickedCheck1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CBuildHelperDlg::OnBnClickedButton2)
+	ON_EN_CHANGE(IDC_EDIT1, &CBuildHelperDlg::OnEnChangeEdit1)
 END_MESSAGE_MAP()
 
 
@@ -138,11 +145,23 @@ BOOL CBuildHelperDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	
+	//List Ctrl 초기화
+	m_List.SetExtendedStyle(m_List.GetExtendedStyle()
+		| LVS_EX_GRIDLINES
+		| LVS_EX_FULLROWSELECT
+		| TVS_SHOWSELALWAYS);
+
+	m_List.InsertColumn(0, _T("#"), LVCFMT_LEFT, 40);
+	m_List.InsertColumn(1, _T("작업 이름"), LVCFMT_LEFT, 240);
+	m_List.InsertColumn(2, _T("작업 종류"), LVCFMT_LEFT, 140);
+
+	// 설정 읽기
 	static Job gSetting;
 	if(m_pSetting == NULL)
 	{
 		CString strPath;
-		strPath.Format(_T("%s%s"), FileUtils::GetCurrentModulePath(), FileUtils::GetSettingFileName());
+		strPath.Format(_T("%s%s"), FileUtils::GetSettingPath(), FileUtils::GetSettingFileName());
 		gSetting.Load(strPath);
 		if (gSetting.GetImpl() == nullptr ||
 			gSetting.GetImpl()->GetType() != JobBase::EN_JOB_TYPE_JOBSETTING)
@@ -209,6 +228,87 @@ HCURSOR CBuildHelperDlg::OnQueryDragIcon()
 
 
 
+void CBuildHelperDlg::UpdateList()
+{
+	UpdateJobs();
+
+	bool bShowSub = ((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck() ? true : false;
+
+	VecStr strKwd;
+	CString strTemp;
+	GetDlgItem(IDC_EDIT1)->GetWindowText(strTemp);
+	CString token;
+	int pos = 0;
+	while ((token = strTemp.Tokenize(L" ", pos)) != L"")
+	{
+		strKwd.push_back(token);
+	}
+
+	m_List.DeleteAllItems();
+	int nIdx = 1;
+	for (auto itr = m_Jobs.begin(); itr != m_Jobs.end(); itr++)
+	{
+		Job* pJob = itr->second;
+		if(!bShowSub)
+		{
+			if (pJob->GetSubJob()) continue;
+		}
+
+		CString strItemName = itr->first;
+		CString strItemType = JobBase::GetJobName(pJob->GetJobType(), true);
+		bool bShow = true;
+		if (strKwd.size() > 0)
+		{
+			bShow = false;
+			for (CString& kwd : strKwd)
+			{
+				if (strItemName.Find(kwd) >= 0)
+				{
+					bShow = true;
+					break;
+				}
+				if(strItemType.Find(kwd) >= 0)
+				{
+					bShow = true;
+				}
+			}
+		}
+		if (!bShow) continue;
+
+		CString strTemp;
+		strTemp.Format(_T("%d"), nIdx++);
+		int nIndex = m_List.InsertItem(m_List.GetItemCount(), strTemp);
+		m_List.SetItemText(nIndex, 1, strItemName);
+		m_List.SetItemText(nIndex, 2, strItemType);
+		m_List.SetItemData(nIndex, (DWORD_PTR)pJob);
+	}
+}
+
+void CBuildHelperDlg::UpdateJobs()
+{
+	for (auto itr : m_Jobs)
+	{
+		Job* pJob = itr.second;
+		delete pJob;
+	}
+	m_Jobs.clear();
+
+	CString strPath;
+	strPath.Format(L"%s*", FileUtils::GetSettingPath());
+	VecStr files;
+	FileUtils::FileList(strPath, L"*.job", files);
+	for (CString str : files)
+	{
+		CString strName = FileUtils::GetOnlyFileName(str, false, true);
+		Job* pJob = new Job();
+		
+		pJob->SetJobName(strName);
+		pJob->Load(str);
+		
+		m_Jobs[strName] = pJob;
+	}
+}
+
 void CBuildHelperDlg::OnBnClickedCheck4()
 {
 	BOOL bEnable = ((CButton*)GetDlgItem(IDC_CHECK4))->GetCheck() ? FALSE : TRUE;
@@ -225,7 +325,7 @@ void CBuildHelperDlg::OnBnClickedClose()
 		return;
 	}
 	CString strPath;
-	strPath.Format(_T("%s%s"), FileUtils::GetCurrentModulePath(), FileUtils::GetSettingFileName());
+	strPath.Format(_T("%s%s"), FileUtils::GetSettingPath(), FileUtils::GetSettingFileName());
 	m_pSetting->Save(strPath);
 	CDialogEx::OnOK();
 }
@@ -238,27 +338,15 @@ void CBuildHelperDlg::OnBnClickedButton1()
 	{
 		Job jobNew;
 		jobNew.Init(dlg.GetType());
-		switch(dlg.GetType())
-		{
-		case JobBase::EN_JOB_TYPE_FILECOPY:
-		{
-			JobFileCopyDlg dlg2((FileCopy*)jobNew.GetImpl());
-			dlg2.DoModal();
-		} break;
-		case JobBase::EN_JOB_TYPE_FILEEXECUTE:
-		{
-			JobFileExecuteDlg dlg2((FileExecute*)jobNew.GetImpl());
-			dlg2.DoModal();
-		} break;
-		case JobBase::EN_JOB_TYPE_FILEBATCH:
-		{
-			JobBatchDlg dlg2((FileBatch*)jobNew.GetImpl());
-			dlg2.DoModal();
-		} break;
-		default:
-			ASSERT(0);
-			break;
-		}
+		jobNew.SetJobName(dlg.GetJobName());
+		jobNew.SetSubJob(dlg.GetSubJob());
+		if (jobNew.DoModal() != IDOK) return;
+
+		CString strTemp;
+		strTemp.Format(_T("%s%s.job"), FileUtils::GetSettingPath(), dlg.GetJobName());
+		jobNew.Save(strTemp);
+
+		UpdateList();
 	}
 }
 
@@ -266,5 +354,103 @@ void CBuildHelperDlg::OnBnClickedButton1()
 void CBuildHelperDlg::OnBnClickedOk()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (m_List.GetSelectedCount() != 1)
+	{
+		DEF_OUT(L"한번에 한개만 실행할 수 있습니다.\n(연속 실행을 이용하세요.)");
+		return;
+	}
 
+	POSITION pos = m_List.GetFirstSelectedItemPosition();
+	int nIndex = m_List.GetNextSelectedItem(pos);
+	Job* pJob = (Job*)m_List.GetItemData(nIndex);
+	if(pJob == nullptr)
+	{
+		DEF_OUT(L"작업을 확인할 수 없습니다.");
+	}
+	
+	pJob->Run();
+}
+
+
+void CBuildHelperDlg::OnBnClickedButton4()
+{
+	int nCount = m_List.GetSelectedCount();
+	if (nCount == 0)
+	{
+		DEF_OUT(L"선택된 작업이 없습니다.");
+	}
+	else
+	{
+		CString strTemp;
+		strTemp.Format(_T("%d개의 작업을 삭제하시겠습니까?"), nCount);
+		bool bDelete = false;
+		OutputControl::Instance()->ScanIn(strTemp, bDelete);
+		if (!bDelete) return;
+
+		int nFailCnt = 0;
+		POSITION pos = m_List.GetFirstSelectedItemPosition();
+		while (pos)
+		{
+			int nIndex = m_List.GetNextSelectedItem(pos);
+			Job* pJob = (Job*)m_List.GetItemData(nIndex);
+			if (pJob->GetLoadedFilePath().GetLength() > 0)
+			{
+				if (!::DeleteFile(pJob->GetLoadedFilePath())) nFailCnt++;
+			}
+		}
+
+		UpdateList();
+
+		if (nFailCnt == 0)	strTemp.Format(_T("선택된 %d개의 작업중 %d개가 삭제되었습니다."), nCount, nCount - nFailCnt);
+		else				strTemp.Format(_T("선택된 %d개의 작업이 삭제되었습니다."), nCount);
+		DEF_OUT(strTemp);
+	}
+}
+
+
+void CBuildHelperDlg::OnBnClickedCheck1()
+{
+	UpdateList();
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CBuildHelperDlg::OnBnClickedButton2()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (m_List.GetSelectedCount() != 1)
+	{
+		DEF_OUT(L"한번에 한개만 수정할 수 있습니다.");
+		return;
+	}
+
+	POSITION pos = m_List.GetFirstSelectedItemPosition();
+	int nIndex = m_List.GetNextSelectedItem(pos);
+	Job* pJob = (Job*)m_List.GetItemData(nIndex);
+	if (pJob == nullptr)
+	{
+		DEF_OUT(L"작업을 확인할 수 없습니다.");
+	}
+
+	Job jobTemp;
+	jobTemp.Load(pJob->GetLoadedFilePath());
+	if (jobTemp.DoModal() == IDOK)
+	{
+		jobTemp.Save(pJob->GetLoadedFilePath());
+	}
+
+	UpdateList();
+}
+
+
+void CBuildHelperDlg::OnEnChangeEdit1()
+{
+	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
+	// CDialogEx::OnInitDialog() 함수를 재지정 
+	//하고 마스크에 OR 연산하여 설정된 ENM_CHANGE 플래그를 지정하여 CRichEditCtrl().SetEventMask()를 호출하지 않으면
+	// 이 알림 메시지를 보내지 않습니다.
+
+	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	UpdateList();
 }

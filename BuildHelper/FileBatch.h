@@ -10,10 +10,11 @@ public:
 	FileBatch();
 
 	// Set Functions...
-	void	SetSourcePath(int nCnt, const CString* pVals);
+	void	SetJobs(int nCnt, const CString* pVals);
+	void	AddJob(const CString& strJob);
 
 	// Get Functions...
-	int		GetSourcePath(std::vector<CString>& rVals) const;
+	int		GetJobs(std::vector<CString>& rVals) const;
 
 	// Main Functions...
 	virtual bool	Run();

@@ -9,14 +9,15 @@ typedef std::map<CString, bool>	MapStr2Bool;
 class FileUtils
 {
 public:
-	static CString	GetOnlyFileName(const CString& strPath, bool bRevSlash = false);
+	static CString	GetOnlyFileName(const CString& strPath, bool bRevSlash = false, bool bWithOutExt = true);
 	static CString	GetOnlyPath(const CString& strPath);
 	static CString	GetCurrentModulePath();
+	static CString	GetSettingPath();
 	static CString	GetSettingFileName() { return L"Setting.dat"; }
 
 	// pPath : c:\test\nice\*
 	// pExt : *.txt
-	static void		FileList(TCHAR* pPath, TCHAR* pExt, VecStr& vecTarget, bool bSubFolder = true);
+	static void		FileList(const TCHAR* pPath, const TCHAR* pExt, VecStr& vecTarget, bool bSubFolder = true);
 
 	// 파일이 존재하는지 검사 (폴더인경우 return false)
 	// pFilePath : c:\test\abc.txt

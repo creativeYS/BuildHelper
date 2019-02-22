@@ -15,7 +15,7 @@ FileBatch::FileBatch()
 {
 }
 
-void FileBatch::SetSourcePath(int nCnt, const CString* pVals)
+void FileBatch::SetJobs(int nCnt, const CString* pVals)
 {
 	m_vecTargetJobs.clear();
 	m_vecTargetJobs.reserve(nCnt);
@@ -26,9 +26,14 @@ void FileBatch::SetSourcePath(int nCnt, const CString* pVals)
 }
 
 
-int FileBatch::GetSourcePath(std::vector<CString>& rVals) const
+void FileBatch::AddJob(const CString& strJob)
 {
-	int nCnt = m_vecTargetJobs.size();
+	m_vecTargetJobs.push_back(strJob);
+}
+
+int FileBatch::GetJobs(std::vector<CString>& rVals) const
+{
+	int nCnt = (int)m_vecTargetJobs.size();
 	rVals.clear();
 	rVals.reserve(nCnt);
 	for(const CString& str : m_vecTargetJobs)
@@ -41,7 +46,7 @@ int FileBatch::GetSourcePath(std::vector<CString>& rVals) const
 bool FileBatch::Run()
 {
 	int nSuccessCnt = 0;
-	int nTotalCnt = m_vecTargetJobs.size();
+	int nTotalCnt = (int)m_vecTargetJobs.size();
 	if (nTotalCnt == 0)
 	{
 		DEF_OUT_RETURN_FALSE(L"작업을 확인할 수 없습니다.");
@@ -84,7 +89,7 @@ bool FileBatch::Load(FILE* pFile)
 
 bool FileBatch::Save(FILE* pFile)
 {
-	int nCnt = m_vecTargetJobs.size();
+	int nCnt = (int)m_vecTargetJobs.size();
 	wrInt(pFile, nCnt);
 	for(int i = 0 ; i < nCnt; i++)
 	{
