@@ -199,6 +199,9 @@
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="JobBase.h" />
+    <ClInclude Include="JobBatchDlg.h" />
+    <ClInclude Include="JobFileCopyDlg.h" />
+    <ClInclude Include="JobFileExecuteDlg.h" />
     <ClInclude Include="OutputControl.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -213,6 +216,9 @@
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="Job.cpp" />
     <ClCompile Include="JobBase.cpp" />
+    <ClCompile Include="JobBatchDlg.cpp" />
+    <ClCompile Include="JobFileCopyDlg.cpp" />
+    <ClCompile Include="JobFileExecuteDlg.cpp" />
     <ClCompile Include="OutputControl.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -1,18 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="BuildHelper">
       <UniqueIdentifier>{0e58b87f-96a9-4c83-9c30-f77adfc520b5}</UniqueIdentifier>
     </Filter>
@@ -25,23 +13,15 @@
     <Filter Include="BuildHelper\Util">
       <UniqueIdentifier>{df1f695a-9f06-4d33-97b5-7575c08f5d3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="BuildHelper\Dialogs">
+      <UniqueIdentifier>{846f73b3-6fd7-4464-bfc7-0af18e77d362}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="...">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BuildHelper.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="BuildHelperDlg.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Job.h">
       <Filter>BuildHelper\Struct</Filter>
     </ClInclude>
@@ -63,17 +43,32 @@
     <ClInclude Include="FileBatch.h">
       <Filter>BuildHelper\Jobs</Filter>
     </ClInclude>
+    <ClInclude Include="BuildHelperDlg.h">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>...</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>...</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>...</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildHelper.h">
+      <Filter>BuildHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="JobFileExecuteDlg.h">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="JobBatchDlg.h">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="JobFileCopyDlg.h">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BuildHelper.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="BuildHelperDlg.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Job.cpp">
       <Filter>BuildHelper\Struct</Filter>
     </ClCompile>
@@ -95,20 +90,38 @@
     <ClCompile Include="FileBatch.cpp">
       <Filter>BuildHelper\Jobs</Filter>
     </ClCompile>
+    <ClCompile Include="BuildHelperDlg.cpp">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>...</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildHelper.cpp">
+      <Filter>BuildHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="JobFileExecuteDlg.cpp">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="JobBatchDlg.cpp">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="JobFileCopyDlg.cpp">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BuildHelper.rc">
-      <Filter>리소스 파일</Filter>
+      <Filter>...</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\BuildHelper.rc2">
-      <Filter>리소스 파일</Filter>
+      <Filter>...</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\BuildHelper.ico">
-      <Filter>리소스 파일</Filter>
+      <Filter>...</Filter>
     </Image>
   </ItemGroup>
 </Project>
