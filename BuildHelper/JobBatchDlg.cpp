@@ -5,8 +5,8 @@
 #define new DEBUG_NEW
 #endif
 
-JobBatchDlg::JobBatchDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(JobBatchDlg::IDD, pParent)
+JobBatchDlg::JobBatchDlg(FileBatch* pImpl, CWnd* pParent /*=nullptr*/)
+	: CDialogEx(JobBatchDlg::IDD, pParent) , m_pImpl(pImpl)
 {
 }
 

@@ -5,8 +5,8 @@
 #define new DEBUG_NEW
 #endif
 
-JobFileCopyDlg::JobFileCopyDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(JobFileCopyDlg::IDD, pParent)
+JobFileCopyDlg::JobFileCopyDlg(FileCopy* pImpl, CWnd* pParent /*=nullptr*/)
+	: CDialogEx(JobFileCopyDlg::IDD, pParent), m_pImpl(pImpl)
 {
 }
 

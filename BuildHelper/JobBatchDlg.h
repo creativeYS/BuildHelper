@@ -1,9 +1,10 @@
 ﻿#pragma once
 
+class FileBatch;
 class JobBatchDlg : public CDialogEx
 {
 public:
-	JobBatchDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
+	JobBatchDlg(FileBatch* pImpl, CWnd* pParent = nullptr);	// 표준 생성자입니다.
 
 	enum { IDD = IDD_BUILDHELPER_JOB_BATCH };
 
@@ -15,4 +16,6 @@ protected:
 	virtual BOOL OnInitDialog();
 
 	DECLARE_MESSAGE_MAP()
+
+	FileBatch* m_pImpl = nullptr;
 };

@@ -1,9 +1,10 @@
 ﻿#pragma once
 
+class FileExecute;
 class JobFileExecuteDlg : public CDialogEx
 {
 public:
-	JobFileExecuteDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
+	JobFileExecuteDlg(FileExecute* pImpl, CWnd* pParent = nullptr);	// 표준 생성자입니다.
 
 	enum { IDD = IDD_BUILDHELPER_JOB_FILEEXECUTE };
 
@@ -15,4 +16,6 @@ protected:
 	virtual BOOL OnInitDialog();
 
 	DECLARE_MESSAGE_MAP()
+
+	FileExecute* m_pImpl = nullptr;
 };

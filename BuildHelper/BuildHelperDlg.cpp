@@ -10,6 +10,10 @@
 #include "Job.h"
 #include "JobSetting.h"
 #include "OutputControl.h"
+#include "JobTypeDlg.h"
+#include "JobFileCopyDlg.h"
+#include "JobFileExecuteDlg.h"
+#include "JobBatchDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -96,6 +100,8 @@ BEGIN_MESSAGE_MAP(CBuildHelperDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_CHECK4, &CBuildHelperDlg::OnBnClickedCheck4)
+	ON_BN_CLICKED(IDC_BUTTON5, &CBuildHelperDlg::OnBnClickedClose)
+	ON_BN_CLICKED(IDC_BUTTON1, &CBuildHelperDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDOK, &CBuildHelperDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
@@ -211,7 +217,7 @@ void CBuildHelperDlg::OnBnClickedCheck4()
 }
 
 
-void CBuildHelperDlg::OnBnClickedOk()
+void CBuildHelperDlg::OnBnClickedClose()
 {
 	if (!Dlg2Data())
 	{
@@ -222,4 +228,43 @@ void CBuildHelperDlg::OnBnClickedOk()
 	strPath.Format(_T("%s%s"), FileUtils::GetCurrentModulePath(), FileUtils::GetSettingFileName());
 	m_pSetting->Save(strPath);
 	CDialogEx::OnOK();
+}
+
+
+void CBuildHelperDlg::OnBnClickedButton1()
+{
+	JobTypeDlg dlg;
+	if (dlg.DoModal() == IDOK)
+	{
+		Job jobNew;
+		jobNew.Init(dlg.GetType());
+		switch(dlg.GetType())
+		{
+		case JobBase::EN_JOB_TYPE_FILECOPY:
+		{
+			JobFileCopyDlg dlg2((FileCopy*)jobNew.GetImpl());
+			dlg2.DoModal();
+		} break;
+		case JobBase::EN_JOB_TYPE_FILEEXECUTE:
+		{
+			JobFileExecuteDlg dlg2((FileExecute*)jobNew.GetImpl());
+			dlg2.DoModal();
+		} break;
+		case JobBase::EN_JOB_TYPE_FILEBATCH:
+		{
+			JobBatchDlg dlg2((FileBatch*)jobNew.GetImpl());
+			dlg2.DoModal();
+		} break;
+		default:
+			ASSERT(0);
+			break;
+		}
+	}
+}
+
+
+void CBuildHelperDlg::OnBnClickedOk()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
 }

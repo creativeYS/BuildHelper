@@ -1,18 +1,30 @@
 ﻿#pragma once
 
-class JobBatchDlg : public CDialogEx
+class JobTypeDlg : public CDialogEx
 {
 public:
-	JobBatchDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
+	JobTypeDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
 
-	enum { IDD = IDD_BUILDHELPER_JOB_BATCH };
+	enum { IDD = IDD_BUILDHELPER_JOB_TYPENAME };
 
-	protected:
+	int		GetType() { return m_enType; }
+	CString GetJobName() { return m_strJobName; }
+	bool	GetSubJob() { return m_bSubJob; }
+
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 
+	void data2dlg();
+	bool dlg2data();
 
 protected:
 	virtual BOOL OnInitDialog();
 
 	DECLARE_MESSAGE_MAP()
+
+	int			m_enType = 0;
+	CString		m_strJobName = L"작업";
+	bool		m_bSubJob = true;
+public:
+	afx_msg void OnBnClickedOk();
 };
