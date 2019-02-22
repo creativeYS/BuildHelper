@@ -16,6 +16,7 @@ public:
 		EN_JOB_TYPE_FILECOPY,
 		EN_JOB_TYPE_FILEEXECUTE,
 		EN_JOB_TYPE_FILEBATCH,
+		EN_JOB_TYPE_JOBSETTING,
 		EN_JOB_TYPE_NUMBER,
 	};
 	static JobBase* CreateImpl(int enType);

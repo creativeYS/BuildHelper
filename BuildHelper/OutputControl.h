@@ -10,6 +10,7 @@ public:
 
 	enum EN_TYPE
 	{
+		EN_TYPE_NONE,
 		EN_TYPE_CONSOLE,
 		EN_TYPE_MSGBOX,
 	};

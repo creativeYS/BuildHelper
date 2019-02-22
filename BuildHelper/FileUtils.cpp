@@ -191,3 +191,13 @@ CString FileUtils::GetOnlyPath(const CString& strPath)
 
 	return CString();
 }
+
+CString FileUtils::GetCurrentModulePath()
+{
+	wchar_t tmpStr[MAX_PATH];
+	DWORD status = GetModuleFileName(NULL, tmpStr, MAX_PATH);
+
+	CString strTemp = tmpStr;
+	return strTemp.Left(strTemp.ReverseFind('\\') + 1);
+
+}

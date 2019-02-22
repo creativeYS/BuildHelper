@@ -11,6 +11,8 @@ class FileUtils
 public:
 	static CString	GetOnlyFileName(const CString& strPath, bool bRevSlash = false);
 	static CString	GetOnlyPath(const CString& strPath);
+	static CString	GetCurrentModulePath();
+	static CString	GetSettingFileName() { return L"Setting.dat"; }
 
 	// pPath : c:\test\nice\*
 	// pExt : *.txt

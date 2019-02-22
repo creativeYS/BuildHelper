@@ -8,6 +8,7 @@
 #include "FileCopy.h"
 #include "FileExecute.h"
 #include "FileBatch.h"
+#include "JobSetting.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -28,6 +29,10 @@ JobBase* JobBase::CreateImpl(int enType)
 		break;
 	case EN_JOB_TYPE_FILEBATCH:
 		pImpl = new FileBatch();
+		break;
+	case EN_JOB_TYPE_JOBSETTING:
+		pImpl = new JobSetting();
+		break;
 	default:
 		ASSERT(0);
 	}
@@ -47,6 +52,10 @@ CString JobBase::GetJobName(int enType)
 		break;
 	case EN_JOB_TYPE_FILEBATCH:
 		strTemp = L"FILEBATCH";
+		break;
+	case EN_JOB_TYPE_JOBSETTING:
+		strTemp = L"JOBSETTING";
+		break;
 	default:
 		ASSERT(0);
 	}
@@ -67,18 +76,12 @@ FILE* JobBase::Open(const TCHAR* pFilePath, bool bWrite)
 	FILE* pFile = NULL;
 	try
 	{
-		FILE* pFile = NULL;
 		_wfopen_s(&pFile, pFilePath, bWrite ? L"wb, ccs=UNICODE" : L"r, ccs=UNICODE");
-		if (pFile == NULL) DEF_OUT_RETURN_FALSE(L"파일을 열수 없습니다.");
-
-		WORD mark = 0xFEFF;
-		fwrite(&mark, sizeof(WORD), 1, pFile);
 	}
 	catch (CException*)
 	{
-		fclose(pFile);
+		if(pFile) fclose(pFile);
 	}
-	fclose(pFile);
 
 	return pFile;
 }
@@ -132,6 +135,7 @@ CString JobBase::rdString(FILE* pFile)
 
 		pStr = fgetws(buff, sizeof(buff), pFile);
 		CString strRet = buff;
+		strRet.Replace(L"\n", L"");
 		return strRet;
 	}
 	return CString();

@@ -83,6 +83,8 @@ BOOL CBuildHelperApp::InitInstance()
 		return FALSE;
 	}
 
+	OutputControl::Instance()->SetType(OutputControl::EN_TYPE_MSGBOX);
+
 	CBuildHelperDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();

@@ -6,6 +6,10 @@
 #include "BuildHelper.h"
 #include "BuildHelperDlg.h"
 #include "afxdialogex.h"
+#include "FileUtils.h"
+#include "Job.h"
+#include "JobSetting.h"
+#include "OutputControl.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -60,10 +64,39 @@ void CBuildHelperDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 }
 
+bool CBuildHelperDlg::Dlg2Data()
+{
+	if (m_pSetting == nullptr) { ASSERT(0); return false; }
+	JobSetting* pSetting = (JobSetting*)m_pSetting->GetImpl();
+	if (pSetting == nullptr) { ASSERT(0); return false; }
+
+	bool bChk1 = ((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck();
+	pSetting->SetShowSubJob(bChk1);
+	bool bChk2 = ((CButton*)GetDlgItem(IDC_CHECK4))->GetCheck();
+	pSetting->SetUseProgramPath(bChk2);
+	CString strTemp;
+	GetDlgItem(IDC_EDIT2)->GetWindowText(strTemp);
+	pSetting->SetWorkingPath(strTemp);
+	return true;
+}
+
+void CBuildHelperDlg::Data2Dlg()
+{
+	if (m_pSetting == nullptr) { ASSERT(0); return; }
+	JobSetting* pSetting = (JobSetting*)m_pSetting->GetImpl();
+	if (pSetting == nullptr) { ASSERT(0); return; }
+
+	if (pSetting->GetShowSubJob()) ((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(TRUE);
+	if (pSetting->GetUseProgramPath()) ((CButton*)GetDlgItem(IDC_CHECK4))->SetCheck(TRUE);
+	GetDlgItem(IDC_EDIT2)->SetWindowText(pSetting->GetWorkingPath());
+}
+
 BEGIN_MESSAGE_MAP(CBuildHelperDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_CHECK4, &CBuildHelperDlg::OnBnClickedCheck4)
+	ON_BN_CLICKED(IDOK, &CBuildHelperDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -99,6 +132,22 @@ BOOL CBuildHelperDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	static Job gSetting;
+	if(m_pSetting == NULL)
+	{
+		CString strPath;
+		strPath.Format(_T("%s%s"), FileUtils::GetCurrentModulePath(), FileUtils::GetSettingFileName());
+		gSetting.Load(strPath);
+		if (gSetting.GetImpl() == nullptr ||
+			gSetting.GetImpl()->GetType() != JobBase::EN_JOB_TYPE_JOBSETTING)
+		{
+			gSetting.Init(JobBase::EN_JOB_TYPE_JOBSETTING);
+		}
+
+		m_pSetting = &gSetting;
+	}
+	Data2Dlg();
+	OnBnClickedCheck4();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -152,3 +201,25 @@ HCURSOR CBuildHelperDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CBuildHelperDlg::OnBnClickedCheck4()
+{
+	BOOL bEnable = ((CButton*)GetDlgItem(IDC_CHECK4))->GetCheck() ? FALSE : TRUE;
+
+	GetDlgItem(IDC_EDIT2)->EnableWindow(bEnable);
+}
+
+
+void CBuildHelperDlg::OnBnClickedOk()
+{
+	if (!Dlg2Data())
+	{
+		DEF_OUT(L"성정값을 저장할 수 없습니다.");
+		return;
+	}
+	CString strPath;
+	strPath.Format(_T("%s%s"), FileUtils::GetCurrentModulePath(), FileUtils::GetSettingFileName());
+	m_pSetting->Save(strPath);
+	CDialogEx::OnOK();
+}

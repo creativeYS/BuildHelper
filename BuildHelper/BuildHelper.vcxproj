@@ -196,6 +196,7 @@
     <ClInclude Include="FileBatch.h" />
     <ClInclude Include="FileCopy.h" />
     <ClInclude Include="FileExecute.h" />
+    <ClInclude Include="JobSetting.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="JobBase.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="FileBatch.cpp" />
     <ClCompile Include="FileCopy.cpp" />
     <ClCompile Include="FileExecute.cpp" />
+    <ClCompile Include="JobSetting.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="Job.cpp" />
     <ClCompile Include="JobBase.cpp" />

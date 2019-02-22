@@ -45,7 +45,7 @@ void OutputControl::PrintOut(const TCHAR* pStr)
 	{
 		wcout << pStr << endl;
 	}
-	else if (m_enType == OutputControl::EN_TYPE::EN_TYPE_CONSOLE)
+	else if (m_enType == OutputControl::EN_TYPE::EN_TYPE_MSGBOX)
 	{
 		AfxMessageBox(pStr);
 	}
@@ -58,7 +58,7 @@ void OutputControl::SetType(EN_TYPE enType)
 }
 
 OutputControl::OutputControl()
-	: m_enType(OutputControl::EN_TYPE::EN_TYPE_CONSOLE)
+	: m_enType(OutputControl::EN_TYPE::EN_TYPE_NONE)
 {
 
 }

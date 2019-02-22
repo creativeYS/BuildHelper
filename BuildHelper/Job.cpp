@@ -29,10 +29,14 @@ bool Job::Run()
 	return false;
 }
 
-void Job::Init()
+void Job::Init(int enType)
 {
 	if (m_pImpl) delete m_pImpl;
 	m_pImpl = nullptr;
+
+	if (enType == -1) return;
+
+	m_pImpl = JobBase::CreateImpl(enType);
 }
 
 bool Job::Load(const TCHAR* pFilePath)
@@ -50,7 +54,10 @@ bool Job::Load(const TCHAR* pFilePath)
 	if(nType == JobBase::EN_JOB_TYPE::EN_JOB_TYPE_NUMBER) DEF_OUT_RETURN_FALSE(L"확인할 수 없는 작업입니다.");
 	m_pImpl = JobBase::CreateImpl(nType);
 
-	return m_pImpl->Load(pFile);
+	bool bRet = m_pImpl->Load(pFile);
+	JobBase::Close(pFile);
+
+	return bRet;
 }
 
 bool Job::Save(const TCHAR* pFilePath)
@@ -60,8 +67,14 @@ bool Job::Save(const TCHAR* pFilePath)
 	FILE* pFile = JobBase::Open(pFilePath, true);
 	if (pFile == NULL) DEF_OUT_RETURN_FALSE(L"파일을 열 수 없습니다.");
 
+	WORD mark = 0xFEFF;
+	fwrite(&mark, sizeof(WORD), 1, pFile);
+
 	CString strName = JobBase::GetJobName(m_pImpl->GetType());
 	JobBase::wrString(pFile, strName);
 
-	return m_pImpl->Save(pFile);
+	bool bRet = m_pImpl->Save(pFile);
+	JobBase::Close(pFile);
+
+	return bRet;
 }
