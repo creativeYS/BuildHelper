@@ -10,11 +10,13 @@ public:
 
 	// Set Functions...
 	void	SetExecuteFile(const CString& str) { m_strExecuteFile = str; }
-	void	SetParam(const CString& str) { m_strParam = str; }
+	void	AddParam(const CString& strName, const CString& strParam);
+	void	SetParam(int nCount, const CString* pStrName, const CString* strParam);
 
 	// Get Functions...
 	CString GetExecuteFile() const  { return m_strExecuteFile; }
-	CString GetParam() const  { return m_strParam; }
+	int		GetParams(VecStr& strName, VecStr& strParam) const;
+	int		GetParamNum() const;
 
 	// Main Functions...
 	virtual bool	Run();
@@ -25,6 +27,7 @@ public:
 	virtual int		GetType() { return JobBase::EN_JOB_TYPE::EN_JOB_TYPE_FILEEXECUTE; }
 
 protected:
-	CString m_strExecuteFile;		// c:\test\run.exe
-	CString m_strParam;				// "c:\param1\test.txt" good 2
+	CString m_strExecuteFile;			// c:\test\run.exe
+	std::vector<CString> m_vecParamName;	// Param Name
+	std::vector<CString> m_vecParam;		// Param
 };
