@@ -22,7 +22,7 @@ public:
 	virtual bool	Load(FILE* pFile);
 	virtual bool	Save(FILE* pFile);
 
-	virtual int		GetType() { return JobBase::EN_JOB_TYPE::EN_JOB_TYPE_FILECOPY; }
+	virtual int		GetType() { return JobBase::EN_JOB_TYPE::EN_JOB_TYPE_FILEEXECUTE; }
 
 protected:
 	CString m_strExecuteFile;		// c:\test\run.exe

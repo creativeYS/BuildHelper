@@ -34,6 +34,7 @@ void JobFileExecuteDlg::data2dlg()
 
 BEGIN_MESSAGE_MAP(JobFileExecuteDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &JobFileExecuteDlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_BUTTON1, &JobFileExecuteDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 BOOL JobFileExecuteDlg::OnInitDialog()
@@ -48,4 +49,11 @@ void JobFileExecuteDlg::OnBnClickedOk()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	dlg2data();
 	CDialogEx::OnOK();
+}
+
+
+void JobFileExecuteDlg::OnBnClickedButton1()
+{
+	FileUtils::OnBrowseFolder(this, IDC_EDIT2, true);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

@@ -39,6 +39,9 @@ void JobFileCopyDlg::data2dlg()
 
 BEGIN_MESSAGE_MAP(JobFileCopyDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &JobFileCopyDlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_BUTTON1, &JobFileCopyDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &JobFileCopyDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &JobFileCopyDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 BOOL JobFileCopyDlg::OnInitDialog()
@@ -54,4 +57,20 @@ void JobFileCopyDlg::OnBnClickedOk()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	dlg2data();
 	CDialogEx::OnOK();
+}
+
+void JobFileCopyDlg::OnBnClickedButton1()
+{
+	FileUtils::OnBrowseFolder(this, IDC_EDIT2);
+}
+
+
+void JobFileCopyDlg::OnBnClickedButton2()
+{
+	FileUtils::OnBrowseFolder(this, IDC_EDIT3);
+}
+
+
+void JobFileCopyDlg::OnBnClickedButton3()
+{
 }

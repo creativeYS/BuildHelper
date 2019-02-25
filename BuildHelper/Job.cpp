@@ -112,17 +112,17 @@ UINT Job::DoModal()
 	case JobBase::EN_JOB_TYPE_FILECOPY:
 	{
 		JobFileCopyDlg dlg2((FileCopy*)GetImpl());
-		return dlg2.DoModal();
+		return (UINT)dlg2.DoModal();
 	} break;
 	case JobBase::EN_JOB_TYPE_FILEEXECUTE:
 	{
 		JobFileExecuteDlg dlg2((FileExecute*)GetImpl());
-		return dlg2.DoModal();
+		return (UINT)dlg2.DoModal();
 	} break;
 	case JobBase::EN_JOB_TYPE_FILEBATCH:
 	{
 		JobBatchDlg dlg2((FileBatch*)GetImpl());
-		return dlg2.DoModal();
+		return (UINT)dlg2.DoModal();
 	} break;
 	default:
 		ASSERT(0);

@@ -22,4 +22,5 @@ protected:
 	FileExecute* m_pImpl = nullptr;
 public:
 	afx_msg void OnBnClickedOk();
+	afx_msg void OnBnClickedButton1();
 };

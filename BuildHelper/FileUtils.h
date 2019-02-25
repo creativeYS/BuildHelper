@@ -15,6 +15,12 @@ public:
 	static CString	GetSettingPath();
 	static CString	GetSettingFileName() { return L"Setting.dat"; }
 
+	static BOOL		ConvertRelativeFileName(const TCHAR* szCurPath, CString& strPath);
+
+	static bool		IsLastChar(const CString& strCheck, TCHAR ch);
+
+	static void		OnBrowseFolder(CDialog* pDlg, UINT uiEdit, bool bFile = false);
+
 	// pPath : c:\test\nice\*
 	// pExt : *.txt
 	static void		FileList(const TCHAR* pPath, const TCHAR* pExt, VecStr& vecTarget, bool bSubFolder = true);

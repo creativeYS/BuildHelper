@@ -11,6 +11,117 @@
 #endif
 
 
+BOOL FileUtils::ConvertRelativeFileName(const TCHAR* szCurPath, CString& strPath)
+{
+	if (strPath.GetLength() > 1)
+	{
+		CString strTemp;
+		if ((strPath[0] == '.' && strPath[1] == '\\') ||
+			(strPath[0] == '.' && strPath[1] == '/'))
+		{
+			strTemp = strPath.Right(strPath.GetLength() - 1);
+		}
+		else if ((strPath[0] == '.' && strPath[1] == '.'))
+		{
+			strTemp.Format(_T("\\%s"), strPath);
+		}
+		else if (strPath[0] == '\\' || strPath[0] == '/')
+		{
+			strTemp = strPath;
+		}
+		else // 상대경로가 아닌것으로 본다.
+		{
+			strTemp = strPath;
+			return TRUE;
+		}
+
+		CString strFront = szCurPath;
+		CString strRear = strTemp;
+
+		while (strRear.Find(_T("../"), 0) >= 0 || strRear.Find(_T("..\\"), 0) >= 0)
+		{
+			int _left = strFront.ReverseFind(_T('\\'));
+			strFront = strFront.Left(_left);
+
+			int _len = (int)strlen("../");
+
+			int _right = 0;
+
+			if (strRear.Find(_T("../"), 0) >= 0)
+				_right = strRear.GetLength() - strRear.Find(_T("../"), 0) - _len;
+			else if (strRear.Find(_T("..\\"), 0) >= 0)
+				_right = strRear.GetLength() - strRear.Find(_T("..\\"), 0) - _len;
+
+			strRear = strRear.Right(_right);
+		}
+
+		if (strRear.GetLength() > 0 && strRear[0] == '\\')
+			strTemp = strFront + strRear;
+		else
+			strTemp = strFront + _T("\\") + strRear;
+
+		strPath = strTemp;
+		return TRUE;
+	}
+	return FALSE;
+}
+
+bool FileUtils::IsLastChar(const CString& strCheck, TCHAR ch)
+{
+	if (strCheck.GetLength() <= 0) return false;
+
+	if (strCheck[strCheck.GetLength() - 1] == ch) return true;
+
+	return false;
+}
+
+void FileUtils::OnBrowseFolder(CDialog* pDlg, UINT uiEdit, bool bFile)
+{
+	CString strModulePath = FileUtils::GetCurrentModulePath();
+	strModulePath.Replace('/', '\\');
+	if (FileUtils::IsLastChar(strModulePath, '\\'))
+		strModulePath.Delete(strModulePath.GetLength() - 1, 1);
+
+	CString strInit = strModulePath;
+
+	CString strTemp;
+	pDlg->GetDlgItem(uiEdit)->GetWindowText(strTemp);
+
+	if (strTemp.GetLength() > 0)
+	{
+		if (!bFile && !FileUtils::IsLastChar(strTemp, '\\')) strTemp.AppendChar('\\');
+		FileUtils::ConvertRelativeFileName(strInit, strTemp);
+		strInit = strTemp;
+		
+// 		if (bFile && strInit.GetLength() > 0 &&
+// 			strInit.ReverseFind('\\') < strInit.ReverseFind('.'))
+// 		{
+// 			strTemp = strInit.Left(strInit.ReverseFind('\\'));
+// 			strInit = strTemp;
+// 		}
+	}
+	if (!FileUtils::IsLastChar(strInit, '\\')) strInit.AppendChar('\\');
+
+	if (bFile)
+	{
+		CFileDialog dlg(TRUE, NULL, strInit, OFN_HIDEREADONLY, _T("Execute File(*.exe)|*.exe|All Files(*.*)|*.*||"));
+		if (dlg.DoModal() == IDOK)
+		{
+			CString strPathName = dlg.GetPathName();
+			pDlg->GetDlgItem(uiEdit)->SetWindowText(strPathName);
+		}
+	}
+	else
+	{
+		CFolderPickerDialog Picker(strInit, OFN_FILEMUSTEXIST, NULL, 0);
+		if (Picker.DoModal() == IDOK)
+		{
+			CString strFolderPath = Picker.GetPathName();
+			pDlg->GetDlgItem(uiEdit)->SetWindowText(strFolderPath);
+		}
+	}
+}
+
 void FileUtils::FileList(const TCHAR* pPath, const TCHAR* pExt, VecStr& vecTarget, bool bSubFolder)
 {
 	HANDLE hSrch;
