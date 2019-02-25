@@ -20,6 +20,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="BuildHelper\Dialogs\Job">
+      <UniqueIdentifier>{eea2be45-709a-4043-8517-e292143e552d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Job.h">
@@ -58,22 +61,22 @@
     <ClInclude Include="BuildHelper.h">
       <Filter>BuildHelper</Filter>
     </ClInclude>
-    <ClInclude Include="JobFileExecuteDlg.h">
-      <Filter>BuildHelper\Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="JobBatchDlg.h">
-      <Filter>BuildHelper\Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="JobFileCopyDlg.h">
-      <Filter>BuildHelper\Dialogs</Filter>
-    </ClInclude>
     <ClInclude Include="JobSetting.h">
       <Filter>BuildHelper\Jobs</Filter>
     </ClInclude>
-    <ClInclude Include="JobTypeDlg.h">
+    <ClInclude Include="NameDlg.h">
       <Filter>BuildHelper\Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="NameDlg.h">
+    <ClInclude Include="JobBatchDlg.h">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClInclude>
+    <ClInclude Include="JobFileCopyDlg.h">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClInclude>
+    <ClInclude Include="JobFileExecuteDlg.h">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClInclude>
+    <ClInclude Include="JobTypeDlg.h">
       <Filter>BuildHelper\Dialogs</Filter>
     </ClInclude>
   </ItemGroup>
@@ -108,22 +111,22 @@
     <ClCompile Include="BuildHelper.cpp">
       <Filter>BuildHelper</Filter>
     </ClCompile>
-    <ClCompile Include="JobFileExecuteDlg.cpp">
-      <Filter>BuildHelper\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="JobBatchDlg.cpp">
-      <Filter>BuildHelper\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="JobFileCopyDlg.cpp">
-      <Filter>BuildHelper\Dialogs</Filter>
-    </ClCompile>
     <ClCompile Include="JobSetting.cpp">
       <Filter>BuildHelper\Jobs</Filter>
     </ClCompile>
-    <ClCompile Include="JobTypeDlg.cpp">
+    <ClCompile Include="NameDlg.cpp">
       <Filter>BuildHelper\Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="NameDlg.cpp">
+    <ClCompile Include="JobBatchDlg.cpp">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClCompile>
+    <ClCompile Include="JobFileCopyDlg.cpp">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClCompile>
+    <ClCompile Include="JobFileExecuteDlg.cpp">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClCompile>
+    <ClCompile Include="JobTypeDlg.cpp">
       <Filter>BuildHelper\Dialogs</Filter>
     </ClCompile>
   </ItemGroup>

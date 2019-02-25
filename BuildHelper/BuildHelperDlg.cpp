@@ -260,17 +260,15 @@ void CBuildHelperDlg::UpdateList()
 		if (strKwd.size() > 0)
 		{
 			bShow = false;
+			int nFindCnt = 0;
 			for (CString& kwd : strKwd)
 			{
-				if (strItemName.Find(kwd) >= 0)
-				{
-					bShow = true;
-					break;
-				}
-				if(strItemType.Find(kwd) >= 0)
-				{
-					bShow = true;
-				}
+				if (strItemName.Find(kwd) >= 0) { nFindCnt++; continue; }
+				if (strItemType.Find(kwd) >= 0) { nFindCnt++; continue; }
+			}
+			if(nFindCnt == (int)strKwd.size())
+			{
+				bShow = true;
 			}
 		}
 		if (!bShow) continue;

@@ -47,6 +47,18 @@ int FileExecute::GetParamNum() const
 
 bool FileExecute::Run()
 {
+	CString strParam;
+	for (CString& strItem : m_vecParam)
+	{
+		if (strParam.GetLength() <= 0) strParam = strItem;
+		else
+		{
+			strParam.AppendChar(' ');
+			strParam.Append(strItem);
+		}
+	}
+	::ShellExecute(NULL, L"open", m_strExecuteFile, strParam, NULL, SW_SHOWNORMAL);
+
 	return true;
 }
 

@@ -33,7 +33,7 @@ void OutputControl::ScanIn(const TCHAR* pPrompt, bool& bYes)
 			bYes = true;
 		}
 	}
-	else if (m_enType == OutputControl::EN_TYPE::EN_TYPE_CONSOLE)
+	else if (m_enType == OutputControl::EN_TYPE::EN_TYPE_MSGBOX)
 	{
 		if (AfxMessageBox(pPrompt, MB_YESNO) == IDYES) bYes = true;
 	}

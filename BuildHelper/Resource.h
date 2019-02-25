@@ -10,7 +10,6 @@
 #define IDD_BUILDHELPER_JOB_BATCH       107
 #define IDD_BUILDHELPER_JOB_FILEEXECUTE 109
 #define IDD_BUILDHELPER_JOB_TYPENAME    110
-#define IDD_BUILDHELPER_JOB_TYPENAME1   111
 #define IDD_BUILDHELPER_NAME            111
 #define IDR_MAINFRAME                   128
 #define IDC_EDIT1                       1003
