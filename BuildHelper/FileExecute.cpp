@@ -44,6 +44,11 @@ int FileExecute::GetParamNum() const
 
 bool FileExecute::Run()
 {
+	CString strWorkingPath = JobSetting::GetCurrentWorkingPath();
+	if (strWorkingPath.GetLength() <= 0) DEF_OUT_RETURN_FALSE(L"작업 경로를 확인할 수 없습니다.");
+	if (strWorkingPath[strWorkingPath.GetLength() - 1] != '\\')
+		strWorkingPath.AppendChar('\\');
+
 	CString strParam;
 	for (CString strItem : m_vecParam)
 	{
@@ -52,11 +57,6 @@ bool FileExecute::Run()
 			&& strItem.GetLength() > 2)
 		{
 			CString strTemp = strItem;
-			CString strWorkingPath = JobSetting::GetCurrentWorkingPath();
-			if (strWorkingPath.GetLength() <= 0) DEF_OUT_RETURN_FALSE(L"작업 경로를 확인할 수 없습니다.");
-			if (strWorkingPath[strWorkingPath.GetLength() - 1] != '\\')
-				strWorkingPath.AppendChar('\\');
-
 			bool bDdaom = strTemp[0] == '\"' && strTemp[strTemp.GetLength() - 1] == '\"';
 			if (bDdaom)
 			{
@@ -65,7 +65,8 @@ bool FileExecute::Run()
 			}
 
 			FileUtils::ConvertRelativeFileName(strWorkingPath, strTemp);
-			strItem = strTemp;
+			if (bDdaom) strItem.Format(_T("\"%s\""), strTemp);
+			else		strItem = strTemp;
 		}
 
 		if (strParam.GetLength() <= 0) strParam = strItem;
@@ -75,7 +76,18 @@ bool FileExecute::Run()
 			strParam.Append(strItem);
 		}
 	}
-	::ShellExecute(NULL, L"open", m_strExecuteFile, strParam, NULL, SW_SHOWNORMAL);
+
+	CString strExeFile = m_strExecuteFile;
+	if(strExeFile.Find(L".\\") >= 0 || strExeFile.Find(L"..\\") >= 0)
+	{
+		CString strRelTemp = strExeFile;
+		if (FileUtils::ConvertRelativeFileName(strWorkingPath, strRelTemp))
+		{
+			strExeFile = strRelTemp;
+		}
+	}
+
+	::ShellExecute(NULL, L"open", strExeFile, strParam, NULL, SW_SHOWNORMAL);
 
 	return true;
 }
