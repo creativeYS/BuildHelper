@@ -42,7 +42,13 @@ public:
 
 	virtual int		GetType() { return JobBase::EN_JOB_TYPE::EN_JOB_TYPE_JOBSETTING; }
 
+public:
+	static CString	GetCurrentWorkingPath() { return m_strCurrentWorkingPath; }
+	static void		SetCurrentWorkingPath(const CString& str) { m_strCurrentWorkingPath = str; }
+
 protected:
 	CString		m_strLastSetting;
 	VecSetting	m_vecSettings;
+
+	static CString m_strCurrentWorkingPath;
 };

@@ -11,6 +11,9 @@
 #endif
 
 #define DEF_CLEAR_RESERVE(VECTOR, SIZE) { VECTOR.clear(); VECTOR.reserve(SIZE); }
+
+CString JobSetting::m_strCurrentWorkingPath;
+
 void JobSetting::SetSetting(const VecSetting& settings)
 {
 	m_vecSettings = settings;

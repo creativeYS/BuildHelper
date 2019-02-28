@@ -461,6 +461,16 @@ void CBuildHelperDlg::OnBnClickedRunJob()
 		DEF_OUT(L"작업을 확인할 수 없습니다.");
 	}
 	
+	CString strWorkingPath;
+	if (((CButton*)GetDlgItem(IDC_CHECK4))->GetCheck())
+	{
+		strWorkingPath = FileUtils::GetCurrentModulePath();
+	}
+	else
+	{
+		GetDlgItem(IDC_EDIT2)->GetWindowText(strWorkingPath);
+	}
+	JobSetting::SetCurrentWorkingPath(strWorkingPath);
 	pJob->Run();
 }
 

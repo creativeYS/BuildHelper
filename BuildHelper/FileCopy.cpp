@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "FileCopy.h"
 #include "OutputControl.h"
+#include "JobSetting.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -16,30 +17,42 @@ bool FileCopy::Run()
 	if (m_strDestPath.GetLength() <= 0)		DEF_OUT_RETURN_FALSE(L"목표 폴더 경로를 확인할 수 없습니다.");
 	if (m_strTargetFilter.GetLength() <= 0)	DEF_OUT_RETURN_FALSE(L"목표 파일 필터를 확인할 수 없습니다.");
 
-	if (m_strSourcePath[m_strSourcePath.GetLength() - 2] != '\\')
-		m_strSourcePath.AppendChar('\\');
-	if (m_strSourcePath[m_strSourcePath.GetLength() - 1] != '*')
-		m_strSourcePath.AppendChar('*');
+	CString strSourcePath = m_strSourcePath;
+	CString strDestPath = m_strDestPath;
+	CString strTargetFilter = m_strTargetFilter;
 
-	if (m_strDestPath[m_strDestPath.GetLength() - 1] != '\\' &&
-		m_strDestPath[m_strDestPath.GetLength() - 1] != '/')
+	if (strSourcePath[strSourcePath.GetLength() - 2] != '\\')
+		strSourcePath.AppendChar('\\');
+	if (strSourcePath[strSourcePath.GetLength() - 1] != '*')
+		strSourcePath.AppendChar('*');
+
+	if (strDestPath[strDestPath.GetLength() - 1] != '\\' &&
+		strDestPath[strDestPath.GetLength() - 1] != '/')
 	{
-		m_strDestPath.AppendChar('\\');
+		strDestPath.AppendChar('\\');
 	}
 
+	CString strWorkingPath = JobSetting::GetCurrentWorkingPath();
+	if (strWorkingPath.GetLength() <= 0) DEF_OUT_RETURN_FALSE(L"작업 경로를 확인할 수 없습니다.");
+	if (strWorkingPath[strWorkingPath.GetLength() - 1] != '\\')
+		strWorkingPath.AppendChar('\\');
+
+	FileUtils::ConvertRelativeFileName(strWorkingPath, strSourcePath);
+
+
 	VecStr strResult;
-	FileUtils::FileList(m_strSourcePath.GetBuffer(), m_strTargetFilter.GetBuffer(), strResult, m_bIncludeSubFolder);
+	FileUtils::FileList(strSourcePath.GetBuffer(), strTargetFilter.GetBuffer(), strResult, m_bIncludeSubFolder);
 	
 	if (strResult.size() == 0) DEF_OUT_RETURN_FALSE(L"목표 파일을 찾을 수 없습니다.");
 
-	if (!MakeDir(m_strDestPath))  DEF_OUT_RETURN_FALSE(L"목표 폴더를 생성할 수 없습니다.");
+	if (!MakeDir(strDestPath))  DEF_OUT_RETURN_FALSE(L"목표 폴더를 생성할 수 없습니다.");
 
 	for (CString& strFileOrg : strResult)
 	{
-		CString strFile = strFileOrg.Right(strFileOrg.GetLength() - m_strSourcePath.GetLength() + 1);
+		CString strFile = strFileOrg.Right(strFileOrg.GetLength() - strSourcePath.GetLength() + 1);
 		
 		CString strCopiedFilePath;
-		strCopiedFilePath.Format(_T("%s%s"), m_strDestPath, strFile);
+		strCopiedFilePath.Format(_T("%s%s"), strDestPath, strFile);
 
 		CString strPathMid = FileUtils::GetOnlyPath(strCopiedFilePath);
 
