@@ -49,19 +49,19 @@ CString JobBase::GetJobTypeName(int enType, bool bDisplay)
 	switch (enType)
 	{
 	case EN_JOB_TYPE_FILECOPY:
-		strTemp = bDisplay ? L"복사 작업" : L"FILECOPY";
+		strTemp = bDisplay ? L"복사 작업" : L"COPY";
 		break;
 	case EN_JOB_TYPE_FILEEXECUTE:
-		strTemp = bDisplay ? L"실행 작업" : L"FILEEXECUTE";
+		strTemp = bDisplay ? L"실행 작업" : L"EXECUTE";
 		break;
 	case EN_JOB_TYPE_FILEBATCH:
-		strTemp = bDisplay ? L"연속 실행" : L"FILEBATCH";
+		strTemp = bDisplay ? L"연속 실행" : L"BATCH";
 		break;
 	case EN_JOB_TYPE_JOBSETTING:
-		strTemp = bDisplay ? L"설정" : L"JOBSETTING";
+		strTemp = bDisplay ? L"설정" : L"SETTING";
 		break;
 	case EN_JOB_TYPE_CREATEFILELIST:
-		strTemp = bDisplay ? L"파일 리스트 생성" : L"CREATEFILELIST";
+		strTemp = bDisplay ? L"파일 리스트 생성" : L"FILELIST";
 		break;
 	default:
 		ASSERT(0);

@@ -150,8 +150,17 @@ bool ConsoleMode()
 	if (params[0].CompareNoCase(L"?") == 0)
 	{
 		DEF_OUT(L"1. [program] list [options : /os = only sub job, /es = except sub job]");
-		DEF_OUT(L"2. [program] run [Job Name]");
-		DEF_OUT(L"2. [program] delete [Job Name]");
+		DEF_OUT(L"2. [program] create [Job Name] [JobType] [SubJob:0,1] \"val1\" \"val2\" \"val3\" ...");
+		CString strTypes = L" - JobType : ";
+		for (int i = 0; i < JobBase::EN_JOB_TYPE::EN_JOB_TYPE_NUMBER; i++)
+		{
+			CString strTypeName = JobBase::GetJobTypeName(i, false);
+			if (strTypes.GetLength() != 0) strTypes.Append(L", ");
+			strTypes.Append(strTypeName);
+		}
+		DEF_OUT(strTypes);
+		DEF_OUT(L"3. [program] run [Job Name]");
+		DEF_OUT(L"4. [program] delete [Job Name]");
 		return true;
 	}
 	else if (params[0].CompareNoCase(L"list") == 0)
@@ -248,5 +257,31 @@ bool ConsoleMode()
 			}
 		}
 	}
+	else if (params[0].CompareNoCase(L"create") == 0 && params.size() > 3)
+	{
+		CString strTempFileName;
+		strTempFileName.Format(L"%s%s.job", FileUtils::GetSettingPath(), params[1]);
+
+		FILE* pFile = JobBase::Open(strTempFileName, true);
+		if (pFile == NULL) DEF_OUT_RETURN_FALSE(L"파일을 열 수 없습니다.");
+
+		WORD mark = 0xFEFF;
+		fwrite(&mark, sizeof(WORD), 1, pFile);
+
+		bool bExecute = JobBase::GetJobTypeCode(params[2]) == JobBase::EN_JOB_TYPE::EN_JOB_TYPE_FILEEXECUTE;
+		for (int i = 2; i < (int)params.size(); i++)
+		{
+			CString strWriteTemp;
+			if (bExecute && params[i].Find(L" ") >= 0)
+				strWriteTemp.Format(_T("\"%s\""), params[i]);
+			else
+				strWriteTemp = params[i];
+
+			JobBase::wrString(pFile, strWriteTemp);
+		}
+
+		JobBase::Close(pFile);
+	}
+
 	return true;
 }
