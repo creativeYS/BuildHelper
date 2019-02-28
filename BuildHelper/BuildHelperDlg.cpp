@@ -120,6 +120,7 @@ bool CBuildHelperDlg::SetSettingData(const CString& strName)
 void CBuildHelperDlg::Dlg2DataSub(T_SETTING* pSetting)
 {
 	if (pSetting == nullptr) return;
+
 	GetDlgItem(IDC_EDIT1)->GetWindowText(pSetting->strFilter);
 	pSetting->nShowSub = (((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck()) ? 1 : 0;
 	pSetting->nUsePgmPath = (((CButton*)GetDlgItem(IDC_CHECK4))->GetCheck()) ? 1 : 0;
@@ -129,6 +130,7 @@ void CBuildHelperDlg::Dlg2DataSub(T_SETTING* pSetting)
 void CBuildHelperDlg::Data2DlgSub(const T_SETTING* pSetting)
 {
 	if (pSetting == nullptr) return;
+
 	GetDlgItem(IDC_EDIT1)->SetWindowText(pSetting->strFilter);
 	((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(pSetting->nShowSub == 1 ? TRUE : FALSE);
 	((CButton*)GetDlgItem(IDC_CHECK4))->SetCheck(pSetting->nUsePgmPath == 1 ? TRUE : FALSE);
@@ -218,7 +220,9 @@ BOOL CBuildHelperDlg::OnInitDialog()
 	// combo, list 업데이트
 	UpdateCombo();
 	const T_SETTING* pSetting = m_pSetting->GetSettingData();
-	Data2DlgSub(pSetting);
+	T_SETTING settingDummy(L"");
+	settingDummy.nShowSub = 1;
+	Data2DlgSub(pSetting == nullptr ? &settingDummy : pSetting);
 	UpdateList();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.

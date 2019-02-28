@@ -16,6 +16,8 @@ bool FileCopy::Run()
 	if (m_strDestPath.GetLength() <= 0)		DEF_OUT_RETURN_FALSE(L"목표 폴더 경로를 확인할 수 없습니다.");
 	if (m_strTargetFilter.GetLength() <= 0)	DEF_OUT_RETURN_FALSE(L"목표 파일 필터를 확인할 수 없습니다.");
 
+	if (m_strSourcePath[m_strSourcePath.GetLength() - 2] != '\\')
+		m_strSourcePath.AppendChar('\\');
 	if (m_strSourcePath[m_strSourcePath.GetLength() - 1] != '*')
 		m_strSourcePath.AppendChar('*');
 
@@ -45,7 +47,6 @@ bool FileCopy::Run()
 
 		::CopyFile(strFileOrg, strCopiedFilePath, FALSE);
 	}
-	FileUtils::FolderDelete(L"D:\\_Temp\\test\\새 폴더");
 
 	return true;
 }
