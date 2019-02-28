@@ -268,6 +268,19 @@ bool FileUtils::FolderDelete(const TCHAR* pPath)
 	return false;
 }
 
+bool FileUtils::MakeDir(const TCHAR* pPath)
+{
+	if (FileUtils::FileExistOnly(pPath))
+	{
+		if (!FileUtils::PathExist(pPath)) return false;
+	}
+
+	if (!FileUtils::PathExist(pPath))
+		_wmkdir(pPath);
+
+	return true;
+}
+
 CString FileUtils::GetOnlyFileName(const CString& strPath, bool bRevSlash, bool bWithOutExt)
 {
 	int nPos = strPath.ReverseFind('\\');

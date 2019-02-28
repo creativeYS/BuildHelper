@@ -32,6 +32,22 @@ bool FileCopy::Run()
 		strDestPath.AppendChar('\\');
 	}
 
+	VecStr FileNames;
+	bool bMultiFile = false;
+	if (strTargetFilter.Find(L";") >= 0)
+	{
+		bMultiFile = true;
+
+		CString token;
+		int pos = 0;
+		while ((token = strTargetFilter.Tokenize(L";", pos)) != L"")
+		{
+			FileNames.push_back(token);
+		}
+
+		strTargetFilter = L"*.*";
+	}
+
 	CString strWorkingPath = JobSetting::GetCurrentWorkingPath();
 	if (strWorkingPath.GetLength() <= 0) DEF_OUT_RETURN_FALSE(L"작업 경로를 확인할 수 없습니다.");
 	if (strWorkingPath[strWorkingPath.GetLength() - 1] != '\\')
@@ -44,18 +60,32 @@ bool FileCopy::Run()
 	
 	if (strResult.size() == 0) DEF_OUT_RETURN_FALSE(L"목표 파일을 찾을 수 없습니다.");
 
-	if (!MakeDir(strDestPath))  DEF_OUT_RETURN_FALSE(L"목표 폴더를 생성할 수 없습니다.");
+	if (!FileUtils::MakeDir(strDestPath))  DEF_OUT_RETURN_FALSE(L"목표 폴더를 생성할 수 없습니다.");
 
 	for (CString& strFileOrg : strResult)
 	{
 		CString strFile = strFileOrg.Right(strFileOrg.GetLength() - strSourcePath.GetLength() + 1);
 		
+		if (bMultiFile)
+		{
+			bool bFind = false;
+			for (const CString& strFilterFile : FileNames)
+			{
+				if (strFilterFile.CompareNoCase(strFile) == 0)
+				{
+					bFind = true;
+					break;
+				}
+			}
+			if (!bFind) continue;
+		}
+
 		CString strCopiedFilePath;
 		strCopiedFilePath.Format(_T("%s%s"), strDestPath, strFile);
 
 		CString strPathMid = FileUtils::GetOnlyPath(strCopiedFilePath);
 
-		if (!MakeDir(strPathMid)) continue;
+		if (!FileUtils::MakeDir(strPathMid)) continue;
 
 		::CopyFile(strFileOrg, strCopiedFilePath, FALSE);
 	}
@@ -79,18 +109,4 @@ bool FileCopy::Save(FILE* pFile)
 	wrString(pFile, m_strTargetFilter);
 	wrInt(pFile, m_bIncludeSubFolder ? 1 : 0);
 	return true;
-}
-
-bool FileCopy::MakeDir(const TCHAR* pPath)
-{
-	if (FileUtils::FileExistOnly(pPath))
-	{
-		if (!FileUtils::PathExist(pPath)) return false;
-	}
-	
-	if (!FileUtils::PathExist(pPath))
-		_wmkdir(pPath);
-
-	return true;
-
 }

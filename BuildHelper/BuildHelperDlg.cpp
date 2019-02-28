@@ -307,7 +307,7 @@ void CBuildHelperDlg::UpdateList()
 		}
 
 		CString strItemName = itr->first;
-		CString strItemType = JobBase::GetJobName(pJob->GetJobType(), true);
+		CString strItemType = JobBase::GetJobTypeName(pJob->GetJobType(), true);
 		bool bShow = true;
 		if (strKwd.size() > 0)
 		{

@@ -11,6 +11,7 @@
 #define IDD_BUILDHELPER_JOB_FILEEXECUTE 109
 #define IDD_BUILDHELPER_JOB_TYPENAME    110
 #define IDD_BUILDHELPER_NAME            111
+#define IDD_BUILDHELPER_JOB_CREATEFILELIST 112
 #define IDR_MAINFRAME                   128
 #define IDC_EDIT1                       1003
 #define IDC_CHECK1                      1004

@@ -79,6 +79,12 @@
     <ClInclude Include="JobTypeDlg.h">
       <Filter>BuildHelper\Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="CreateFileList.h">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="JobCreateFileListDlg.h">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Job.cpp">
@@ -128,6 +134,12 @@
     </ClCompile>
     <ClCompile Include="JobTypeDlg.cpp">
       <Filter>BuildHelper\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateFileList.cpp">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="JobCreateFileListDlg.cpp">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

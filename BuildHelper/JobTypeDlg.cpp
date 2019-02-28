@@ -15,13 +15,18 @@ JobTypeDlg::JobTypeDlg(CWnd* pParent /*=nullptr*/)
 void JobTypeDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_COMBO1, m_cbxType);
 }
 
 void JobTypeDlg::data2dlg()
 {
-	((CButton*)GetDlgItem(IDC_RADIO1))->SetCheck(m_enType == JobBase::EN_JOB_TYPE_FILECOPY ? TRUE : FALSE);
-	((CButton*)GetDlgItem(IDC_RADIO2))->SetCheck(m_enType == JobBase::EN_JOB_TYPE_FILEEXECUTE ? TRUE : FALSE);
-	((CButton*)GetDlgItem(IDC_RADIO3))->SetCheck(m_enType == JobBase::EN_JOB_TYPE_FILEBATCH ? TRUE : FALSE);
+	int nSelIndex = -1;
+	for (int i = 0; i < m_cbxType.GetCount(); i++)
+	{
+		int nType = (int)m_cbxType.GetItemData(i);
+		if (nType == m_enType) nSelIndex = i;
+	}
+	m_cbxType.SetCurSel(nSelIndex);
 
 	GetDlgItem(IDC_EDIT1)->SetWindowText(m_strJobName);
 
@@ -30,12 +35,8 @@ void JobTypeDlg::data2dlg()
 
 bool JobTypeDlg::dlg2data()
 {
-	m_enType = JobBase::EN_JOB_TYPE_NUMBER;
-	if (((CButton*)GetDlgItem(IDC_RADIO1))->GetCheck()) m_enType = JobBase::EN_JOB_TYPE_FILECOPY;
-	else if (((CButton*)GetDlgItem(IDC_RADIO2))->GetCheck()) m_enType = JobBase::EN_JOB_TYPE_FILEEXECUTE;
-	else if (((CButton*)GetDlgItem(IDC_RADIO3))->GetCheck()) m_enType = JobBase::EN_JOB_TYPE_FILEBATCH;
-
-	if(m_enType == JobBase::EN_JOB_TYPE_NUMBER) DEF_OUT_RETURN_FALSE(L"작업의 종류를 선택해주세요");
+	if(m_cbxType.GetCurSel() < 0) DEF_OUT_RETURN_FALSE(L"작업의 종류를 선택해주세요");
+	m_enType = (int)m_cbxType.GetItemData(m_cbxType.GetCurSel());
 
 	GetDlgItem(IDC_EDIT1)->GetWindowText(m_strJobName);
 	if (m_strJobName.GetLength() <= 0) DEF_OUT_RETURN_FALSE(L"작업 이름을 입력해주세요");
@@ -51,6 +52,16 @@ END_MESSAGE_MAP()
 BOOL JobTypeDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
+
+	for (int i = 0; i < (int)JobBase::EN_JOB_TYPE::EN_JOB_TYPE_NUMBER; i++)
+	{
+		// 설정은 제외
+		if (i == (int)JobBase::EN_JOB_TYPE::EN_JOB_TYPE_JOBSETTING) continue;
+
+		CString strJobTypeName = JobBase::GetJobTypeName(i, true);
+		int nIndex = m_cbxType.AddString(strJobTypeName);
+		m_cbxType.SetItemData(nIndex, i);
+	}
 
 	data2dlg();
 

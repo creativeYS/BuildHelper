@@ -193,9 +193,11 @@
   <ItemGroup>
     <ClInclude Include="BuildHelper.h" />
     <ClInclude Include="BuildHelperDlg.h" />
+    <ClInclude Include="CreateFileList.h" />
     <ClInclude Include="FileBatch.h" />
     <ClInclude Include="FileCopy.h" />
     <ClInclude Include="FileExecute.h" />
+    <ClInclude Include="JobCreateFileListDlg.h" />
     <ClInclude Include="JobSetting.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="Job.h" />
@@ -213,9 +215,11 @@
   <ItemGroup>
     <ClCompile Include="BuildHelper.cpp" />
     <ClCompile Include="BuildHelperDlg.cpp" />
+    <ClCompile Include="CreateFileList.cpp" />
     <ClCompile Include="FileBatch.cpp" />
     <ClCompile Include="FileCopy.cpp" />
     <ClCompile Include="FileExecute.cpp" />
+    <ClCompile Include="JobCreateFileListDlg.cpp" />
     <ClCompile Include="JobSetting.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="Job.cpp" />

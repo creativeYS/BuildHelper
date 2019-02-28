@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-class FileCopy;
-class JobFileCopyDlg : public CDialogEx
+class CreateFileList;
+class JobCreateFileListDlg : public CDialogEx
 {
 public:
-	JobFileCopyDlg(FileCopy* pImpl, CWnd* pParent = nullptr);	// 표준 생성자입니다.
+	JobCreateFileListDlg(CreateFileList* pImpl, CWnd* pParent = nullptr);	// 표준 생성자입니다.
 
-	enum { IDD = IDD_BUILDHELPER_JOB_FILECOPY };
+	enum { IDD = IDD_BUILDHELPER_JOB_CREATEFILELIST };
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
@@ -18,9 +18,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-	FileCopy* m_pImpl = nullptr;
+	CreateFileList* m_pImpl = nullptr;
 public:
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedButton1();
-	afx_msg void OnBnClickedButton2();
 };

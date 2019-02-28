@@ -9,6 +9,7 @@
 #include "FileExecute.h"
 #include "FileBatch.h"
 #include "JobSetting.h"
+#include "CreateFileList.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -33,13 +34,16 @@ JobBase* JobBase::CreateImpl(int enType)
 	case EN_JOB_TYPE_JOBSETTING:
 		pImpl = new JobSetting();
 		break;
+	case EN_JOB_TYPE_CREATEFILELIST:
+		pImpl = new CreateFileList();
+		break;
 	default:
 		ASSERT(0);
 	}
 	return pImpl;
 }
 
-CString JobBase::GetJobName(int enType, bool bDisplay)
+CString JobBase::GetJobTypeName(int enType, bool bDisplay)
 {
 	CString strTemp;
 	switch (enType)
@@ -56,17 +60,20 @@ CString JobBase::GetJobName(int enType, bool bDisplay)
 	case EN_JOB_TYPE_JOBSETTING:
 		strTemp = bDisplay ? L"설정" : L"JOBSETTING";
 		break;
+	case EN_JOB_TYPE_CREATEFILELIST:
+		strTemp = bDisplay ? L"파일 리스트 생성" : L"CREATEFILELIST";
+		break;
 	default:
 		ASSERT(0);
 	}
 	return strTemp;
 }
 
-int JobBase::GetJobCode(const CString& strName)
+int JobBase::GetJobTypeCode(const CString& strName)
 {
 	for (int i = 0; i < EN_JOB_TYPE_NUMBER; i++)
 	{
-		if (GetJobName(i) == strName) return i;
+		if (GetJobTypeName(i) == strName) return i;
 	}
 	return EN_JOB_TYPE_NUMBER;
 }
@@ -100,7 +107,7 @@ int JobBase::rdInt(FILE* pFile)
 
 	if (!feof(pFile))
 	{
-		TCHAR  buff[1024];
+		TCHAR  buff[2048];
 		TCHAR* pStr;
 
 		pStr = fgetws(buff, sizeof(buff), pFile);
@@ -115,7 +122,7 @@ double JobBase::rdDouble(FILE* pFile)
 
 	if (!feof(pFile))
 	{
-		TCHAR  buff[1024];
+		TCHAR  buff[2048];
 		TCHAR* pStr;
 
 		pStr = fgetws(buff, sizeof(buff), pFile);
@@ -130,12 +137,13 @@ CString JobBase::rdString(FILE* pFile)
 
 	if (!feof(pFile))
 	{
-		TCHAR  buff[1024];
+		TCHAR  buff[2048];
 		TCHAR* pStr;
 
 		pStr = fgetws(buff, sizeof(buff), pFile);
 		CString strRet = buff;
 		strRet.Replace(L"\n", L"");
+		strRet.Replace(L"\r", L"");
 		return strRet;
 	}
 	return CString();
@@ -146,7 +154,7 @@ void JobBase::wrInt(FILE* pFile, int nVal)
 	if (pFile)
 	{
 		CString strTemp;
-		strTemp.Format(_T("%d\n"), nVal);
+		strTemp.Format(_T("%d\r\n"), nVal);
 		fputws(strTemp, pFile);
 	}
 }
@@ -156,7 +164,7 @@ void JobBase::wrDouble(FILE* pFile, double dVal)
 	if (pFile)
 	{
 		CString strTemp;
-		strTemp.Format(_T("%f\n"), dVal);
+		strTemp.Format(_T("%f\r\n"), dVal);
 		fputws(strTemp, pFile);
 	}
 }
@@ -166,7 +174,7 @@ void JobBase::wrString(FILE* pFile, const CString& strVal)
 	if (pFile)
 	{
 		CString strTemp;
-		strTemp.Format(_T("%s\n"), strVal);
+		strTemp.Format(_T("%s\r\n"), strVal);
 		fputws(strTemp, pFile);
 	}
 }

@@ -35,4 +35,6 @@ public:
 
 	// 폴더의 내용물을 포함하여 모두 지운다.
 	static bool		FolderDelete(const TCHAR* pPath);
+
+	static bool		MakeDir(const TCHAR* pPath);
 };

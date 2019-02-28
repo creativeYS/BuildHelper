@@ -41,7 +41,6 @@ BEGIN_MESSAGE_MAP(JobFileCopyDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &JobFileCopyDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDC_BUTTON1, &JobFileCopyDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &JobFileCopyDlg::OnBnClickedButton2)
-	ON_BN_CLICKED(IDC_BUTTON3, &JobFileCopyDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 BOOL JobFileCopyDlg::OnInitDialog()
@@ -68,9 +67,4 @@ void JobFileCopyDlg::OnBnClickedButton1()
 void JobFileCopyDlg::OnBnClickedButton2()
 {
 	FileUtils::OnBrowseFolder(GetDlgItem(IDC_EDIT3), FileUtils::GetCurrentModulePath());
-}
-
-
-void JobFileCopyDlg::OnBnClickedButton3()
-{
 }

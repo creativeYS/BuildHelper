@@ -10,6 +10,7 @@
 #include "JobFileCopyDlg.h"
 #include "JobFileExecuteDlg.h"
 #include "JobBatchDlg.h"
+#include "JobCreateFileListDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -54,7 +55,7 @@ bool Job::Load(const TCHAR* pFilePath)
 	if (pFile == NULL) DEF_OUT_RETURN_FALSE(L"파일을 열 수 없습니다.");
 
 	CString strName = JobBase::rdString(pFile);
-	int nType = JobBase::GetJobCode(strName);
+	int nType = JobBase::GetJobTypeCode(strName);
 	if(nType == JobBase::EN_JOB_TYPE::EN_JOB_TYPE_NUMBER) DEF_OUT_RETURN_FALSE(L"확인할 수 없는 작업입니다.");
 
 	m_bSubJob = JobBase::rdInt(pFile) == 1 ? true : false;
@@ -84,7 +85,7 @@ bool Job::Save(const TCHAR* pFilePath)
 	WORD mark = 0xFEFF;
 	fwrite(&mark, sizeof(WORD), 1, pFile);
 
-	CString strName = JobBase::GetJobName(m_pImpl->GetType());
+	CString strName = JobBase::GetJobTypeName(m_pImpl->GetType());
 	JobBase::wrString(pFile, strName);
 
 	JobBase::wrInt(pFile, m_bSubJob ? 1 : 0);
@@ -111,18 +112,23 @@ UINT Job::DoModal()
 	{
 	case JobBase::EN_JOB_TYPE_FILECOPY:
 	{
-		JobFileCopyDlg dlg2((FileCopy*)GetImpl());
-		return (UINT)dlg2.DoModal();
+		JobFileCopyDlg dlg((FileCopy*)GetImpl());
+		return (UINT)dlg.DoModal();
 	} break;
 	case JobBase::EN_JOB_TYPE_FILEEXECUTE:
 	{
-		JobFileExecuteDlg dlg2((FileExecute*)GetImpl());
-		return (UINT)dlg2.DoModal();
+		JobFileExecuteDlg dlg((FileExecute*)GetImpl());
+		return (UINT)dlg.DoModal();
 	} break;
 	case JobBase::EN_JOB_TYPE_FILEBATCH:
 	{
-		JobBatchDlg dlg2((FileBatch*)GetImpl());
-		return (UINT)dlg2.DoModal();
+		JobBatchDlg dlg((FileBatch*)GetImpl());
+		return (UINT)dlg.DoModal();
+	} break;
+	case JobBase::EN_JOB_TYPE_CREATEFILELIST:
+	{
+		JobCreateFileListDlg dlg((CreateFileList*)GetImpl());
+		return (UINT)dlg.DoModal();
 	} break;
 	default:
 		ASSERT(0);

@@ -27,8 +27,11 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 	int			m_enType = 0;
-	CString		m_strJobName = L"작업";
+	CString		m_strJobName = L"작업";	
 	bool		m_bSubJob = true;
+
+	CComboBox	m_cbxType;
+
 public:
 	afx_msg void OnBnClickedOk();
 };
