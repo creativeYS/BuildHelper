@@ -9,6 +9,7 @@
 #include <locale.h>
 #include "OutputControl.h"
 #include "Job.h"
+#include "JobSetting.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -78,7 +79,7 @@ BOOL CBuildHelperApp::InitInstance()
 	// TODO: 이 문자열을 회사 또는 조직의 이름과 같은
 	// 적절한 내용으로 수정해야 합니다.
 	SetRegistryKey(_T("로컬 응용 프로그램 마법사에서 생성된 응용 프로그램"));
-	
+
 	if (ConsoleMode())
 	{
 		return FALSE;
@@ -140,7 +141,7 @@ bool ConsoleMode()
 		params.push_back(CString(pszParam));
 	}
 
-	
+
 
 	CString strPath;
 	strPath.Format(L"%s*", FileUtils::GetSettingPath());
@@ -151,17 +152,19 @@ bool ConsoleMode()
 	{
 		DEF_OUT(L"1. [program] list [options : /os = only sub job, /es = except sub job]");
 		DEF_OUT(L"2. [program] create [Job Name] [JobType] [SubJob:0,1] \"val1\" \"val2\" \"val3\" ...");
-		CString strTypes = L" - JobType : ";
+		CString strTypes;
 		for (int i = 0; i < JobBase::EN_JOB_TYPE::EN_JOB_TYPE_NUMBER; i++)
 		{
 			CString strTypeName = JobBase::GetJobTypeName(i, false);
-			if (strTypes.GetLength() != 0) strTypes.Append(L", ");
+			if (strTypes.GetLength() == 0)	strTypes.Append(L" - JobType : ");
+			else							strTypes.Append(L", ");
 			strTypes.Append(strTypeName);
 		}
 		DEF_OUT(strTypes);
 		DEF_OUT(L"3. [program] run [Job Name]");
 		DEF_OUT(L"4. [program] delete [Job Name]");
-		return true;
+		DEF_OUT(L"5. [program] setting [Setting Name]")
+			return true;
 	}
 	else if (params[0].CompareNoCase(L"list") == 0)
 	{
@@ -180,7 +183,7 @@ bool ConsoleMode()
 			job.Load(str);
 
 			CString strPrompt;
-			if(bSubOnly)
+			if (bSubOnly)
 			{
 				if (!job.GetSubJob()) continue;
 			}
@@ -196,7 +199,27 @@ bool ConsoleMode()
 	}
 	else if (params[0].CompareNoCase(L"run") == 0)
 	{
-		if(params.size() < 2)
+		Job Setting;
+		CString strSettingFileName;
+		strSettingFileName.Format(L"%sSetting.dat", FileUtils::GetSettingPath());
+		Setting.Load(strSettingFileName);
+
+		JobSetting* pSetting = (JobSetting*)Setting.GetImpl();
+		if (pSetting)
+		{
+			const T_SETTING* pSettingData = pSetting->GetSettingData();
+			if (pSettingData && pSettingData->nUsePgmPath == 0)
+			{
+				JobSetting::SetCurrentWorkingPath(pSettingData->strWorkingPath);
+			}
+		}
+
+		if(JobSetting::GetCurrentWorkingPath().GetLength() <= 0)
+		{
+			JobSetting::SetCurrentWorkingPath(FileUtils::GetCurrentModulePath());
+		}
+
+		if (params.size() < 2)
 		{
 			DEF_OUT(L"Error> [Job Name] required.");
 		}
@@ -281,6 +304,23 @@ bool ConsoleMode()
 		}
 
 		JobBase::Close(pFile);
+	}
+	else if (params[0].CompareNoCase(L"setting") == 0)
+	{
+		Job Setting;
+		CString strSettingFileName;
+		strSettingFileName.Format(L"%sSetting.dat", FileUtils::GetSettingPath());
+		Setting.Load(strSettingFileName);
+
+		JobSetting* pSetting = (JobSetting*)Setting.GetImpl();
+		if (pSetting == nullptr) return false;
+		const T_SETTING* pSettingData = pSetting->GetSettingData(params[1]);
+		if (pSettingData)
+		{
+			pSetting->SetLastSetting(params[1]);
+			Setting.Save(strSettingFileName);
+		}
+		else DEF_OUT_RETURN_FALSE(L"확인할 수 없는 설정입니다.");
 	}
 
 	return true;
