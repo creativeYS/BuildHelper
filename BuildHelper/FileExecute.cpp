@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "FileExecute.h"
 #include "OutputControl.h"
+#include "JobSetting.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -44,8 +45,29 @@ int FileExecute::GetParamNum() const
 bool FileExecute::Run()
 {
 	CString strParam;
-	for (CString& strItem : m_vecParam)
+	for (CString strItem : m_vecParam)
 	{
+		// 상대경로인놈은 업데이트...
+		if ((strItem.Find(L".\\") >= 0 || strItem.Find(L"..\\") >= 0)
+			&& strItem.GetLength() > 2)
+		{
+			CString strTemp = strItem;
+			CString strWorkingPath = JobSetting::GetCurrentWorkingPath();
+			if (strWorkingPath.GetLength() <= 0) DEF_OUT_RETURN_FALSE(L"작업 경로를 확인할 수 없습니다.");
+			if (strWorkingPath[strWorkingPath.GetLength() - 1] != '\\')
+				strWorkingPath.AppendChar('\\');
+
+			bool bDdaom = strTemp[0] == '\"' && strTemp[strTemp.GetLength() - 1] == '\"';
+			if (bDdaom)
+			{
+				CString str1 = strTemp.Mid(1, strTemp.GetLength() - 2);
+				strTemp = str1;
+			}
+
+			FileUtils::ConvertRelativeFileName(strWorkingPath, strTemp);
+			strItem = strTemp;
+		}
+
 		if (strParam.GetLength() <= 0) strParam = strItem;
 		else
 		{

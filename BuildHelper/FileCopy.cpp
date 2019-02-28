@@ -39,7 +39,6 @@ bool FileCopy::Run()
 
 	FileUtils::ConvertRelativeFileName(strWorkingPath, strSourcePath);
 
-
 	VecStr strResult;
 	FileUtils::FileList(strSourcePath.GetBuffer(), strTargetFilter.GetBuffer(), strResult, m_bIncludeSubFolder);
 	
