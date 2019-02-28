@@ -11,6 +11,10 @@ public:
 	CString GetJobName() { return m_strJobName; }
 	bool	GetSubJob() { return m_bSubJob; }
 
+	void	SetType(int nType) { m_enType = nType; }
+	void	SetJobName(const CString& strName) { m_strJobName = strName; }
+	void	SetSubJob(bool bSub) { m_bSubJob = bSub; }
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 

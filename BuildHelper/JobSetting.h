@@ -3,20 +3,36 @@
 #include "FileUtils.h"
 #include "JobBase.h"
 
+
+struct T_SETTING
+{
+	CString strName;
+	CString strFilter;
+	int		nShowSub;
+	int		nUsePgmPath;
+	CString strWorkingPath;
+
+	T_SETTING(const CString& str) : strName(str), nShowSub(0), nUsePgmPath(1)
+	{}
+};
+typedef std::vector<T_SETTING> VecSetting;
+
 class JobSetting : public JobBase
 {
 public:
-	JobSetting();
+	JobSetting() {}
+	virtual ~JobSetting() {}
 
 	// Set Functions...
-	void	SetShowSubJob(bool bSet) { m_bShowSubJob = bSet; }
-	void	SetUseProgramPath(bool bSet) { m_bUseProgramPath = bSet; }
-	void	SetWorkingPath(const CString& str) { m_strWorkingPath = str; }
+	void	SetSetting(const VecSetting& settings);
 
 	// Get Functions...
-	bool	GetShowSubJob() const { return m_bShowSubJob; }
-	bool	GetUseProgramPath() const { return m_bUseProgramPath; }
-	CString GetWorkingPath() const  { return m_strWorkingPath; }
+	int		GetSetting(VecSetting& settings);
+
+	const T_SETTING*	GetSettingData(const CString& strName = L"") const;
+
+	CString	GetLastSetting() { return m_strLastSetting;  }
+	void	SetLastSetting(const CString& strName) { m_strLastSetting = strName; }
 
 	// Main Functions...
 	virtual bool	Run();
@@ -27,7 +43,6 @@ public:
 	virtual int		GetType() { return JobBase::EN_JOB_TYPE::EN_JOB_TYPE_JOBSETTING; }
 
 protected:
-	bool	m_bShowSubJob = true;
-	bool	m_bUseProgramPath = true;
-	CString	m_strWorkingPath;
+	CString		m_strLastSetting;
+	VecSetting	m_vecSettings;
 };

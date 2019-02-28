@@ -8,6 +8,7 @@
 #include "FileCopy.h"
 #include <locale.h>
 #include "OutputControl.h"
+#include "Job.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,7 +20,7 @@ BEGIN_MESSAGE_MAP(CBuildHelperApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 // CBuildHelperApp 생성
 
@@ -122,9 +123,13 @@ BOOL CBuildHelperApp::InitInstance()
 bool ConsoleMode()
 {
 	int iCnt = __argc;
-	if (iCnt <= 1) return false;
+	if (iCnt <= 1)
+	{
+		FreeConsole();
+		return false;
+	}
 
-	AllocConsole();
+	OutputControl::Instance()->SetType(OutputControl::EN_TYPE_CONSOLE);
 
 	std::vector<CString> params;
 	params.reserve(iCnt);
@@ -135,13 +140,113 @@ bool ConsoleMode()
 		params.push_back(CString(pszParam));
 	}
 
-	OutputControl::Instance()->SetType(OutputControl::EN_TYPE_CONSOLE);
+	
 
-	FileCopy test;
-	test.SetSourcePath(L"D:\\_Temp\\test\\*");
-	test.SetTargetFilter(L"*.txt");
-	test.SetDestPath(L"D:\\_Temp\\NEW");
-	test.SetIncludeSubFolder(true);
-	test.Run();
+	CString strPath;
+	strPath.Format(L"%s*", FileUtils::GetSettingPath());
+	VecStr files;
+	FileUtils::FileList(strPath, L"*.job", files);
+
+	if (params[0].CompareNoCase(L"?") == 0)
+	{
+		DEF_OUT(L"1. [program] list [options : /os = only sub job, /es = except sub job]");
+		DEF_OUT(L"2. [program] run [Job Name]");
+		DEF_OUT(L"2. [program] delete [Job Name]");
+		return true;
+	}
+	else if (params[0].CompareNoCase(L"list") == 0)
+	{
+		int nIndex = 1;
+		bool bSubOnly = false;
+		bool bExceptOnly = false;
+		if (params.size() >= 2 && params[1].CompareNoCase(L"/os") == 0) bSubOnly = true;
+		if (params.size() >= 2 && params[1].CompareNoCase(L"/es") == 0) bExceptOnly = true;
+
+		for (CString str : files)
+		{
+			CString strName = FileUtils::GetOnlyFileName(str, false, true);
+
+			Job job;
+			job.SetJobName(strName);
+			job.Load(str);
+
+			CString strPrompt;
+			if(bSubOnly)
+			{
+				if (!job.GetSubJob()) continue;
+			}
+			else if (bExceptOnly)
+			{
+				if (job.GetSubJob()) continue;
+			}
+
+			strPrompt.Format(_T("%d. %s (%s)"), nIndex++, strName, str);
+			DEF_OUT(strPrompt);
+		}
+		DEF_OUT(L"Done");
+	}
+	else if (params[0].CompareNoCase(L"run") == 0)
+	{
+		if(params.size() < 2)
+		{
+			DEF_OUT(L"Error> [Job Name] required.");
+		}
+		else
+		{
+			CString& strJobName = params[1];
+
+			bool bFind = false;
+			for (CString str : files)
+			{
+				CString strName = FileUtils::GetOnlyFileName(str, false, true);
+				if (strName.CompareNoCase(strJobName) == 0)
+				{
+					Job job;
+					job.SetJobName(strName);
+					job.Load(str);
+					job.Run();
+					bFind = true;
+					DEF_OUT(L"Executed.");
+					break;
+				}
+			}
+			if (!bFind)
+			{
+				CString strPrompt;
+				strPrompt.Format(L"Error > Can not find %s", strJobName);
+				DEF_OUT(strPrompt);
+			}
+		}
+	}
+	else if (params[0].CompareNoCase(L"delete") == 0)
+	{
+		if (params.size() < 2)
+		{
+			DEF_OUT(L"Error> [Job Name] required.");
+		}
+		else
+		{
+			CString& strJobName = params[1];
+
+			bool bFind = false;
+			for (CString str : files)
+			{
+				CString strName = FileUtils::GetOnlyFileName(str, false, true);
+				if (strName.CompareNoCase(strJobName) == 0)
+				{
+					::DeleteFile(str);
+					bFind = true;
+					DEF_OUT(L"Deleted.");
+					break;
+				}
+			}
+			if (!bFind)
+			{
+				CString strPrompt;
+				strPrompt.Format(L"Error > Can not find \"%s\"", strJobName);
+				DEF_OUT(strPrompt);
+			}
+		}
+	}
 	return true;
 }

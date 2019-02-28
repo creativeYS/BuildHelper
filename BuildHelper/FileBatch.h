@@ -7,7 +7,8 @@
 class FileBatch : public JobBase
 {
 public:
-	FileBatch();
+	FileBatch() {}
+	virtual ~FileBatch() {}
 
 	// Set Functions...
 	void	SetJobs(int nCnt, const CString* pVals);

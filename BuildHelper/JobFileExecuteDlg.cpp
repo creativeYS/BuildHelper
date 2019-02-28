@@ -45,7 +45,15 @@ bool JobFileExecuteDlg::dlg2data()
 		GetDlgItem(uiParam)->GetWindowText(strTemp);
 		strParam.push_back(strTemp);
 	}
-	m_pImpl->SetParam((int)strName.size(), &strName[0], &strParam[0]);
+
+	if (strName.size() == 0)
+	{
+		m_pImpl->SetParam((int)strName.size(), NULL, NULL);
+	}
+	else
+	{
+		m_pImpl->SetParam((int)strName.size(), &strName[0], &strParam[0]);
+	}
 	return true;
 }
 
@@ -162,7 +170,7 @@ void JobFileExecuteDlg::OnBnClickedOk()
 
 void JobFileExecuteDlg::OnBnClickedButton1()
 {
-	FileUtils::OnBrowseFolder(this, IDC_EDIT2, true);
+	FileUtils::OnBrowseFolder(GetDlgItem(IDC_EDIT2), FileUtils::GetCurrentModulePath(), true);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 

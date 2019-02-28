@@ -6,7 +6,8 @@
 class FileExecute : public JobBase
 {
 public:
-	FileExecute();
+	FileExecute() {}
+	virtual ~FileExecute() {}
 
 	// Set Functions...
 	void	SetExecuteFile(const CString& str) { m_strExecuteFile = str; }

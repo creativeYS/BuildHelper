@@ -61,13 +61,13 @@ void JobFileCopyDlg::OnBnClickedOk()
 
 void JobFileCopyDlg::OnBnClickedButton1()
 {
-	FileUtils::OnBrowseFolder(this, IDC_EDIT2);
+	FileUtils::OnBrowseFolder(GetDlgItem(IDC_EDIT2), FileUtils::GetCurrentModulePath());
 }
 
 
 void JobFileCopyDlg::OnBnClickedButton2()
 {
-	FileUtils::OnBrowseFolder(this, IDC_EDIT3);
+	FileUtils::OnBrowseFolder(GetDlgItem(IDC_EDIT3), FileUtils::GetCurrentModulePath());
 }
 
 

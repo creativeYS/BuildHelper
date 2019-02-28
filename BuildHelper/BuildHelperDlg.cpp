@@ -14,6 +14,7 @@
 #include "JobFileCopyDlg.h"
 #include "JobFileExecuteDlg.h"
 #include "JobBatchDlg.h"
+#include "NameDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -63,53 +64,94 @@ CBuildHelperDlg::CBuildHelperDlg(CWnd* pParent /*=nullptr*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
+CBuildHelperDlg::~CBuildHelperDlg()
+{
+	ClearJobs();
+}
+
 void CBuildHelperDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_List);
+	DDX_Control(pDX, IDC_COMBO1, m_cbxSetting);
 }
 
-bool CBuildHelperDlg::Dlg2Data()
+bool CBuildHelperDlg::SetSettingData(const CString& strName)
 {
 	if (m_pSetting == nullptr) { ASSERT(0); return false; }
-	JobSetting* pSetting = (JobSetting*)m_pSetting->GetImpl();
-	if (pSetting == nullptr) { ASSERT(0); return false; }
 
-	bool bChk1 = ((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck();
-	pSetting->SetShowSubJob(bChk1);
-	bool bChk2 = ((CButton*)GetDlgItem(IDC_CHECK4))->GetCheck();
-	pSetting->SetUseProgramPath(bChk2);
-	CString strTemp;
-	GetDlgItem(IDC_EDIT2)->GetWindowText(strTemp);
-	pSetting->SetWorkingPath(strTemp);
+	VecSetting settings;
+
+	int nCnt = m_pSetting->GetSetting(settings);
+
+	CString strSaveTarget;
+	if(strName.GetLength() > 0) strSaveTarget = strName;
+	else
+	{
+		int nIdx = m_cbxSetting.GetCurSel();
+		if (nIdx >= 0) m_cbxSetting.GetLBText(nIdx, strSaveTarget);
+	}
+	if (strSaveTarget.GetLength() <= 0)
+	{
+		DEF_OUT_RETURN_FALSE(L"저장할 대상을 확인할 수 없습니다.");
+	}
+
+	T_SETTING* pSaveTarget = nullptr;
+	for (T_SETTING& rSetting : settings)
+	{
+		if (rSetting.strName.CompareNoCase(strSaveTarget) == 0)
+		{
+			pSaveTarget = &rSetting;
+			break;
+		}
+	}
+
+	if (pSaveTarget == nullptr)
+	{
+		DEF_OUT_RETURN_FALSE(L"저장할 대상을 확인할 수 없습니다.");
+	}
+	
+	Dlg2DataSub(pSaveTarget);	
+	m_pSetting->SetSetting(settings);
+
 	return true;
 }
 
-void CBuildHelperDlg::Data2Dlg()
+void CBuildHelperDlg::Dlg2DataSub(T_SETTING* pSetting)
 {
-	if (m_pSetting == nullptr) { ASSERT(0); return; }
-	JobSetting* pSetting = (JobSetting*)m_pSetting->GetImpl();
-	if (pSetting == nullptr) { ASSERT(0); return; }
+	if (pSetting == nullptr) return;
+	GetDlgItem(IDC_EDIT1)->GetWindowText(pSetting->strFilter);
+	pSetting->nShowSub = (((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck()) ? 1 : 0;
+	pSetting->nUsePgmPath = (((CButton*)GetDlgItem(IDC_CHECK4))->GetCheck()) ? 1 : 0;
+	GetDlgItem(IDC_EDIT2)->GetWindowText(pSetting->strWorkingPath);
+}
 
-	if (pSetting->GetShowSubJob()) ((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(TRUE);
-	if (pSetting->GetUseProgramPath()) ((CButton*)GetDlgItem(IDC_CHECK4))->SetCheck(TRUE);
-	GetDlgItem(IDC_EDIT2)->SetWindowText(pSetting->GetWorkingPath());
+void CBuildHelperDlg::Data2DlgSub(const T_SETTING* pSetting)
+{
+	if (pSetting == nullptr) return;
+	GetDlgItem(IDC_EDIT1)->SetWindowText(pSetting->strFilter);
+	((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(pSetting->nShowSub == 1 ? TRUE : FALSE);
+	((CButton*)GetDlgItem(IDC_CHECK4))->SetCheck(pSetting->nUsePgmPath == 1 ? TRUE : FALSE);
+	GetDlgItem(IDC_EDIT2)->SetWindowText(pSetting->strWorkingPath);
 
-	UpdateList();
+	// check에 따른 edit 박스 업데이트
+	OnBnClickedUpdateEditEnable();
 }
 
 BEGIN_MESSAGE_MAP(CBuildHelperDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_CHECK4, &CBuildHelperDlg::OnBnClickedCheck4)
+	ON_BN_CLICKED(IDC_CHECK4, &CBuildHelperDlg::OnBnClickedUpdateEditEnable)
 	ON_BN_CLICKED(IDC_BUTTON5, &CBuildHelperDlg::OnBnClickedClose)
-	ON_BN_CLICKED(IDC_BUTTON1, &CBuildHelperDlg::OnBnClickedButton1)
-	ON_BN_CLICKED(IDOK, &CBuildHelperDlg::OnBnClickedOk)
-	ON_BN_CLICKED(IDC_BUTTON4, &CBuildHelperDlg::OnBnClickedButton4)
-	ON_BN_CLICKED(IDC_CHECK1, &CBuildHelperDlg::OnBnClickedCheck1)
-	ON_BN_CLICKED(IDC_BUTTON2, &CBuildHelperDlg::OnBnClickedButton2)
-	ON_EN_CHANGE(IDC_EDIT1, &CBuildHelperDlg::OnEnChangeEdit1)
+	ON_BN_CLICKED(IDC_BUTTON1, &CBuildHelperDlg::OnBnClickedNewJob)
+	ON_BN_CLICKED(IDOK, &CBuildHelperDlg::OnBnClickedRunJob)
+	ON_BN_CLICKED(IDC_BUTTON4, &CBuildHelperDlg::OnBnClickedDeleteJob)
+	ON_BN_CLICKED(IDC_CHECK1, &CBuildHelperDlg::OnBnClickedShowSub)
+	ON_BN_CLICKED(IDC_BUTTON2, &CBuildHelperDlg::OnBnClickedJobModify)
+	ON_EN_CHANGE(IDC_EDIT1, &CBuildHelperDlg::OnEnChangeEditFilter)
+	ON_BN_CLICKED(IDC_BUTTON6, &CBuildHelperDlg::OnBnClickedSaveSetting)
+	ON_CBN_SELCHANGE(IDC_COMBO1, &CBuildHelperDlg::OnCbnSelchangeSettomgCombo)
 END_MESSAGE_MAP()
 
 
@@ -169,10 +211,15 @@ BOOL CBuildHelperDlg::OnInitDialog()
 			gSetting.Init(JobBase::EN_JOB_TYPE_JOBSETTING);
 		}
 
-		m_pSetting = &gSetting;
+		m_pSetting = (JobSetting*)gSetting.GetImpl();
+		m_pSettingJob = &gSetting;
 	}
-	Data2Dlg();
-	OnBnClickedCheck4();
+
+	// combo, list 업데이트
+	UpdateCombo();
+	const T_SETTING* pSetting = m_pSetting->GetSettingData();
+	Data2DlgSub(pSetting);
+	UpdateList();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -245,9 +292,10 @@ void CBuildHelperDlg::UpdateList()
 	}
 
 	m_List.DeleteAllItems();
-	int nIdx = 1;
+	int nIdx = 0;
 	for (auto itr = m_Jobs.begin(); itr != m_Jobs.end(); itr++)
 	{
+		nIdx++;
 		Job* pJob = itr->second;
 		if(!bShowSub)
 		{
@@ -265,6 +313,10 @@ void CBuildHelperDlg::UpdateList()
 			{
 				if (strItemName.Find(kwd) >= 0) { nFindCnt++; continue; }
 				if (strItemType.Find(kwd) >= 0) { nFindCnt++; continue; }
+				int nVal = _wtoi(kwd);
+				CString strTemp;
+				strTemp.Format(_T("%d"), nVal);
+				if(strTemp == kwd && nVal != 0 && nVal == nIdx) { nFindCnt++; continue; }
 			}
 			if(nFindCnt == (int)strKwd.size())
 			{
@@ -274,7 +326,7 @@ void CBuildHelperDlg::UpdateList()
 		if (!bShow) continue;
 
 		CString strTemp;
-		strTemp.Format(_T("%d"), nIdx++);
+		strTemp.Format(_T("%d"), nIdx);
 		int nIndex = m_List.InsertItem(m_List.GetItemCount(), strTemp);
 		m_List.SetItemText(nIndex, 1, strItemName);
 		m_List.SetItemText(nIndex, 2, strItemType);
@@ -284,12 +336,7 @@ void CBuildHelperDlg::UpdateList()
 
 void CBuildHelperDlg::UpdateJobs()
 {
-	for (auto itr : m_Jobs)
-	{
-		Job* pJob = itr.second;
-		delete pJob;
-	}
-	m_Jobs.clear();
+	ClearJobs();
 
 	CString strPath;
 	strPath.Format(L"%s*", FileUtils::GetSettingPath());
@@ -307,7 +354,37 @@ void CBuildHelperDlg::UpdateJobs()
 	}
 }
 
-void CBuildHelperDlg::OnBnClickedCheck4()
+void CBuildHelperDlg::UpdateCombo()
+{
+	m_cbxSetting.ResetContent();
+
+	CString strLastSetting = m_pSetting->GetLastSetting();
+	VecSetting vecSettings;
+	int nCnt = m_pSetting->GetSetting(vecSettings);
+	int nIndex = -1;
+	for (int i = 0; i < nCnt; i++)
+	{
+		if (strLastSetting.CompareNoCase(vecSettings[i].strName) == 0) nIndex = i;
+		m_cbxSetting.AddString(vecSettings[i].strName);
+	}
+
+	// 자동 정렬이라... 그냥 마지막에 오라고 ㅋㅋㅋ~
+	m_cbxSetting.AddString(L"~새 설정");
+
+	m_cbxSetting.SetCurSel(nIndex);
+}
+
+void CBuildHelperDlg::ClearJobs()
+{
+	for (auto itr : m_Jobs)
+	{
+		Job* pJob = itr.second;
+		delete pJob;
+	}
+	m_Jobs.clear();
+}
+
+void CBuildHelperDlg::OnBnClickedUpdateEditEnable()
 {
 	BOOL bEnable = ((CButton*)GetDlgItem(IDC_CHECK4))->GetCheck() ? FALSE : TRUE;
 
@@ -317,21 +394,35 @@ void CBuildHelperDlg::OnBnClickedCheck4()
 
 void CBuildHelperDlg::OnBnClickedClose()
 {
-	if (!Dlg2Data())
-	{
-		DEF_OUT(L"성정값을 저장할 수 없습니다.");
-		return;
-	}
-	CString strPath;
-	strPath.Format(_T("%s%s"), FileUtils::GetSettingPath(), FileUtils::GetSettingFileName());
-	m_pSetting->Save(strPath);
 	CDialogEx::OnOK();
 }
 
 
-void CBuildHelperDlg::OnBnClickedButton1()
+void CBuildHelperDlg::OnBnClickedNewJob()
 {
+	CString strJobTempName;
+	static int nIdx = 0;
+	while (nIdx++ < 100)
+	{
+		strJobTempName.Format(L"작업 %02d", nIdx);
+
+		bool bExist = false;
+		for (auto itr = m_Jobs.begin(); itr != m_Jobs.end(); itr++)
+		{
+			CString strJobName = itr->second->GetJobName();
+			if (strJobName.CompareNoCase(strJobTempName) == 0)
+			{
+				bExist = true;
+				break;
+			}
+		}
+
+		if (bExist) continue;
+		break;
+	}
+
 	JobTypeDlg dlg;
+	dlg.SetJobName(strJobTempName);
 	if (dlg.DoModal() == IDOK)
 	{
 		Job jobNew;
@@ -349,7 +440,7 @@ void CBuildHelperDlg::OnBnClickedButton1()
 }
 
 
-void CBuildHelperDlg::OnBnClickedOk()
+void CBuildHelperDlg::OnBnClickedRunJob()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (m_List.GetSelectedCount() != 1)
@@ -370,7 +461,7 @@ void CBuildHelperDlg::OnBnClickedOk()
 }
 
 
-void CBuildHelperDlg::OnBnClickedButton4()
+void CBuildHelperDlg::OnBnClickedDeleteJob()
 {
 	int nCount = m_List.GetSelectedCount();
 	if (nCount == 0)
@@ -406,14 +497,14 @@ void CBuildHelperDlg::OnBnClickedButton4()
 }
 
 
-void CBuildHelperDlg::OnBnClickedCheck1()
+void CBuildHelperDlg::OnBnClickedShowSub()
 {
 	UpdateList();
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
 
-void CBuildHelperDlg::OnBnClickedButton2()
+void CBuildHelperDlg::OnBnClickedJobModify()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (m_List.GetSelectedCount() != 1)
@@ -430,18 +521,37 @@ void CBuildHelperDlg::OnBnClickedButton2()
 		DEF_OUT(L"작업을 확인할 수 없습니다.");
 	}
 
-	Job jobTemp;
-	jobTemp.Load(pJob->GetLoadedFilePath());
-	if (jobTemp.DoModal() == IDOK)
+	JobTypeDlg dlg;
+	dlg.SetType(pJob->GetJobType());
+	dlg.SetJobName(pJob->GetJobName());
+	dlg.SetSubJob(pJob->GetSubJob());
+	if (dlg.DoModal() == IDOK)
 	{
-		jobTemp.Save(pJob->GetLoadedFilePath());
-	}
+		Job jobTemp;
+		jobTemp.Load(pJob->GetLoadedFilePath());
+		if (jobTemp.GetJobType() != dlg.GetType())
+		{
+			jobTemp.Init(dlg.GetType());
+		}
+		jobTemp.SetJobName(dlg.GetJobName());
+		jobTemp.SetSubJob(dlg.GetSubJob());
 
-	UpdateList();
+		if (jobTemp.DoModal() == IDOK)
+		{
+			::DeleteFile(pJob->GetLoadedFilePath());
+			CString strFilePath = pJob->GetLoadedFilePath();
+			CString strOrg, strNew;
+			strOrg.Format(_T("\\%s."), pJob->GetJobName());
+			strNew.Format(_T("\\%s."), dlg.GetJobName());
+			strFilePath.Replace(strOrg, strNew);
+			jobTemp.Save(strFilePath);
+			UpdateList();
+		}
+	}
 }
 
 
-void CBuildHelperDlg::OnEnChangeEdit1()
+void CBuildHelperDlg::OnEnChangeEditFilter()
 {
 	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
 	// CDialogEx::OnInitDialog() 함수를 재지정 
@@ -451,4 +561,83 @@ void CBuildHelperDlg::OnEnChangeEdit1()
 	// TODO:  여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
 	UpdateList();
+}
+
+void CBuildHelperDlg::OnBnClickedSaveSetting()
+{
+	if (!SetSettingData())
+	{
+		DEF_OUT(L"성정값을 저장할 수 없습니다.");
+		return;
+	}
+
+	CString strPath;
+	strPath.Format(_T("%s%s"), FileUtils::GetSettingPath(), FileUtils::GetSettingFileName());
+	m_pSettingJob->Save(strPath);
+	DEF_OUT(L"성정을 저장하였습니다.");
+}
+
+
+void CBuildHelperDlg::OnCbnSelchangeSettomgCombo()
+{
+	// 마지막 선택시
+	if(m_cbxSetting.GetCurSel() == m_cbxSetting .GetCount() - 1)
+	{
+		VecSetting vecSettings;
+
+		int nCnt = m_pSetting->GetSetting(vecSettings);
+		int nIdx = 1;
+
+		CString strName;
+		while (true)
+		{
+			strName.Format(_T("설정 %02d"), nIdx++);
+
+			if (m_pSetting->GetSettingData(strName) == NULL) break;
+		}
+
+
+		NameDlg dlg;
+		dlg.SetDlgVal(L"설정 이름", L"설정 이름", L"설정 이름");
+		if (strName.GetLength() > 0) dlg.SetName(strName);
+		if (dlg.DoModal() == IDOK)
+		{
+			strName = dlg.GetName();
+
+			T_SETTING rSetting(strName);
+			vecSettings.push_back(rSetting);
+
+			m_pSetting->SetSetting(vecSettings);
+			m_pSetting->SetLastSetting(strName);
+
+			UpdateCombo();
+			Data2DlgSub(&rSetting);
+		}
+		else
+		{
+			UpdateCombo();
+			Data2DlgSub(m_pSetting->GetSettingData());
+		}
+	}
+	else if(m_pSetting->GetLastSetting().GetLength() > 0) // 바꿀때
+	{
+		// 이전의 것 저장하고
+		SetSettingData(m_pSetting->GetLastSetting());
+
+		// 새로 선택된것으로 바꾼다.
+		int nCur = m_cbxSetting.GetCurSel();
+		if (nCur >= 0)
+		{
+			CString strTemp;
+			m_cbxSetting.GetLBText(nCur, strTemp);
+			
+			auto pData = m_pSetting->GetSettingData(strTemp);
+			if(pData)
+			{
+				m_pSetting->SetLastSetting(strTemp);
+				Data2DlgSub(pData);
+				UpdateList();
+			}
+		}
+	}
 }

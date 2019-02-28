@@ -10,8 +10,27 @@
 #define new DEBUG_NEW
 #endif
 
-JobSetting::JobSetting()
+#define DEF_CLEAR_RESERVE(VECTOR, SIZE) { VECTOR.clear(); VECTOR.reserve(SIZE); }
+void JobSetting::SetSetting(const VecSetting& settings)
 {
+	m_vecSettings = settings;
+}
+
+int JobSetting::GetSetting(VecSetting& settings)
+{
+	settings = m_vecSettings;
+	return (int)m_vecSettings.size();
+}
+
+const T_SETTING* JobSetting::GetSettingData(const CString& strName) const
+{
+	CString strTarget = strName.GetLength() > 0 ? strName : m_strLastSetting;
+	for (const T_SETTING& setting : m_vecSettings)
+	{
+		if (setting.strName.CompareNoCase(strTarget) == 0)
+			return &setting;
+	}
+	return NULL;
 }
 
 bool JobSetting::Run()
@@ -21,16 +40,39 @@ bool JobSetting::Run()
 
 bool JobSetting::Load(FILE* pFile)
 {
-	m_bShowSubJob = rdInt(pFile) == 1 ? true : false;
-	m_bUseProgramPath = rdInt(pFile) == 1 ? true : false;
-	m_strWorkingPath = rdString(pFile);
+	m_strLastSetting = rdString(pFile);
+
+	int nSize = rdInt(pFile);
+
+	DEF_CLEAR_RESERVE(m_vecSettings, nSize);
+
+	while (nSize--)
+	{
+		T_SETTING setting(rdString(pFile));
+		setting.strFilter		= rdString(pFile);
+		setting.nShowSub		= rdInt(pFile);
+		setting.nUsePgmPath		= rdInt(pFile);
+		setting.strWorkingPath	= rdString(pFile);
+
+		m_vecSettings.push_back(setting);
+	}
 	return true;
 }
 
 bool JobSetting::Save(FILE* pFile)
 {
-	wrInt(pFile, m_bShowSubJob ? 1 : 0);
-	wrInt(pFile, m_bUseProgramPath ? 1 : 0);
-	wrString(pFile, m_strWorkingPath);
+	wrString(pFile, m_strLastSetting);
+
+	wrInt(pFile, (int)m_vecSettings.size());
+
+	for(int i = 0 ; i < (int)m_vecSettings.size(); i++)
+	{
+		const T_SETTING& setting = m_vecSettings[i];
+		wrString(pFile, setting.strName);
+		wrString(pFile, setting.strFilter);
+		wrInt(pFile,	setting.nShowSub);
+		wrInt(pFile,	setting.nUsePgmPath);
+		wrString(pFile, setting.strWorkingPath);
+	}
 	return true;
 }

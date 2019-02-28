@@ -11,10 +11,6 @@
 #define new DEBUG_NEW
 #endif
 
-FileBatch::FileBatch()
-{
-}
-
 void FileBatch::SetJobs(int nCnt, const CString* pVals)
 {
 	m_vecTargetJobs.clear();

@@ -54,11 +54,10 @@ void OutputControl::PrintOut(const TCHAR* pStr)
 void OutputControl::SetType(EN_TYPE enType)
 {
 	m_enType = enType;
-	if(m_enType == EN_TYPE_CONSOLE) _wsetlocale(LC_ALL, _T("korean"));
+	if(m_enType == EN_TYPE_CONSOLE) _wsetlocale(LC_ALL, L"korean");
 }
 
 OutputControl::OutputControl()
 	: m_enType(OutputControl::EN_TYPE::EN_TYPE_NONE)
 {
-
 }

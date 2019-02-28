@@ -1,8 +1,17 @@
 ﻿#pragma once
 
+#include <vector>
+
+typedef std::vector<int>		VecInt;
+typedef std::vector<CString>	VecStr;
+
+class Job;
+
 class JobBase
 {
 public:
+	virtual ~JobBase() {}
+
 	virtual bool	Run() = 0;
 
 	virtual bool	Load(FILE* pFile) = 0;

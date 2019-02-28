@@ -10,10 +10,6 @@
 #define new DEBUG_NEW
 #endif
 
-FileExecute::FileExecute()
-{
-}
-
 void FileExecute::AddParam(const CString& strName, const CString& strParam)
 {
 	m_vecParamName.push_back(strName);

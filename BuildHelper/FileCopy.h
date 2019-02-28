@@ -6,7 +6,8 @@
 class FileCopy : public JobBase
 {
 public:
-	FileCopy();
+	FileCopy() {}
+	virtual ~FileCopy() {}
 
 	// Set Functions...
 	void	SetSourcePath(const CString& strPath) { m_strSourcePath = strPath; }
@@ -35,5 +36,5 @@ protected:
 	CString m_strSourcePath;		// c:\test\* 
 	CString m_strDestPath;			// c:\target
 	CString m_strTargetFilter;		// *.txt
-	bool	m_bIncludeSubFolder;
+	bool	m_bIncludeSubFolder = true;
 };

@@ -12,6 +12,13 @@ NameDlg::NameDlg(CWnd* pParent /*=nullptr*/)
 {
 }
 
+void NameDlg::SetDlgVal(const TCHAR* pTitle, const TCHAR* pGroup, const TCHAR* pLabel)
+{
+	m_strDlgTitle = pTitle;
+	m_strDlgGroup = pGroup;
+	m_strDlgLabel = pLabel;
+}
+
 void NameDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
@@ -20,6 +27,10 @@ void NameDlg::DoDataExchange(CDataExchange* pDX)
 void NameDlg::data2dlg()
 {
 	GetDlgItem(IDC_EDIT1)->SetWindowText(m_strName);
+
+	if(m_strDlgTitle.GetLength() > 0) SetWindowText(m_strDlgTitle);
+	if(m_strDlgGroup.GetLength() > 0) GetDlgItem(IDC_STATIC3)->SetWindowText(m_strDlgGroup);
+	if(m_strDlgLabel.GetLength() > 0) GetDlgItem(IDC_STATIC2)->SetWindowText(m_strDlgLabel);
 }
 
 bool NameDlg::dlg2data()

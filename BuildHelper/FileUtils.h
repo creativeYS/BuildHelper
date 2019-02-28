@@ -19,7 +19,7 @@ public:
 
 	static bool		IsLastChar(const CString& strCheck, TCHAR ch);
 
-	static void		OnBrowseFolder(CDialog* pDlg, UINT uiEdit, bool bFile = false);
+	static void		OnBrowseFolder(CWnd* pCtrl, const TCHAR* pBasePath, bool bFile = false);
 
 	// pPath : c:\test\nice\*
 	// pExt : *.txt

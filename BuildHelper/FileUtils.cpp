@@ -13,6 +13,13 @@
 
 BOOL FileUtils::ConvertRelativeFileName(const TCHAR* szCurPath, CString& strPath)
 {
+	CString strModulePath = szCurPath == nullptr ? GetCurrentModulePath() : szCurPath;
+	strModulePath.Replace('/', '\\');
+	if (FileUtils::IsLastChar(strModulePath, '\\'))
+		strModulePath.Delete(strModulePath.GetLength() - 1, 1);
+
+	szCurPath = strModulePath;
+
 	if (strPath.GetLength() > 1)
 	{
 		CString strTemp;
@@ -75,9 +82,9 @@ bool FileUtils::IsLastChar(const CString& strCheck, TCHAR ch)
 	return false;
 }
 
-void FileUtils::OnBrowseFolder(CDialog* pDlg, UINT uiEdit, bool bFile)
+void FileUtils::OnBrowseFolder(CWnd* pCtrl, const TCHAR* pBasePath, bool bFile)
 {
-	CString strModulePath = FileUtils::GetCurrentModulePath();
+	CString strModulePath = pBasePath;
 	strModulePath.Replace('/', '\\');
 	if (FileUtils::IsLastChar(strModulePath, '\\'))
 		strModulePath.Delete(strModulePath.GetLength() - 1, 1);
@@ -85,7 +92,7 @@ void FileUtils::OnBrowseFolder(CDialog* pDlg, UINT uiEdit, bool bFile)
 	CString strInit = strModulePath;
 
 	CString strTemp;
-	pDlg->GetDlgItem(uiEdit)->GetWindowText(strTemp);
+	pCtrl->GetWindowText(strTemp);
 
 	if (strTemp.GetLength() > 0)
 	{
@@ -108,7 +115,7 @@ void FileUtils::OnBrowseFolder(CDialog* pDlg, UINT uiEdit, bool bFile)
 		if (dlg.DoModal() == IDOK)
 		{
 			CString strPathName = dlg.GetPathName();
-			pDlg->GetDlgItem(uiEdit)->SetWindowText(strPathName);
+			pCtrl->SetWindowText(strPathName);
 		}
 	}
 	else
@@ -117,7 +124,7 @@ void FileUtils::OnBrowseFolder(CDialog* pDlg, UINT uiEdit, bool bFile)
 		if (Picker.DoModal() == IDOK)
 		{
 			CString strFolderPath = Picker.GetPathName();
-			pDlg->GetDlgItem(uiEdit)->SetWindowText(strFolderPath);
+			pCtrl->SetWindowText(strFolderPath);
 		}
 	}
 }

@@ -10,11 +10,6 @@
 #define new DEBUG_NEW
 #endif
 
-FileCopy::FileCopy()
-	: m_bIncludeSubFolder(true)
-{
-}
-
 bool FileCopy::Run()
 {
 	if (m_strSourcePath.GetLength() <= 0)	DEF_OUT_RETURN_FALSE(L"원본 폴더 경로를 확인할 수 없습니다.");
