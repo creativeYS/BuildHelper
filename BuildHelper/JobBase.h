@@ -1,9 +1,11 @@
 ﻿#pragma once
 
 #include <vector>
+#include <map>
 
 typedef std::vector<int>		VecInt;
 typedef std::vector<CString>	VecStr;
+typedef std::map<CString, bool>	MapStrBool;
 
 class Job;
 

@@ -87,7 +87,7 @@ bool FileExecute::Run()
 		}
 	}
 
-	::ShellExecute(NULL, L"open", strExeFile, strParam, NULL, SW_SHOWNORMAL);
+	HINSTANCE hInst = ::ShellExecute(NULL, L"open", strExeFile, strParam, NULL, SW_SHOWNORMAL);
 
 	return true;
 }

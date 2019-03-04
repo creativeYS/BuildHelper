@@ -206,7 +206,10 @@ BOOL CBuildHelperDlg::OnInitDialog()
 	{
 		CString strPath;
 		strPath.Format(_T("%s%s"), FileUtils::GetSettingPath(), FileUtils::GetSettingFileName());
-		gSetting.Load(strPath);
+		if (FileUtils::FileExistOnly(strPath))
+		{
+			gSetting.Load(strPath);
+		}
 		if (gSetting.GetImpl() == nullptr ||
 			gSetting.GetImpl()->GetType() != JobBase::EN_JOB_TYPE_JOBSETTING)
 		{

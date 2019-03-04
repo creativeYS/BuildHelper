@@ -28,6 +28,11 @@ public:
 	virtual int		GetType() { return JobBase::EN_JOB_TYPE::EN_JOB_TYPE_CREATEFILELIST; }
 
 protected:
+	bool			Run_Path(CString strTargetPath, CString strTargetFilter);
+	bool			Run_Solution(CString strTargetPath);
+
+	bool			GetProjects(const CString strSolutionPath, MapStrBool& mapProjects);
+
 	CString m_strTargetPath;
 	CString m_strTargetFilter;
 	bool	m_bIncludeSubFolder = true;
