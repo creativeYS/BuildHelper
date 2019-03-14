@@ -15,6 +15,7 @@
 #include "JobFileExecuteDlg.h"
 #include "JobBatchDlg.h"
 #include "NameDlg.h"
+#include <algorithm>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -369,14 +370,22 @@ void CBuildHelperDlg::UpdateCombo()
 	VecSetting vecSettings;
 	int nCnt = m_pSetting->GetSetting(vecSettings);
 	int nIndex = -1;
+	VecStr strNames;
+	strNames.reserve(nCnt);
 	for (int i = 0; i < nCnt; i++)
 	{
-		if (strLastSetting.CompareNoCase(vecSettings[i].strName) == 0) nIndex = i;
-		m_cbxSetting.AddString(vecSettings[i].strName);
+		strNames.push_back(vecSettings[i].strName);
+	}
+	std::sort(strNames.begin(), strNames.end(), std::greater<CString>());
+
+	for(int i = 0 ; i < nCnt; i++)
+	{
+		if (strLastSetting.CompareNoCase(strNames[i]) == 0) nIndex = i;
+		m_cbxSetting.AddString(strNames[i]);
 	}
 
 	// 자동 정렬이라... 그냥 마지막에 오라고 ㅋㅋㅋ~
-	m_cbxSetting.AddString(L"~새 설정");
+	m_cbxSetting.AddString(L"새 설정");
 
 	m_cbxSetting.SetCurSel(nIndex);
 }
@@ -473,6 +482,7 @@ void CBuildHelperDlg::OnBnClickedRunJob()
 	{
 		GetDlgItem(IDC_EDIT2)->GetWindowText(strWorkingPath);
 	}
+
 	JobSetting::SetCurrentWorkingPath(strWorkingPath);
 	pJob->Run();
 }
@@ -505,11 +515,11 @@ void CBuildHelperDlg::OnBnClickedDeleteJob()
 			}
 		}
 
-		UpdateList();
-
 		if (nFailCnt == 0)	strTemp.Format(_T("선택된 %d개의 작업중 %d개가 삭제되었습니다."), nCount, nCount - nFailCnt);
 		else				strTemp.Format(_T("선택된 %d개의 작업이 삭제되었습니다."), nCount);
 		DEF_OUT(strTemp);
+
+		UpdateList();
 	}
 }
 

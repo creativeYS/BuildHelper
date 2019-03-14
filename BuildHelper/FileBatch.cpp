@@ -48,10 +48,18 @@ bool FileBatch::Run()
 		DEF_OUT_RETURN_FALSE(L"작업을 확인할 수 없습니다.");
 	}
 
+	CString strPath;
+	strPath.Format(L"%s*", FileUtils::GetSettingPath());
+	VecStr files;
+	FileUtils::FileList(strPath, L"*.job", files);
+
 	for (const CString& str : m_vecTargetJobs)
 	{
+		CString strJobPath;
+		strJobPath.Format(L"%s%s%s", FileUtils::GetSettingPath(), str, L".job");
+
 		Job tempJob;
-		if (!tempJob.Load(str)) continue;
+		if (!tempJob.Load(strJobPath)) continue;
 
 		if (tempJob.Run()) nSuccessCnt++;
 	}

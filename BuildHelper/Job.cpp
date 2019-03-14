@@ -52,19 +52,27 @@ bool Job::Load(const TCHAR* pFilePath)
 	}
 
 	FILE* pFile = JobBase::Open(pFilePath, false);
-	if (pFile == NULL) DEF_OUT_RETURN_FALSE(L"파일을 열 수 없습니다.");
+	if (pFile == NULL)
+	{
+		JobBase::Close(pFile);
+		DEF_OUT_RETURN_FALSE(L"파일을 열 수 없습니다.");
+	}
+
+	m_strLoadedFilePath = pFilePath;
 
 	CString strName = JobBase::rdString(pFile);
 	int nType = JobBase::GetJobTypeCode(strName);
-	if(nType == JobBase::EN_JOB_TYPE::EN_JOB_TYPE_NUMBER) DEF_OUT_RETURN_FALSE(L"확인할 수 없는 작업입니다.");
+	if (nType == JobBase::EN_JOB_TYPE::EN_JOB_TYPE_NUMBER)
+	{
+		JobBase::Close(pFile);
+		DEF_OUT_RETURN_FALSE(L"확인할 수 없는 작업입니다.");
+	}
 
-	m_bSubJob = JobBase::rdInt(pFile) == 1 ? true : false;
-	
+	m_bSubJob = JobBase::rdInt(pFile) == 1 ? true : false;	
 	m_pImpl = JobBase::CreateImpl(nType);
 
 	bool bRet = m_pImpl->Load(pFile);
 	JobBase::Close(pFile);
-	m_strLoadedFilePath = pFilePath;
 
 	return bRet;
 }

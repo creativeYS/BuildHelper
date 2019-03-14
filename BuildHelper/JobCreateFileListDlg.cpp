@@ -24,6 +24,7 @@ bool JobCreateFileListDlg::dlg2data()
 	GetDlgItem(IDC_EDIT4)->GetWindowText(strTemp);
 	m_pImpl->SetTargetFilter(strTemp);
 	m_pImpl->SetIncludeSubFolder(((CButton*)GetDlgItem(IDC_CHECK2))->GetCheck() ? true : false);
+	m_pImpl->SetFindPdb(((CButton*)GetDlgItem(IDC_CHECK9))->GetCheck() ? true : false);
 	return true;
 }
 
@@ -32,6 +33,7 @@ void JobCreateFileListDlg::data2dlg()
 	GetDlgItem(IDC_EDIT2)->SetWindowText(m_pImpl->GetTargetPath());
 	GetDlgItem(IDC_EDIT4)->SetWindowText(m_pImpl->GetTargetFilter());
 	((CButton*)GetDlgItem(IDC_CHECK2))->SetCheck(m_pImpl->GetIncludeSubFolder() ? TRUE : FALSE);
+	((CButton*)GetDlgItem(IDC_CHECK9))->SetCheck(m_pImpl->GetFindPdb() ? TRUE : FALSE);
 }
 
 BEGIN_MESSAGE_MAP(JobCreateFileListDlg, CDialogEx)

@@ -25,6 +25,7 @@
 #define IDC_BUTTON1                     1009
 #define IDC_BUTTON2                     1010
 #define IDC_EDIT6                       1010
+#define IDC_CHECK9                      1010
 #define IDC_BUTTON3                     1011
 #define IDC_LIST1                       1011
 #define IDC_EDIT7                       1011

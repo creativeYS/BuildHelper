@@ -62,6 +62,7 @@ bool FileCopy::Run()
 
 	if (!FileUtils::MakeDir(strDestPath))  DEF_OUT_RETURN_FALSE(L"목표 폴더를 생성할 수 없습니다.");
 
+	int nSuccessCnt = 0;
 	for (CString& strFileOrg : strResult)
 	{
 		CString strFile = strFileOrg.Right(strFileOrg.GetLength() - strSourcePath.GetLength() + 1);
@@ -84,11 +85,20 @@ bool FileCopy::Run()
 		strCopiedFilePath.Format(_T("%s%s"), strDestPath, strFile);
 
 		CString strPathMid = FileUtils::GetOnlyPath(strCopiedFilePath);
-
+		int nLastTemp = strPathMid.ReverseFind('\\');
+		CString strLastTemp = strPathMid.Left(nLastTemp);
+		if (!FileUtils::MakeDir(strLastTemp)) continue;
 		if (!FileUtils::MakeDir(strPathMid)) continue;
 
 		::CopyFile(strFileOrg, strCopiedFilePath, FALSE);
+
+		if (FileUtils::FileExistOnly(strCopiedFilePath)) nSuccessCnt++;
+		DEF_OUT_CONSOLE(strCopiedFilePath);
 	}
+
+	CString strPrompt;
+	strPrompt.Format(_T("%d개의 파일을 복사하였습니다."), nSuccessCnt);
+	DEF_OUT(strPrompt);
 
 	return true;
 }

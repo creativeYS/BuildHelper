@@ -2,6 +2,7 @@
 
 #define DEF_OUT_RETURN_FALSE(MSG)	{ OutputControl::Instance()->PrintOut(MSG); return false; }
 #define DEF_OUT(MSG)				OutputControl::Instance()->PrintOut(MSG);
+#define DEF_OUT_CONSOLE(MSG)		if(OutputControl::Instance()->GetType() == OutputControl::EN_TYPE_CONSOLE) OutputControl::Instance()->PrintOut(MSG);
 
 class OutputControl
 {
@@ -24,7 +25,8 @@ public:
 
 	// CONSOLE : 콘솔창에 프린트 됨.
 	// MSGBOX : 메시지 박스가 뜬다.
-	void SetType(OutputControl::EN_TYPE enType);
+	void	SetType(OutputControl::EN_TYPE enType);
+	EN_TYPE	GetType();
 
 protected:
 	OutputControl();

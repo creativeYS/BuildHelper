@@ -57,6 +57,11 @@ void OutputControl::SetType(EN_TYPE enType)
 	if(m_enType == EN_TYPE_CONSOLE) _wsetlocale(LC_ALL, L"korean");
 }
 
+OutputControl::EN_TYPE OutputControl::GetType()
+{
+	return m_enType;
+}
+
 OutputControl::OutputControl()
 	: m_enType(OutputControl::EN_TYPE::EN_TYPE_NONE)
 {
