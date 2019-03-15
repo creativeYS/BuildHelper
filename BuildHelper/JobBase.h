@@ -9,6 +9,33 @@ typedef std::map<CString, bool>	MapStrBool;
 
 class Job;
 
+
+template <class T>
+void SetOptionSubFunc(T& tVar, const CString& strOpt)
+{
+	tVar = decltype(tVar)strOpt;
+}
+template <class T>
+void SetOptionSubFunc(CString& tVar, const CString& strOpt)
+{
+	tVar = strOpt;
+}
+template <class T>
+void SetOptionSubFunc(bool& tVar, const CString& strOpt)
+{
+	tVar = _wtoi(strOpt) == 0 ? false : true;
+}
+template <class T>
+void SetOptionSubFunc(int& tVar, const CString& strOpt)
+{
+	tVar = _wtoi(strOpt);
+}
+
+#define DEF_SETOPTION(VAR) { \
+CString strKey##VAR = L#VAR; \
+if (strOption.Find(L"/" + strKey##VAR + L"=") == 0) { \
+SetOptionSubFunc<decltype(VAR)>(VAR, strOption.Mid(strKey##VAR.GetLength() + 2)); }}
+
 class JobBase
 {
 public:
@@ -20,6 +47,7 @@ public:
 	virtual bool	Save(FILE* pFile) = 0;
 
 	virtual int		GetType() = 0;
+	virtual void	SetOption(const CString& strOption) {};
 
 public:
 	enum EN_JOB_TYPE

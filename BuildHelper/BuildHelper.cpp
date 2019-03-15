@@ -121,6 +121,73 @@ BOOL CBuildHelperApp::InitInstance()
 	return FALSE;
 }
 
+void CBuildHelperApp::CmdRun(int nNum, const CString* pParams)
+{
+	CString strPath;
+	strPath.Format(L"%s*", FileUtils::GetSettingPath());
+	VecStr files;
+	FileUtils::FileList(strPath, L"*.job", files);
+
+	Job Setting;
+	CString strSettingFileName;
+	strSettingFileName.Format(L"%sSetting.dat", FileUtils::GetSettingPath());
+	Setting.Load(strSettingFileName);
+
+	JobSetting* pSetting = (JobSetting*)Setting.GetImpl();
+	if (pSetting)
+	{
+		const T_SETTING* pSettingData = pSetting->GetSettingData();
+		if (pSettingData && pSettingData->nUsePgmPath == 0)
+		{
+			JobSetting::SetCurrentWorkingPath(pSettingData->strWorkingPath);
+		}
+	}
+
+	if (JobSetting::GetCurrentWorkingPath().GetLength() <= 0)
+	{
+		JobSetting::SetCurrentWorkingPath(FileUtils::GetCurrentModulePath());
+	}
+
+	if (nNum < 2)
+	{
+		DEF_OUT(L"Error> [Job Name] required.");
+	}
+	else
+	{
+		const CString& strJobName = pParams[1];
+
+		bool bFind = false;
+		for (CString str : files)
+		{
+			CString strName = FileUtils::GetOnlyFileName(str, false, true);
+			if (strName.CompareNoCase(strJobName) == 0)
+			{
+				Job job;
+				job.SetJobName(strName);
+				job.Load(str);
+				for (int i = 2; i < nNum; i++)
+				{
+					const CString& strParam = pParams[i];
+					if (strParam.GetLength() <= 0) continue;
+					if (strParam[0] == '/')
+						job.SetOption(strParam);
+				}
+				
+				job.Run();
+				bFind = true;
+				DEF_OUT(L"Executed.");
+				break;
+			}
+		}
+		if (!bFind)
+		{
+			CString strPrompt;
+			strPrompt.Format(L"Error > Can not find %s", strJobName);
+			DEF_OUT(strPrompt);
+		}
+	}
+}
+
 bool ConsoleMode()
 {
 	int iCnt = __argc;
@@ -199,56 +266,7 @@ bool ConsoleMode()
 	}
 	else if (params[0].CompareNoCase(L"run") == 0)
 	{
-		Job Setting;
-		CString strSettingFileName;
-		strSettingFileName.Format(L"%sSetting.dat", FileUtils::GetSettingPath());
-		Setting.Load(strSettingFileName);
-
-		JobSetting* pSetting = (JobSetting*)Setting.GetImpl();
-		if (pSetting)
-		{
-			const T_SETTING* pSettingData = pSetting->GetSettingData();
-			if (pSettingData && pSettingData->nUsePgmPath == 0)
-			{
-				JobSetting::SetCurrentWorkingPath(pSettingData->strWorkingPath);
-			}
-		}
-
-		if(JobSetting::GetCurrentWorkingPath().GetLength() <= 0)
-		{
-			JobSetting::SetCurrentWorkingPath(FileUtils::GetCurrentModulePath());
-		}
-
-		if (params.size() < 2)
-		{
-			DEF_OUT(L"Error> [Job Name] required.");
-		}
-		else
-		{
-			CString& strJobName = params[1];
-
-			bool bFind = false;
-			for (CString str : files)
-			{
-				CString strName = FileUtils::GetOnlyFileName(str, false, true);
-				if (strName.CompareNoCase(strJobName) == 0)
-				{
-					Job job;
-					job.SetJobName(strName);
-					job.Load(str);
-					job.Run();
-					bFind = true;
-					DEF_OUT(L"Executed.");
-					break;
-				}
-			}
-			if (!bFind)
-			{
-				CString strPrompt;
-				strPrompt.Format(L"Error > Can not find %s", strJobName);
-				DEF_OUT(strPrompt);
-			}
-		}
+		CBuildHelperApp::CmdRun(params.size(), &params[0]);
 	}
 	else if (params[0].CompareNoCase(L"delete") == 0)
 	{

@@ -27,6 +27,9 @@ public:
 // 구현입니다.
 
 	DECLARE_MESSAGE_MAP()
+
+public:
+	static void CmdRun(int nNum, const CString* pParams);
 };
 
 extern CBuildHelperApp theApp;

@@ -144,3 +144,10 @@ UINT Job::DoModal()
 	}
 	return IDCANCEL;
 }
+
+void Job::SetOption(const CString& strOption)
+{
+	if (m_pImpl == nullptr) return;
+
+	m_pImpl->SetOption(strOption);
+}

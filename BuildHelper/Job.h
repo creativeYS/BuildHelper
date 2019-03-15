@@ -27,6 +27,9 @@ public:
 	UINT		DoModal();
 	JobBase*	GetImpl() { return m_pImpl;  }
 
+	// Option
+	void		SetOption(const CString& strOption);
+
 protected:
 	CString		m_strJobName;
 	bool		m_bSubJob = true;
