@@ -79,3 +79,17 @@ bool JobSetting::Save(FILE* pFile)
 	}
 	return true;
 }
+
+CString JobSetting::GetCurrentWorkingPath()
+{
+	return m_strCurrentWorkingPath;
+}
+
+void JobSetting::SetCurrentWorkingPath(const CString& str)
+{
+	m_strCurrentWorkingPath = str;
+	if (m_strCurrentWorkingPath.Find(L".\\") == 0)
+	{
+		m_strCurrentWorkingPath.Insert(0, FileUtils::GetCurrentModulePath());
+	}
+}

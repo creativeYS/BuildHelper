@@ -154,7 +154,9 @@ BEGIN_MESSAGE_MAP(CBuildHelperDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CBuildHelperDlg::OnBnClickedJobModify)
 	ON_EN_CHANGE(IDC_EDIT1, &CBuildHelperDlg::OnEnChangeEditFilter)
 	ON_BN_CLICKED(IDC_BUTTON6, &CBuildHelperDlg::OnBnClickedSaveSetting)
+	ON_BN_CLICKED(IDC_BUTTON7, &CBuildHelperDlg::OnBnClickedDeleteSetting)
 	ON_CBN_SELCHANGE(IDC_COMBO1, &CBuildHelperDlg::OnCbnSelchangeSettomgCombo)
+	ON_BN_CLICKED(IDC_BUTTON9, &CBuildHelperDlg::OnBnClickedCloneJob)
 END_MESSAGE_MAP()
 
 
@@ -605,6 +607,29 @@ void CBuildHelperDlg::OnBnClickedSaveSetting()
 }
 
 
+void CBuildHelperDlg::OnBnClickedDeleteSetting()
+{
+	VecSetting settings;
+	VecSetting settings2;
+	m_pSetting->GetSetting(settings);
+
+	settings2.reserve(settings.size());
+
+	CString strTemp;
+	m_cbxSetting.GetLBText(m_cbxSetting.GetCurSel(), strTemp);
+	for (auto& rSet : settings)
+	{
+		if (rSet.strName.CompareNoCase(strTemp) == 0) continue;
+
+		settings2.push_back(rSet);
+	}
+	m_pSetting->SetSetting(settings2);
+	CString strCurName = settings2.size() > 0 ? settings2[0].strName : L"";
+	m_pSetting->SetLastSetting(strCurName);
+
+	UpdateCombo();
+}
+
 void CBuildHelperDlg::OnCbnSelchangeSettomgCombo()
 {
 	// 마지막 선택시
@@ -666,5 +691,36 @@ void CBuildHelperDlg::OnCbnSelchangeSettomgCombo()
 				UpdateList();
 			}
 		}
+	}
+}
+
+void CBuildHelperDlg::OnBnClickedCloneJob()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (m_List.GetSelectedCount() != 1)
+	{
+		DEF_OUT(L"한번에 한개만 복제할 수 있습니다.");
+		return;
+	}
+
+	POSITION pos = m_List.GetFirstSelectedItemPosition();
+	int nIndex = m_List.GetNextSelectedItem(pos);
+	Job* pJob = (Job*)m_List.GetItemData(nIndex);
+	if (pJob == nullptr)
+	{
+		DEF_OUT(L"작업을 확인할 수 없습니다.");
+	}
+
+	CString strFilePath = pJob->GetLoadedFilePath();
+	CString strOrg, strNew;
+	strOrg.Format(_T("\\%s."), pJob->GetJobName());
+	strNew.Format(_T("\\%s."), pJob->GetJobName() + L"_Copy");
+	strFilePath.Replace(strOrg, strNew);
+	::CopyFile(pJob->GetLoadedFilePath(), strFilePath, FALSE);
+
+	Job jobTemp;
+	if(jobTemp.Load(strFilePath))
+	{
+		UpdateList();
 	}
 }

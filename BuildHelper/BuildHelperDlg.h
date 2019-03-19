@@ -65,5 +65,7 @@ public:
 	afx_msg void OnBnClickedJobModify();
 	afx_msg void OnEnChangeEditFilter();
 	afx_msg void OnBnClickedSaveSetting();
+	afx_msg void OnBnClickedDeleteSetting();
 	afx_msg void OnCbnSelchangeSettomgCombo();
+	afx_msg void OnBnClickedCloneJob();
 };

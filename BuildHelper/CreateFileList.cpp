@@ -218,7 +218,7 @@ CString CreateFileList::GetBuildResultName(const CString &strProjectPath, bool b
 	{L"GenerateDebugInformation", L"false", false},
 	};
 
-	int nSize = arraySize(strParse);
+	int nSize = (int)arraySize(strParse);
 
 	TCHAR  buff[2048];
 	TCHAR* pStr;

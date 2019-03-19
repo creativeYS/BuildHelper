@@ -266,7 +266,7 @@ bool ConsoleMode()
 	}
 	else if (params[0].CompareNoCase(L"run") == 0)
 	{
-		CBuildHelperApp::CmdRun(params.size(), &params[0]);
+		CBuildHelperApp::CmdRun((int)params.size(), &params[0]);
 	}
 	else if (params[0].CompareNoCase(L"delete") == 0)
 	{
