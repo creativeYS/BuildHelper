@@ -138,6 +138,10 @@ UINT Job::DoModal()
 		JobCreateFileListDlg dlg((CreateFileList*)GetImpl());
 		return (UINT)dlg.DoModal();
 	} break;
+	case JobBase::EN_JOB_TYPE_CLOSEUI:
+	{
+		return IDOK;
+	} break;
 	default:
 		ASSERT(0);
 		break;

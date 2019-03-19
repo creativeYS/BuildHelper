@@ -57,6 +57,7 @@ public:
 		EN_JOB_TYPE_FILEBATCH,
 		EN_JOB_TYPE_JOBSETTING,
 		EN_JOB_TYPE_CREATEFILELIST,
+		EN_JOB_TYPE_CLOSEUI,
 		EN_JOB_TYPE_NUMBER,
 	};
 	static JobBase* CreateImpl(int enType);

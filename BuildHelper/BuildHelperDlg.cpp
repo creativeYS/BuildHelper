@@ -447,7 +447,10 @@ void CBuildHelperDlg::OnBnClickedNewJob()
 		jobNew.Init(dlg.GetType());
 		jobNew.SetJobName(dlg.GetJobName());
 		jobNew.SetSubJob(dlg.GetSubJob());
-		if (jobNew.DoModal() != IDOK) return;
+		if (jobNew.DoModal() != IDOK)
+		{
+			return;
+		}
 
 		CString strTemp;
 		strTemp.Format(_T("%s%s.job"), FileUtils::GetSettingPath(), dlg.GetJobName());
@@ -473,6 +476,12 @@ void CBuildHelperDlg::OnBnClickedRunJob()
 	if(pJob == nullptr)
 	{
 		DEF_OUT(L"작업을 확인할 수 없습니다.");
+	}
+
+	if (pJob->GetJobType() == JobBase::EN_JOB_TYPE_CLOSEUI)
+	{
+		OnOK();
+		return;
 	}
 	
 	CString strWorkingPath;

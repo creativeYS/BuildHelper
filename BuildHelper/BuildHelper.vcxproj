@@ -194,6 +194,7 @@
   <ItemGroup>
     <ClInclude Include="BuildHelper.h" />
     <ClInclude Include="BuildHelperDlg.h" />
+    <ClInclude Include="CloseUI.h" />
     <ClInclude Include="CreateFileList.h" />
     <ClInclude Include="FileBatch.h" />
     <ClInclude Include="FileCopy.h" />
@@ -216,6 +217,7 @@
   <ItemGroup>
     <ClCompile Include="BuildHelper.cpp" />
     <ClCompile Include="BuildHelperDlg.cpp" />
+    <ClCompile Include="CloseUI.cpp" />
     <ClCompile Include="CreateFileList.cpp" />
     <ClCompile Include="FileBatch.cpp" />
     <ClCompile Include="FileCopy.cpp" />

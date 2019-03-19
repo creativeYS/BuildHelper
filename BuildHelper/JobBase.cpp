@@ -10,6 +10,7 @@
 #include "FileBatch.h"
 #include "JobSetting.h"
 #include "CreateFileList.h"
+#include "CloseUI.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,6 +38,9 @@ JobBase* JobBase::CreateImpl(int enType)
 	case EN_JOB_TYPE_CREATEFILELIST:
 		pImpl = new CreateFileList();
 		break;
+	case EN_JOB_TYPE_CLOSEUI:
+		pImpl = new CloseUI();
+		break;
 	default:
 		ASSERT(0);
 	}
@@ -62,6 +66,9 @@ CString JobBase::GetJobTypeName(int enType, bool bDisplay)
 		break;
 	case EN_JOB_TYPE_CREATEFILELIST:
 		strTemp = bDisplay ? L"파일 리스트 생성" : L"FILELIST";
+		break;
+	case EN_JOB_TYPE_CLOSEUI:
+		strTemp = bDisplay ? L"UI 닫기" : L"CLOSEUI";
 		break;
 	default:
 		ASSERT(0);

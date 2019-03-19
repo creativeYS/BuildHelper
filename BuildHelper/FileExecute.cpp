@@ -87,7 +87,22 @@ bool FileExecute::Run()
 		}
 	}
 
-	HINSTANCE hInst = ::ShellExecute(NULL, L"open", strExeFile, strParam, NULL, SW_SHOWNORMAL);
+	//HINSTANCE hInst = ::ShellExecute(NULL, L"open", strExeFile, strParam, NULL, SW_SHOWNORMAL);
+	SHELLEXECUTEINFO execinfo;
+
+	// 실행을 위해 구조체 세트
+	ZeroMemory(&execinfo, sizeof(execinfo));
+	execinfo.cbSize = sizeof(execinfo);
+	execinfo.lpVerb = L"open";
+	execinfo.lpFile = strExeFile;
+	execinfo.lpParameters = strParam;
+	execinfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+	execinfo.nShow = SW_SHOWNORMAL;
+
+	// 프로그램을 실행한다.
+	int r = (int)ShellExecuteEx(&execinfo);
+	//프로세스가 종료될 때까지 무한정 기다림
+	WaitForSingleObject(execinfo.hProcess, INFINITE);
 
 	return true;
 }
