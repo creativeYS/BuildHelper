@@ -102,7 +102,16 @@ bool FileExecute::Run()
 	// 프로그램을 실행한다.
 	int r = (int)ShellExecuteEx(&execinfo);
 	//프로세스가 종료될 때까지 무한정 기다림
-	WaitForSingleObject(execinfo.hProcess, INFINITE);
+	DWORD dwRet = WaitForSingleObject(execinfo.hProcess, 100);
+	while (dwRet)
+	{
+		MSG msg;
+		while (::PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
+		{
+			::SendMessage(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+		}
+		dwRet = WaitForSingleObject(execinfo.hProcess, 500);
+	}
 
 	return true;
 }

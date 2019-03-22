@@ -28,7 +28,7 @@ public:
 	virtual bool	Save(FILE* pFile);
 
 	virtual int		GetType() { return JobBase::EN_JOB_TYPE::EN_JOB_TYPE_FILECOPY; }
-	virtual void	SetOption(const CString& strOption)
+	virtual void	SetParamOption(const CString& strOption)
 	{
 		DEF_SETOPTION(m_strSourcePath);
 		DEF_SETOPTION(m_strDestPath);

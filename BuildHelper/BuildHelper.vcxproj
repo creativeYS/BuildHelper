@@ -143,7 +143,7 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -169,7 +169,7 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -194,7 +194,11 @@
   <ItemGroup>
     <ClInclude Include="BuildHelper.h" />
     <ClInclude Include="BuildHelperDlg.h" />
+    <ClInclude Include="CancelJob.h" />
+    <ClInclude Include="CancelJobDlg.h" />
     <ClInclude Include="CloseUI.h" />
+    <ClInclude Include="CopyFileSolution.h" />
+    <ClInclude Include="CopyFileSolutionDlg.h" />
     <ClInclude Include="CreateFileList.h" />
     <ClInclude Include="FileBatch.h" />
     <ClInclude Include="FileCopy.h" />
@@ -217,7 +221,11 @@
   <ItemGroup>
     <ClCompile Include="BuildHelper.cpp" />
     <ClCompile Include="BuildHelperDlg.cpp" />
+    <ClCompile Include="CancelJob.cpp" />
+    <ClCompile Include="CancelJobDlg.cpp" />
     <ClCompile Include="CloseUI.cpp" />
+    <ClCompile Include="CopyFileSolution.cpp" />
+    <ClCompile Include="CopyFileSolutionDlg.cpp" />
     <ClCompile Include="CreateFileList.cpp" />
     <ClCompile Include="FileBatch.cpp" />
     <ClCompile Include="FileCopy.cpp" />

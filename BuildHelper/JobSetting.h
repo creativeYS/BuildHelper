@@ -45,10 +45,16 @@ public:
 public:
 	static CString	GetCurrentWorkingPath();
 	static void		SetCurrentWorkingPath(const CString& str);
+	static bool		GetUIClosed();
+	static void		SetUIClosed(bool bSet);
+	static bool		GetJobCanceled();
+	static void		SetJobCanceled(bool bSet);
 
 protected:
 	CString		m_strLastSetting;
 	VecSetting	m_vecSettings;
 
-	static CString m_strCurrentWorkingPath;
+	static CString	m_strCurrentWorkingPath;
+	static bool		m_bUiClosed;
+	static bool		m_bJobCanceled;
 };

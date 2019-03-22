@@ -170,7 +170,7 @@ void CBuildHelperApp::CmdRun(int nNum, const CString* pParams)
 					const CString& strParam = pParams[i];
 					if (strParam.GetLength() <= 0) continue;
 					if (strParam[0] == '/')
-						job.SetOption(strParam);
+						job.SetParamOption(strParam);
 				}
 				
 				job.Run();

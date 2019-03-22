@@ -11,6 +11,14 @@
 #include "JobSetting.h"
 #include "CreateFileList.h"
 #include "CloseUI.h"
+#include "CopyFileSolution.h"
+#include "JobCreateFileListDlg.h"
+#include "JobBatchDlg.h"
+#include "JobFileExecuteDlg.h"
+#include "JobFileCopyDlg.h"
+#include "CopyFileSolutionDlg.h"
+#include "CancelJob.h"
+#include "CancelJobDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -41,6 +49,12 @@ JobBase* JobBase::CreateImpl(int enType)
 	case EN_JOB_TYPE_CLOSEUI:
 		pImpl = new CloseUI();
 		break;
+	case EN_JOB_TYPE_COPYFILESOLUTION:
+		pImpl = new CopyFileSolution();
+		break;
+	case EN_JOB_TYPE_CANCELJOB:
+		pImpl = new CancelJob();
+		break;
 	default:
 		ASSERT(0);
 	}
@@ -70,6 +84,11 @@ CString JobBase::GetJobTypeName(int enType, bool bDisplay)
 	case EN_JOB_TYPE_CLOSEUI:
 		strTemp = bDisplay ? L"UI 닫기" : L"CLOSEUI";
 		break;
+	case EN_JOB_TYPE_COPYFILESOLUTION:
+		strTemp = bDisplay ? L"솔루션 결과 복사 작업" : L"COPYFILESOLUTION";
+		break;
+	case EN_JOB_TYPE_CANCELJOB:
+		strTemp = bDisplay ? L"작업 취소 도구" : L"JOBCANCEL";
 	default:
 		ASSERT(0);
 	}
@@ -83,6 +102,52 @@ int JobBase::GetJobTypeCode(const CString& strName)
 		if (GetJobTypeName(i) == strName) return i;
 	}
 	return EN_JOB_TYPE_NUMBER;
+}
+
+UINT JobBase::DoModal(int nType, void* pImpl)
+{
+	switch (nType)
+	{
+	case JobBase::EN_JOB_TYPE_FILECOPY:
+	{
+		JobFileCopyDlg dlg((FileCopy*)pImpl);
+		return (UINT)dlg.DoModal();
+	} break;
+	case JobBase::EN_JOB_TYPE_FILEEXECUTE:
+	{
+		JobFileExecuteDlg dlg((FileExecute*)pImpl);
+		return (UINT)dlg.DoModal();
+	} break;
+	case JobBase::EN_JOB_TYPE_FILEBATCH:
+	{
+		JobBatchDlg dlg((FileBatch*)pImpl);
+		return (UINT)dlg.DoModal();
+	} break;
+	case JobBase::EN_JOB_TYPE_CREATEFILELIST:
+	{
+		JobCreateFileListDlg dlg((CreateFileList*)pImpl);
+		return (UINT)dlg.DoModal();
+	} break;
+	case JobBase::EN_JOB_TYPE_CLOSEUI:
+	{
+		return IDOK;
+	} break;
+	case JobBase::EN_JOB_TYPE_COPYFILESOLUTION:
+	{
+		CopyFileSolutionDlg dlg((CopyFileSolution*)pImpl);
+		return (UINT)dlg.DoModal();
+	} break;
+	case JobBase::EN_JOB_TYPE_CANCELJOB:
+	{
+		CancelJobDlg dlg((CancelJob*)pImpl);
+		return (UINT)dlg.DoModal();
+		return IDOK;
+	} break;
+	default:
+		ASSERT(0);
+		break;
+	}
+	return IDCANCEL;
 }
 
 FILE* JobBase::Open(const TCHAR* pFilePath, bool bWrite)

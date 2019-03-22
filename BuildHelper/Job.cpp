@@ -7,10 +7,6 @@
 #include "OutputControl.h"
 #include "FileCopy.h"
 #include "FileExecute.h"
-#include "JobFileCopyDlg.h"
-#include "JobFileExecuteDlg.h"
-#include "JobBatchDlg.h"
-#include "JobCreateFileListDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -116,42 +112,12 @@ int Job::GetJobType()
 
 UINT Job::DoModal()
 {
-	switch (GetJobType())
-	{
-	case JobBase::EN_JOB_TYPE_FILECOPY:
-	{
-		JobFileCopyDlg dlg((FileCopy*)GetImpl());
-		return (UINT)dlg.DoModal();
-	} break;
-	case JobBase::EN_JOB_TYPE_FILEEXECUTE:
-	{
-		JobFileExecuteDlg dlg((FileExecute*)GetImpl());
-		return (UINT)dlg.DoModal();
-	} break;
-	case JobBase::EN_JOB_TYPE_FILEBATCH:
-	{
-		JobBatchDlg dlg((FileBatch*)GetImpl());
-		return (UINT)dlg.DoModal();
-	} break;
-	case JobBase::EN_JOB_TYPE_CREATEFILELIST:
-	{
-		JobCreateFileListDlg dlg((CreateFileList*)GetImpl());
-		return (UINT)dlg.DoModal();
-	} break;
-	case JobBase::EN_JOB_TYPE_CLOSEUI:
-	{
-		return IDOK;
-	} break;
-	default:
-		ASSERT(0);
-		break;
-	}
-	return IDCANCEL;
+	return JobBase::DoModal(GetJobType(), GetImpl());
 }
 
-void Job::SetOption(const CString& strOption)
+void Job::SetParamOption(const CString& strOption)
 {
 	if (m_pImpl == nullptr) return;
 
-	m_pImpl->SetOption(strOption);
+	m_pImpl->SetParamOption(strOption);
 }

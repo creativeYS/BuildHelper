@@ -6,6 +6,7 @@
 #include "FileBatch.h"
 #include "OutputControl.h"
 #include "Job.h"
+#include "JobSetting.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -55,6 +56,13 @@ bool FileBatch::Run()
 
 	for (const CString& str : m_vecTargetJobs)
 	{
+		if (JobSetting::GetJobCanceled())
+		{
+			DEF_OUT(L"작업을 취소 하였습니다.");
+			JobSetting::SetJobCanceled(false);
+			return true;
+		}
+
 		CString strJobPath;
 		strJobPath.Format(L"%s%s%s", FileUtils::GetSettingPath(), str, L".job");
 

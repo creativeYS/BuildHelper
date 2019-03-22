@@ -12,7 +12,9 @@
 
 #define DEF_CLEAR_RESERVE(VECTOR, SIZE) { VECTOR.clear(); VECTOR.reserve(SIZE); }
 
-CString JobSetting::m_strCurrentWorkingPath;
+CString		JobSetting::m_strCurrentWorkingPath;
+bool		JobSetting::m_bUiClosed = false;
+bool		JobSetting::m_bJobCanceled = false;
 
 void JobSetting::SetSetting(const VecSetting& settings)
 {
@@ -92,4 +94,24 @@ void JobSetting::SetCurrentWorkingPath(const CString& str)
 	{
 		m_strCurrentWorkingPath.Insert(0, FileUtils::GetCurrentModulePath());
 	}
+}
+
+bool JobSetting::GetUIClosed()
+{
+	return m_bUiClosed;
+}
+
+void JobSetting::SetUIClosed(bool bSet)
+{
+	m_bUiClosed = bSet;
+}
+
+bool JobSetting::GetJobCanceled()
+{
+	return m_bJobCanceled;
+}
+
+void JobSetting::SetJobCanceled(bool bSet)
+{
+	m_bJobCanceled = bSet;
 }

@@ -16,10 +16,11 @@ public:
 	static CString	GetSettingFileName() { return L"Setting.dat"; }
 
 	static BOOL		ConvertRelativeFileName(const TCHAR* szCurPath, CString& strPath);
+	static CString	RemoveRelative(const TCHAR* szPath);
 
 	static bool		IsLastChar(const CString& strCheck, TCHAR ch);
 
-	static void		OnBrowseFolder(CWnd* pCtrl, const TCHAR* pBasePath, bool bFile = false);
+	static void		OnBrowseFolder(CWnd* pCtrl, const TCHAR* pBasePath, bool bFile = false, const TCHAR* pExt = nullptr);
 
 	// pPath : c:\test\nice\*
 	// pExt : *.txt

@@ -68,4 +68,5 @@ public:
 	afx_msg void OnBnClickedDeleteSetting();
 	afx_msg void OnCbnSelchangeSettomgCombo();
 	afx_msg void OnBnClickedCloneJob();
+	afx_msg void OnNMDblclkList(NMHDR *pNMHDR, LRESULT *pResult);
 };

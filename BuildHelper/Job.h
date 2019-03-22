@@ -28,7 +28,7 @@ public:
 	JobBase*	GetImpl() { return m_pImpl;  }
 
 	// Option
-	void		SetOption(const CString& strOption);
+	void		SetParamOption(const CString& strOption);
 
 protected:
 	CString		m_strJobName;

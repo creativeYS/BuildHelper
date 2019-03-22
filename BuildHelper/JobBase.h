@@ -47,7 +47,7 @@ public:
 	virtual bool	Save(FILE* pFile) = 0;
 
 	virtual int		GetType() = 0;
-	virtual void	SetOption(const CString& strOption) {};
+	virtual void	SetParamOption(const CString& strOption) {};
 
 public:
 	enum EN_JOB_TYPE
@@ -58,11 +58,14 @@ public:
 		EN_JOB_TYPE_JOBSETTING,
 		EN_JOB_TYPE_CREATEFILELIST,
 		EN_JOB_TYPE_CLOSEUI,
+		EN_JOB_TYPE_COPYFILESOLUTION,
+		EN_JOB_TYPE_CANCELJOB,
 		EN_JOB_TYPE_NUMBER,
 	};
 	static JobBase* CreateImpl(int enType);
 	static CString	GetJobTypeName(int enType, bool bDisplay = false);
 	static int		GetJobTypeCode(const CString& strName);
+	static UINT		DoModal(int nType, void* pImpl);
 
 	static FILE*	Open(const TCHAR* pFilePath, bool bWrite);
 	static void		Close(FILE* pFile);

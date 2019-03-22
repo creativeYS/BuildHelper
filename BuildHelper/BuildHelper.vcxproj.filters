@@ -88,6 +88,18 @@
     <ClInclude Include="CloseUI.h">
       <Filter>BuildHelper\Jobs</Filter>
     </ClInclude>
+    <ClInclude Include="CopyFileSolution.h">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="CopyFileSolutionDlg.h">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClInclude>
+    <ClInclude Include="CancelJob.h">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="CancelJobDlg.h">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Job.cpp">
@@ -146,6 +158,18 @@
     </ClCompile>
     <ClCompile Include="CloseUI.cpp">
       <Filter>BuildHelper\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="CopyFileSolution.cpp">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="CopyFileSolutionDlg.cpp">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClCompile>
+    <ClCompile Include="CancelJob.cpp">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="CancelJobDlg.cpp">
+      <Filter>BuildHelper\Dialogs\Job</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

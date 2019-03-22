@@ -3,6 +3,7 @@
 #include "FileUtils.h"
 #include "FileBatch.h"
 #include "Job.h"
+#include "OutputControl.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,8 +38,8 @@ BEGIN_MESSAGE_MAP(JobBatchDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &JobBatchDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON6, &JobBatchDlg::OnBnClickedButton6)
 	ON_BN_CLICKED(IDC_BUTTON5, &JobBatchDlg::OnBnClickedButton5)
-	ON_BN_CLICKED(IDC_BUTTON7, &JobBatchDlg::OnBnClickedButton7)
-	ON_BN_CLICKED(IDC_BUTTON8, &JobBatchDlg::OnBnClickedButton8)
+	ON_BN_CLICKED(IDC_BUTTON7, &JobBatchDlg::OnBnClickedButtonUp)
+	ON_BN_CLICKED(IDC_BUTTON8, &JobBatchDlg::OnBnClickedButtonDown)
 	ON_BN_CLICKED(IDC_CHECK3, &JobBatchDlg::OnBnClickedCheck3)
 END_MESSAGE_MAP()
 
@@ -151,7 +152,7 @@ void JobBatchDlg::OnBnClickedButton5()
 }
 
 
-void JobBatchDlg::OnBnClickedButton7()
+void JobBatchDlg::OnBnClickedButtonUp()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
@@ -163,7 +164,7 @@ void JobBatchDlg::OnBnClickedButton7()
 	m_pImpl->GetJobs(jobs);
 
 	if (jobs.size() == 0) return;
-	if (lp[0] == 0) return;
+	if (lp[0] == 0) { DEF_OUT(L"올릴 수 없습니다.") return; }
 
 
 	for (int i = 0; i < count2; i++)
@@ -175,10 +176,14 @@ void JobBatchDlg::OnBnClickedButton7()
 	m_pImpl->SetJobs((int)jobs.size(), &jobs[0]);
 
 	UpdateListTarget();
+	for (int i = 0; i < count2; i++)
+	{
+		m_ListTarget.SetSel(lp[i] - 1);
+	}
 }
 
 
-void JobBatchDlg::OnBnClickedButton8()
+void JobBatchDlg::OnBnClickedButtonDown()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
@@ -190,9 +195,9 @@ void JobBatchDlg::OnBnClickedButton8()
 	m_pImpl->GetJobs(jobs);
 
 	if (jobs.size() == 0) return;
-	if (lp[count2 - 1] == jobs.size() - 1) return;
+	if (lp[count2 - 1] == jobs.size() - 1) { DEF_OUT(L"내릴 수 없습니다.") return; }
 
-	for (int i = 0; i < count2; i++)
+	for (int i = count2 - 1; i >= 0; i--)
 	{
 		CString strTemp = jobs[lp[i] + 1];
 		jobs[lp[i] + 1] = jobs[lp[i]];
@@ -201,6 +206,10 @@ void JobBatchDlg::OnBnClickedButton8()
 	m_pImpl->SetJobs((int)jobs.size(), &jobs[0]);
 
 	UpdateListTarget();
+	for (int i = count2 - 1; i >= 0; i--)
+	{
+		m_ListTarget.SetSel(lp[i] + 1);
+	}
 }
 
 

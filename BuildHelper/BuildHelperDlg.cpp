@@ -157,6 +157,7 @@ BEGIN_MESSAGE_MAP(CBuildHelperDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON7, &CBuildHelperDlg::OnBnClickedDeleteSetting)
 	ON_CBN_SELCHANGE(IDC_COMBO1, &CBuildHelperDlg::OnCbnSelchangeSettomgCombo)
 	ON_BN_CLICKED(IDC_BUTTON9, &CBuildHelperDlg::OnBnClickedCloneJob)
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST1, &CBuildHelperDlg::OnNMDblclkList)
 END_MESSAGE_MAP()
 
 
@@ -477,12 +478,6 @@ void CBuildHelperDlg::OnBnClickedRunJob()
 	{
 		DEF_OUT(L"작업을 확인할 수 없습니다.");
 	}
-
-	if (pJob->GetJobType() == JobBase::EN_JOB_TYPE_CLOSEUI)
-	{
-		OnOK();
-		return;
-	}
 	
 	CString strWorkingPath;
 	if (((CButton*)GetDlgItem(IDC_CHECK4))->GetCheck())
@@ -496,6 +491,12 @@ void CBuildHelperDlg::OnBnClickedRunJob()
 
 	JobSetting::SetCurrentWorkingPath(strWorkingPath);
 	pJob->Run();
+
+	if (JobSetting::GetUIClosed())
+	{
+		OnOK();
+		return;
+	}
 }
 
 
@@ -732,4 +733,17 @@ void CBuildHelperDlg::OnBnClickedCloneJob()
 	{
 		UpdateList();
 	}
+}
+
+void CBuildHelperDlg::OnNMDblclkList(NMHDR *pNMHDR, LRESULT *pResult)
+{	
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (m_List.GetSelectedCount() == 1)
+	{
+		OnBnClickedRunJob();
+	}
+
+	*pResult = 0;
 }

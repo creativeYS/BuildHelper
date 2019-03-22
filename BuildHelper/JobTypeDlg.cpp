@@ -41,6 +41,9 @@ bool JobTypeDlg::dlg2data()
 	GetDlgItem(IDC_EDIT1)->GetWindowText(m_strJobName);
 	if (m_strJobName.GetLength() <= 0) DEF_OUT_RETURN_FALSE(L"작업 이름을 입력해주세요");
 
+	if (m_strJobName.FindOneOf(L"\\/:*?\"<>|") >= 0)
+		DEF_OUT_RETURN_FALSE(L"사용할 수 없는 문자가 포함되었습니다.");
+
 	m_bSubJob = ((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck() ? true : false;
 	return true;
 }

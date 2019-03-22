@@ -13,6 +13,9 @@
 
 BOOL FileUtils::ConvertRelativeFileName(const TCHAR* szCurPath, CString& strPath)
 {
+	CString szCurPathWithoutRelative = RemoveRelative(szCurPath);
+	if (szCurPathWithoutRelative.GetLength() > 0) szCurPath = szCurPathWithoutRelative;
+
 	CString strModulePath = szCurPath == nullptr ? GetCurrentModulePath() : szCurPath;
 	strModulePath.Replace('/', '\\');
 	if (FileUtils::IsLastChar(strModulePath, '\\'))
@@ -73,6 +76,30 @@ BOOL FileUtils::ConvertRelativeFileName(const TCHAR* szCurPath, CString& strPath
 	return FALSE;
 }
 
+CString FileUtils::RemoveRelative(const TCHAR* szPath)
+{
+	CString strTemp = szPath;
+	int nPos = strTemp.Find(L"..\\") - 1;
+	if (nPos < 0) return L"";
+
+	while (nPos >= 0)
+	{
+		int nPosFirst = nPos + 3;
+		if (nPos < 0) return L"";
+		while (--nPos)
+		{
+			if (strTemp[nPos] == '\\')
+			{
+				CString strMidTemp = strTemp.Mid(nPos, nPosFirst - nPos);
+				strTemp.Replace(strMidTemp, L"");
+				break;
+			}
+		}
+		nPos = strTemp.Find(L"..\\") - 1;
+	}
+	return strTemp;
+}
+
 bool FileUtils::IsLastChar(const CString& strCheck, TCHAR ch)
 {
 	if (strCheck.GetLength() <= 0) return false;
@@ -82,7 +109,7 @@ bool FileUtils::IsLastChar(const CString& strCheck, TCHAR ch)
 	return false;
 }
 
-void FileUtils::OnBrowseFolder(CWnd* pCtrl, const TCHAR* pBasePath, bool bFile)
+void FileUtils::OnBrowseFolder(CWnd* pCtrl, const TCHAR* pBasePath, bool bFile, const TCHAR* pExt)
 {
 	CString strModulePath = pBasePath;
 	strModulePath.Replace('/', '\\');
@@ -111,7 +138,12 @@ void FileUtils::OnBrowseFolder(CWnd* pCtrl, const TCHAR* pBasePath, bool bFile)
 
 	if (bFile)
 	{
-		CFileDialog dlg(TRUE, NULL, strInit, OFN_HIDEREADONLY, _T("Execute File(*.exe)|*.exe|All Files(*.*)|*.*||"));
+		CString strFilter = _T("Execute File(*.exe)|*.exe|All Files(*.*)|*.*||");
+		if (pExt)
+		{
+			strFilter = pExt;
+		}
+		CFileDialog dlg(TRUE, NULL, strInit, OFN_HIDEREADONLY, strFilter);
 		if (dlg.DoModal() == IDOK)
 		{
 			CString strPathName = dlg.GetPathName();
