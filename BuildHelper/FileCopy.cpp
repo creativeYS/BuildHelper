@@ -54,6 +54,7 @@ bool FileCopy::Run()
 		strWorkingPath.AppendChar('\\');
 
 	FileUtils::ConvertRelativeFileName(strWorkingPath, strSourcePath);
+	FileUtils::ConvertRelativeFileName(strWorkingPath, strDestPath);
 
 	VecStr strResult;
 	FileUtils::FileList(strSourcePath.GetBuffer(), strTargetFilter.GetBuffer(), strResult, m_bIncludeSubFolder);
@@ -66,13 +67,34 @@ bool FileCopy::Run()
 	for (CString& strFileOrg : strResult)
 	{
 		CString strFile = strFileOrg.Right(strFileOrg.GetLength() - strSourcePath.GetLength() + 1);
+		CString strFileNameOnly = strFile.ReverseFind('\\') >= 0 ? strFile.Mid(strFile.ReverseFind('\\') + 1) : strFile;
 		
 		if (bMultiFile)
 		{
 			bool bFind = false;
 			for (const CString& strFilterFile : FileNames)
 			{
-				if (strFilterFile.CompareNoCase(strFile) == 0)
+				if (strFilterFile.GetLength() > 0 && strFilterFile[0] == '~')
+				{
+					CString strExcluded = strFilterFile.Mid(1);
+					if (strExcluded.CompareNoCase(strFileNameOnly) == 0)
+					{
+						bFind = false;
+						break;
+					}
+				}
+				if (strFilterFile.Left(2).CompareNoCase(L"*.") == 0 &&
+					strFileNameOnly.ReverseFind('.') >= 0)
+				{
+					CString strExt = strFileNameOnly.Mid(strFileNameOnly.ReverseFind('.'));
+					if (strExt.CompareNoCase(strFilterFile.Mid(1)) == 0)
+					{
+						bFind = true;
+						break;
+					}
+				}
+
+				if (strFilterFile.CompareNoCase(strFileNameOnly) == 0)
 				{
 					bFind = true;
 					break;
@@ -86,14 +108,15 @@ bool FileCopy::Run()
 
 		CString strPathMid = FileUtils::GetOnlyPath(strCopiedFilePath);
 		int nLastTemp = strPathMid.ReverseFind('\\');
+
 		CString strLastTemp1 = strPathMid.Left(nLastTemp);
 		nLastTemp = strLastTemp1.ReverseFind('\\');
 		CString strLastTemp2 = strLastTemp1.Left(nLastTemp);
 		nLastTemp = strLastTemp2.ReverseFind('\\');
 		CString strLastTemp3 = strLastTemp2.Left(nLastTemp);
-		if (!FileUtils::MakeDir(strLastTemp1)) continue;
-		if (!FileUtils::MakeDir(strLastTemp2)) continue;
 		if (!FileUtils::MakeDir(strLastTemp3)) continue;
+		if (!FileUtils::MakeDir(strLastTemp2)) continue;
+		if (!FileUtils::MakeDir(strLastTemp1)) continue;
 		if (!FileUtils::MakeDir(strPathMid)) continue;
 
 		::CopyFile(strFileOrg, strCopiedFilePath, FALSE);
