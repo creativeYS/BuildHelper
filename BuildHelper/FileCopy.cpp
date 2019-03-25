@@ -86,8 +86,14 @@ bool FileCopy::Run()
 
 		CString strPathMid = FileUtils::GetOnlyPath(strCopiedFilePath);
 		int nLastTemp = strPathMid.ReverseFind('\\');
-		CString strLastTemp = strPathMid.Left(nLastTemp);
-		if (!FileUtils::MakeDir(strLastTemp)) continue;
+		CString strLastTemp1 = strPathMid.Left(nLastTemp);
+		nLastTemp = strLastTemp1.ReverseFind('\\');
+		CString strLastTemp2 = strLastTemp1.Left(nLastTemp);
+		nLastTemp = strLastTemp2.ReverseFind('\\');
+		CString strLastTemp3 = strLastTemp2.Left(nLastTemp);
+		if (!FileUtils::MakeDir(strLastTemp1)) continue;
+		if (!FileUtils::MakeDir(strLastTemp2)) continue;
+		if (!FileUtils::MakeDir(strLastTemp3)) continue;
 		if (!FileUtils::MakeDir(strPathMid)) continue;
 
 		::CopyFile(strFileOrg, strCopiedFilePath, FALSE);
