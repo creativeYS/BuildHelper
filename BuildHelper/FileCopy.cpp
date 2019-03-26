@@ -114,6 +114,11 @@ bool FileCopy::Run()
 		CString strLastTemp2 = strLastTemp1.Left(nLastTemp);
 		nLastTemp = strLastTemp2.ReverseFind('\\');
 		CString strLastTemp3 = strLastTemp2.Left(nLastTemp);
+		nLastTemp = strLastTemp3.ReverseFind('\\');
+		CString strLastTemp4 = strLastTemp3.Left(nLastTemp);
+		nLastTemp = strLastTemp4.ReverseFind('\\');
+		CString strLastTemp5 = strLastTemp4.Left(nLastTemp);
+		if (!FileUtils::MakeDir(strLastTemp5)) continue;
 		if (!FileUtils::MakeDir(strLastTemp3)) continue;
 		if (!FileUtils::MakeDir(strLastTemp2)) continue;
 		if (!FileUtils::MakeDir(strLastTemp1)) continue;
