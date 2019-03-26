@@ -107,22 +107,26 @@ bool FileCopy::Run()
 		strCopiedFilePath.Format(_T("%s%s"), strDestPath, strFile);
 
 		CString strPathMid = FileUtils::GetOnlyPath(strCopiedFilePath);
-		int nLastTemp = strPathMid.ReverseFind('\\');
-
-		CString strLastTemp1 = strPathMid.Left(nLastTemp);
-		nLastTemp = strLastTemp1.ReverseFind('\\');
-		CString strLastTemp2 = strLastTemp1.Left(nLastTemp);
-		nLastTemp = strLastTemp2.ReverseFind('\\');
-		CString strLastTemp3 = strLastTemp2.Left(nLastTemp);
-		nLastTemp = strLastTemp3.ReverseFind('\\');
-		CString strLastTemp4 = strLastTemp3.Left(nLastTemp);
-		nLastTemp = strLastTemp4.ReverseFind('\\');
-		CString strLastTemp5 = strLastTemp4.Left(nLastTemp);
-		if (!FileUtils::MakeDir(strLastTemp5)) continue;
-		if (!FileUtils::MakeDir(strLastTemp3)) continue;
-		if (!FileUtils::MakeDir(strLastTemp2)) continue;
-		if (!FileUtils::MakeDir(strLastTemp1)) continue;
-		if (!FileUtils::MakeDir(strPathMid)) continue;
+		VecStr strNeedToMakeDir;
+		int nRepeatLimit = 20;
+		while (--nRepeatLimit)
+		{
+			if (!FileUtils::PathExist(strPathMid))
+			{
+				strNeedToMakeDir.push_back(strPathMid);
+				int nLastTemp = strPathMid.ReverseFind('\\');
+				strPathMid = strPathMid.Left(nLastTemp);
+			}
+			else
+			{
+				break;
+			}
+		}
+		nRepeatLimit = strNeedToMakeDir.size();
+		while(nRepeatLimit--)
+		{
+			FileUtils::MakeDir(strNeedToMakeDir[nRepeatLimit]);
+		}
 
 		::CopyFile(strFileOrg, strCopiedFilePath, FALSE);
 
