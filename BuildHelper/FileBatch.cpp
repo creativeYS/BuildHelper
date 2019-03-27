@@ -117,6 +117,5 @@ bool FileBatch::Save(FILE* pFile)
 
 void FileBatch::SetParamOption(const CString& strOption)
 {
-	m_Options.clear();
 	m_Options.push_back(strOption);
 }
