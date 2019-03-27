@@ -69,6 +69,11 @@ bool FileBatch::Run()
 		Job tempJob;
 		if (!tempJob.Load(strJobPath)) continue;
 
+		for (CString& strOpt : m_Options)
+		{
+			tempJob.SetParamOption(strOpt);
+		}
+
 		if (tempJob.Run()) nSuccessCnt++;
 	}
 	if(nSuccessCnt == nTotalCnt)
@@ -108,4 +113,10 @@ bool FileBatch::Save(FILE* pFile)
 		wrString(pFile, m_vecTargetJobs[i]);
 	}
 	return true;
+}
+
+void FileBatch::SetParamOption(const CString& strOption)
+{
+	m_Options.clear();
+	m_Options.push_back(strOption);
 }

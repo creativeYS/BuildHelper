@@ -24,9 +24,13 @@ public:
 	virtual bool	Save(FILE* pFile);
 
 	virtual int		GetType() { return JobBase::EN_JOB_TYPE::EN_JOB_TYPE_FILEBATCH; }
+	virtual void	SetParamOption(const CString& strOption);
 
 protected:
 
 protected:
-	std::vector<CString> m_vecTargetJobs;		// JobFile Path { c:\test\aadf.job, c:\good.job, ... }
+	VecStr m_vecTargetJobs;		// JobFile Path { c:\test\aadf.job, c:\good.job, ... }
+
+private:
+	VecStr m_Options;			// 이거는 batch 로 실행시 인자 처리이기 때문에 필수는 아니다.
 };
