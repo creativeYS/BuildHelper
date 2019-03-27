@@ -74,6 +74,7 @@ void CopyFileSolution::SetParamOption(const CString& strOption)
 {
 	CString m_strOptions;
 	DEF_SETOPTION(m_strOptions);
+	DEF_SETOPTION(m_strDestCopyPath);
 
 	CString token;
 	int pos = 0;

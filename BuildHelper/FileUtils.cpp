@@ -13,6 +13,12 @@
 
 BOOL FileUtils::ConvertRelativeFileName(const TCHAR* szCurPath, CString& strPath)
 {
+	CString strFindTemp = szCurPath;
+	if (strFindTemp.Find(L"./") < 0 &&
+		strFindTemp.Find(L".\\") < 0 &&
+		strFindTemp.Find(L"../") < 0 &&
+		strFindTemp.Find(L"..\\") < 0 ) return FALSE;
+
 	CString szCurPathWithoutRelative = RemoveRelative(szCurPath);
 	if (szCurPathWithoutRelative.GetLength() > 0) szCurPath = szCurPathWithoutRelative;
 
