@@ -33,7 +33,14 @@ bool CopyFileSolution::Run()
 	if (m_strDestCopyPath.GetLength() <= 0)	DEF_OUT_RETURN_FALSE(L"대상 폴더 경로를 확인할 수 없습니다.");
 	
 	if (m_strTargetSolution.Right(4).CompareNoCase(L".sln") != 0) DEF_OUT_RETURN_FALSE(L"솔루션 파일을 확인할 수 없습니다.");
-	
+
+	CString strWorkingPath = JobSetting::GetCurrentWorkingPath();
+	if (strWorkingPath.GetLength() <= 0) DEF_OUT_RETURN_FALSE(L"작업 경로를 확인할 수 없습니다.");
+	if (strWorkingPath[strWorkingPath.GetLength() - 1] != '\\')
+		strWorkingPath.AppendChar('\\');
+
+	FileUtils::ConvertRelativeFileName(strWorkingPath, m_strTargetSolution);
+
 	return Run_Solution(m_strTargetSolution);
 }
 
@@ -163,6 +170,8 @@ bool CopyFileSolution::Run_Solution(CString strTargetPath)
 		m_strDestCopyPath.AppendChar('\\');
 	}
 
+	int nCopiedCnt = 0;
+	int nCopyTargetCnt = 0;
 	for (auto& itr : mapProjects)
 	{
 		if (!itr.second) continue;
@@ -175,7 +184,16 @@ bool CopyFileSolution::Run_Solution(CString strTargetPath)
 		strCopiedFilePath.Format(_T("%s%s"), m_strDestCopyPath, strFileName);
 
 		::CopyFile(strFile, strCopiedFilePath, FALSE);
+		nCopyTargetCnt++;
+		if (FileUtils::FileExistOnly(strCopiedFilePath)) nCopiedCnt++;
 	}
+
+	CString strPrompt;
+	if(nCopyTargetCnt == nCopiedCnt)
+		strPrompt.Format(_T("%d개의 파일이 모두 복사되었습니다."), nCopiedCnt);
+	else
+		strPrompt.Format(_T("%d개의 의 대상 파일중 %d개의 파일이 복사되었습니다."), nCopyTargetCnt, nCopiedCnt);
+	DEF_OUT(strPrompt);
 	
 	return true;
 }
@@ -442,6 +460,7 @@ bool CopyFileSolution::GetBuildResultName(const CString &strProjectPath, CString
 		break;
 	}
 	strTarget = GetValueFromMap(CString(strTarget), mapData, strProjectPath);
+	if (strTarget.Find(DEF_DEFAULT) >= 0) return false;
 
 	// output 일때 lib 는 수집하지 않음.
 	if (m_enCopyFileType == EN_COPYFILETYPE::OUTPUT)
@@ -468,5 +487,7 @@ bool CopyFileSolution::IsInvalidValue(const CString& strVal)
 {
 	if (strVal.Find(L".bsc") >= 0) return true;
 	if (strVal.Find(L".BSC") >= 0) return true;
+	if (strVal.Find(L".tlb") >= 0) return true;
+	if (strVal.Find(L".TLB") >= 0) return true;
 	return false;
 }
