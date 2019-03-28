@@ -13,33 +13,33 @@
 
 void FileExecute::AddParam(const CString& strName, const CString& strParam)
 {
-	m_vecParamName.push_back(strName);
-	m_vecParam.push_back(strParam);
+	m_vecParamKey.push_back(strName);
+	m_vecParamVal.push_back(strParam);
 }
 
 void FileExecute::SetParam(int nCount, const CString* pStrName, const CString* strParam)
 {
-	m_vecParamName.clear();
-	m_vecParam.clear();
-	m_vecParamName.reserve(nCount);
-	m_vecParam.reserve(nCount);
+	m_vecParamKey.clear();
+	m_vecParamVal.clear();
+	m_vecParamKey.reserve(nCount);
+	m_vecParamVal.reserve(nCount);
 	for(int i = 0; i < nCount; i++)
 	{
-		m_vecParamName.push_back(pStrName[i]);
-		m_vecParam.push_back(strParam[i]);
+		m_vecParamKey.push_back(pStrName[i]);
+		m_vecParamVal.push_back(strParam[i]);
 	}
 }
 
 int FileExecute::GetParams(VecStr& strName, VecStr& strParam) const
 {
-	strName = m_vecParamName;
-	strParam = m_vecParam;
-	return (int)m_vecParamName.size();
+	strName = m_vecParamKey;
+	strParam = m_vecParamVal;
+	return (int)m_vecParamKey.size();
 }
 
 int FileExecute::GetParamNum() const
 {
-	return (int)m_vecParamName.size();
+	return (int)m_vecParamKey.size();
 }
 
 bool FileExecute::Run()
@@ -50,7 +50,7 @@ bool FileExecute::Run()
 		strWorkingPath.AppendChar('\\');
 
 	CString strParam;
-	for (CString strItem : m_vecParam)
+	for (CString strItem : m_vecParamVal)
 	{
 		// 상대경로인놈은 업데이트...
 		if ((strItem.Find(L".\\") >= 0 || strItem.Find(L"..\\") >= 0)
@@ -120,15 +120,15 @@ bool FileExecute::Load(FILE* pFile)
 {
 	m_strExecuteFile = rdString(pFile);
 	int nCount = rdInt(pFile);
-	m_vecParamName.clear();
-	m_vecParam.clear();
-	m_vecParamName.reserve(nCount);
-	m_vecParam.reserve(nCount);
+	m_vecParamKey.clear();
+	m_vecParamVal.clear();
+	m_vecParamKey.reserve(nCount);
+	m_vecParamVal.reserve(nCount);
 
 	while (nCount--)
 	{
-		m_vecParamName.push_back(rdString(pFile));
-		m_vecParam.push_back(rdString(pFile));
+		m_vecParamKey.push_back(rdString(pFile));
+		m_vecParamVal.push_back(rdString(pFile));
 	}
 	return true;
 }
@@ -136,12 +136,47 @@ bool FileExecute::Load(FILE* pFile)
 bool FileExecute::Save(FILE* pFile)
 {
 	wrString(pFile, m_strExecuteFile);
-	int nCount = (int)m_vecParamName.size();
+	int nCount = (int)m_vecParamKey.size();
 	wrInt(pFile, nCount);
 	for (int i = 0; i < nCount; i++)
 	{
-		wrString(pFile, m_vecParamName[i]);
-		wrString(pFile, m_vecParam[i]);
+		wrString(pFile, m_vecParamKey[i]);
+		wrString(pFile, m_vecParamVal[i]);
 	}
 	return true;
+}
+
+void FileExecute::SetParamOption(const CString& strOption)
+{
+	CString m_strOptions;
+	DEF_SETOPTION(m_strOptions);
+	DEF_SETOPTION(m_strExecuteFile);
+
+	CString token;
+	int pos = 0;
+	while ((token = m_strOptions.Tokenize(L";", pos)) != L"")
+	{
+		CString strKey = token.Left(token.Find(L"="));
+		CString strVal = token.Mid(token.Find(L"=") + 1);
+
+		int nTargetIndex = -1;
+		for (auto i = 0; i < m_vecParamKey.size(); i++)
+		{
+			if (m_vecParamKey[i].CompareNoCase(strKey) == 0)
+			{
+				nTargetIndex = i;
+			}
+		}
+
+		if (nTargetIndex >= 0)
+		{
+			m_vecParamVal[nTargetIndex] = strVal;
+		}
+		else
+		{
+			m_vecParamKey.push_back(strKey);
+			m_vecParamVal.push_back(strVal);
+		}
+	}
+
 }

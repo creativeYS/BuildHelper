@@ -26,9 +26,10 @@ public:
 	virtual bool	Save(FILE* pFile);
 
 	virtual int		GetType() { return JobBase::EN_JOB_TYPE::EN_JOB_TYPE_FILEEXECUTE; }
+	virtual void	SetParamOption(const CString& strOption);
 
 protected:
 	CString m_strExecuteFile;			// c:\test\run.exe
-	std::vector<CString> m_vecParamName;	// Param Name
-	std::vector<CString> m_vecParam;		// Param
+	std::vector<CString> m_vecParamKey;	// Param Name
+	std::vector<CString> m_vecParamVal;	// Param
 };
