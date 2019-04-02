@@ -170,7 +170,17 @@ void FileExecute::SetParamOption(const CString& strOption)
 
 		if (nTargetIndex >= 0)
 		{
-			m_vecParamVal[nTargetIndex] = strVal;
+			CString& strParamOrg = m_vecParamVal[nTargetIndex];
+			if (strParamOrg.GetLength() > 2 &&
+				strParamOrg[0] == '\"' &&
+				strParamOrg[strParamOrg.GetLength() - 1] == '\"')
+			{
+				m_vecParamVal[nTargetIndex].Format(_T("\"%s\""), strVal);
+			}
+			else
+			{
+				m_vecParamVal[nTargetIndex] = strVal;
+			}
 		}
 		else
 		{
