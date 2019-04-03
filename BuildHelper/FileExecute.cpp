@@ -77,6 +77,14 @@ bool FileExecute::Run()
 		}
 	}
 
+	if ((m_strExecuteFile.CompareNoCase(L"del") == 0 ||
+		m_strExecuteFile.CompareNoCase(L"delete") == 0) &&
+		m_vecParamVal.size() > 0)
+	{
+		::DeleteFile(m_vecParamVal[0]);
+		return true;
+	}
+
 	CString strExeFile = m_strExecuteFile;
 	if(strExeFile.Find(L".\\") >= 0 || strExeFile.Find(L"..\\") >= 0)
 	{
@@ -103,14 +111,17 @@ bool FileExecute::Run()
 	int r = (int)ShellExecuteEx(&execinfo);
 	//프로세스가 종료될 때까지 무한정 기다림
 	DWORD dwRet = WaitForSingleObject(execinfo.hProcess, 100);
-	while (dwRet)
+	if (execinfo.hProcess)
 	{
-		MSG msg;
-		while (::PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
+		while (dwRet)
 		{
-			::SendMessage(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+			MSG msg;
+			while (::PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
+			{
+				::SendMessage(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+			}
+			dwRet = WaitForSingleObject(execinfo.hProcess, 500);
 		}
-		dwRet = WaitForSingleObject(execinfo.hProcess, 500);
 	}
 
 	return true;
