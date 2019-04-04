@@ -319,6 +319,36 @@ bool FileUtils::MakeDir(const TCHAR* pPath)
 	return true;
 }
 
+bool FileUtils::MakeDirBeforeCopy(const TCHAR* pFilePath)
+{
+	if (pFilePath == NULL) return false;
+
+	CString strPathMid = FileUtils::GetOnlyPath(pFilePath);
+	if (strPathMid.GetLength() <= 0) return false;
+
+	VecStr strNeedToMakeDir;
+	int nRepeatLimit = 20;
+	while (--nRepeatLimit)
+	{
+		if (!FileUtils::PathExist(strPathMid))
+		{
+			strNeedToMakeDir.push_back(strPathMid);
+			int nLastTemp = strPathMid.ReverseFind('\\');
+			strPathMid = strPathMid.Left(nLastTemp);
+		}
+		else
+		{
+			break;
+		}
+	}
+	nRepeatLimit = (int)strNeedToMakeDir.size();
+	while (nRepeatLimit--)
+	{
+		FileUtils::MakeDir(strNeedToMakeDir[nRepeatLimit]);
+	}
+	return true;
+}
+
 CString FileUtils::GetOnlyFileName(const CString& strPath, bool bRevSlash, bool bWithOutExt)
 {
 	int nPos = strPath.ReverseFind('\\');

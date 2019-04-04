@@ -183,6 +183,8 @@ bool CopyFileSolution::Run_Solution(CString strTargetPath)
 		CString strCopiedFilePath;
 		strCopiedFilePath.Format(_T("%s%s"), m_strDestCopyPath, strFileName);
 
+		FileUtils::MakeDirBeforeCopy(strCopiedFilePath);
+
 		::CopyFile(strFile, strCopiedFilePath, FALSE);
 		nCopyTargetCnt++;
 		if (FileUtils::FileExistOnly(strCopiedFilePath)) nCopiedCnt++;

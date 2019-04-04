@@ -38,4 +38,5 @@ public:
 	static bool		FolderDelete(const TCHAR* pPath);
 
 	static bool		MakeDir(const TCHAR* pPath);
+	static bool		MakeDirBeforeCopy(const TCHAR* pFilePath);
 };

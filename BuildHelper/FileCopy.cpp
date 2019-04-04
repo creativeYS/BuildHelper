@@ -106,27 +106,7 @@ bool FileCopy::Run()
 		CString strCopiedFilePath;
 		strCopiedFilePath.Format(_T("%s%s"), strDestPath, strFile);
 
-		CString strPathMid = FileUtils::GetOnlyPath(strCopiedFilePath);
-		VecStr strNeedToMakeDir;
-		int nRepeatLimit = 20;
-		while (--nRepeatLimit)
-		{
-			if (!FileUtils::PathExist(strPathMid))
-			{
-				strNeedToMakeDir.push_back(strPathMid);
-				int nLastTemp = strPathMid.ReverseFind('\\');
-				strPathMid = strPathMid.Left(nLastTemp);
-			}
-			else
-			{
-				break;
-			}
-		}
-		nRepeatLimit = strNeedToMakeDir.size();
-		while(nRepeatLimit--)
-		{
-			FileUtils::MakeDir(strNeedToMakeDir[nRepeatLimit]);
-		}
+		FileUtils::MakeDirBeforeCopy(strCopiedFilePath);
 
 		::CopyFile(strFileOrg, strCopiedFilePath, FALSE);
 
