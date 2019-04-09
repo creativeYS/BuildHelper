@@ -6,6 +6,7 @@
 #include "FileExecute.h"
 #include "OutputControl.h"
 #include "JobSetting.h"
+#include "FileExecute_SubTypes.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -95,36 +96,41 @@ bool FileExecute::Run()
 		}
 	}
 
-	//HINSTANCE hInst = ::ShellExecute(NULL, L"open", strExeFile, strParam, NULL, SW_SHOWNORMAL);
-	SHELLEXECUTEINFO execinfo;
-
-	// 실행을 위해 구조체 세트
-	ZeroMemory(&execinfo, sizeof(execinfo));
-	execinfo.cbSize = sizeof(execinfo);
-	execinfo.lpVerb = L"open";
-	execinfo.lpFile = strExeFile;
-	execinfo.lpParameters = strParam;
-	execinfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-	execinfo.nShow = SW_SHOWNORMAL;
-
-	// 프로그램을 실행한다.
-	int r = (int)ShellExecuteEx(&execinfo);
-	//프로세스가 종료될 때까지 무한정 기다림
-	DWORD dwRet = WaitForSingleObject(execinfo.hProcess, 100);
-	if (execinfo.hProcess)
+	enum EN_EXECUTE_TYPE
 	{
-		while (dwRet)
-		{
-			MSG msg;
-			while (::PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
-			{
-				::SendMessage(msg.hwnd, msg.message, msg.wParam, msg.lParam);
-			}
-			dwRet = WaitForSingleObject(execinfo.hProcess, 500);
-		}
+		EN_SHELLEXECUTE,
+		EN_CREATEPROCESS,
+	};
+	EN_EXECUTE_TYPE enExecuteType(EN_SHELLEXECUTE);
+	enExecuteType = EN_CREATEPROCESS;
+
+	FileExecute_Base* pBase = nullptr;
+	switch (enExecuteType)
+	{
+	case EN_SHELLEXECUTE:
+	{
+		static FileExecute_ShellExecute shellExecute;
+		pBase = &shellExecute;
+	} break;	
+	case EN_CREATEPROCESS:
+	{
+		static FileExecute_CreateProcess createProcess;
+		pBase = &createProcess;
+	} break;
+	default:
+		ASSERT(0);
+		break;
 	}
 
-	return true;
+	bool bRet = false;
+	if (pBase)
+	{
+		pBase->SetExeFile(strExeFile);
+		pBase->SetParams(strParam);
+		bRet = pBase->Run();
+	}
+
+	return bRet;
 }
 
 bool FileExecute::Load(FILE* pFile)

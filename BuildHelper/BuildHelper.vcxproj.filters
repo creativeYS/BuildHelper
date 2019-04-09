@@ -100,6 +100,9 @@
     <ClInclude Include="CancelJobDlg.h">
       <Filter>BuildHelper\Dialogs\Job</Filter>
     </ClInclude>
+    <ClInclude Include="FileExecute_SubTypes.h">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Job.cpp">
@@ -170,6 +173,9 @@
     </ClCompile>
     <ClCompile Include="CancelJobDlg.cpp">
       <Filter>BuildHelper\Dialogs\Job</Filter>
+    </ClCompile>
+    <ClCompile Include="FileExecute_SubTypes.cpp">
+      <Filter>BuildHelper\Jobs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
