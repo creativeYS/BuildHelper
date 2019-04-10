@@ -102,7 +102,12 @@ bool FileExecute::Run()
 		EN_CREATEPROCESS,
 	};
 	EN_EXECUTE_TYPE enExecuteType(EN_SHELLEXECUTE);
-	enExecuteType = EN_CREATEPROCESS;
+
+	// console 인경우는 CreateProcess, 표준입출력 redirection...
+	if(OutputControl::Instance()->GetType() == OutputControl::EN_TYPE_CONSOLE)
+	{
+		enExecuteType = EN_CREATEPROCESS;
+	}
 
 	FileExecute_Base* pBase = nullptr;
 	switch (enExecuteType)
