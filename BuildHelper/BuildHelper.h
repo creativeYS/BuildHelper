@@ -23,6 +23,7 @@ public:
 // 재정의입니다.
 public:
 	virtual BOOL InitInstance();
+	virtual int ExitInstance();
 
 // 구현입니다.
 
@@ -30,6 +31,9 @@ public:
 
 public:
 	static bool CmdRun(int nNum, const CString* pParams);
+
+protected:
+	int m_nExitCode = 0;
 };
 
 extern CBuildHelperApp theApp;
