@@ -190,7 +190,7 @@ bool CBuildHelperApp::CmdRun(int nNum, const CString* pParams)
 		strPrompt.Format(L"Error > Can not find %s", strJobName);
 		DEF_OUT(strPrompt);
 	}
-	return false;
+	return true;
 }
 
 bool ConsoleMode(bool& bRetValue)
