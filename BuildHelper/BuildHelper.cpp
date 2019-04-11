@@ -45,7 +45,7 @@ CBuildHelperApp theApp;
 
 // CBuildHelperApp 초기화
 
-bool ConsoleMode();
+bool ConsoleMode(bool& bRetValue);
 
 BOOL CBuildHelperApp::InitInstance()
 {
@@ -80,8 +80,10 @@ BOOL CBuildHelperApp::InitInstance()
 	// 적절한 내용으로 수정해야 합니다.
 	SetRegistryKey(_T("로컬 응용 프로그램 마법사에서 생성된 응용 프로그램"));
 
-	if (ConsoleMode())
+	bool bRetValue = true;
+	if (ConsoleMode(bRetValue))
 	{
+		if (!bRetValue) return 1;
 		return FALSE;
 	}
 
@@ -121,7 +123,7 @@ BOOL CBuildHelperApp::InitInstance()
 	return FALSE;
 }
 
-void CBuildHelperApp::CmdRun(int nNum, const CString* pParams)
+bool CBuildHelperApp::CmdRun(int nNum, const CString* pParams)
 {
 	CString strPath;
 	strPath.Format(L"%s*", FileUtils::GetSettingPath());
@@ -156,7 +158,6 @@ void CBuildHelperApp::CmdRun(int nNum, const CString* pParams)
 	{
 		const CString& strJobName = pParams[1];
 
-		bool bFind = false;
 		for (CString str : files)
 		{
 			CString strName = FileUtils::GetOnlyFileName(str, false, true);
@@ -173,22 +174,19 @@ void CBuildHelperApp::CmdRun(int nNum, const CString* pParams)
 						job.SetParamOption(strParam);
 				}
 				
-				job.Run();
-				bFind = true;
+				bool bRet = job.Run();
 				DEF_OUT(L"Executed.");
-				break;
+				return bRet;
 			}
 		}
-		if (!bFind)
-		{
-			CString strPrompt;
-			strPrompt.Format(L"Error > Can not find %s", strJobName);
-			DEF_OUT(strPrompt);
-		}
+		CString strPrompt;
+		strPrompt.Format(L"Error > Can not find %s", strJobName);
+		DEF_OUT(strPrompt);
 	}
+	return false;
 }
 
-bool ConsoleMode()
+bool ConsoleMode(bool& bRetValue)
 {
 	int iCnt = __argc;
 	if (iCnt <= 1)
@@ -266,7 +264,7 @@ bool ConsoleMode()
 	}
 	else if (params[0].CompareNoCase(L"run") == 0)
 	{
-		CBuildHelperApp::CmdRun((int)params.size(), &params[0]);
+		bRetValue = CBuildHelperApp::CmdRun((int)params.size(), &params[0]);
 	}
 	else if (params[0].CompareNoCase(L"delete") == 0)
 	{

@@ -39,7 +39,12 @@ bool FileExecute_ShellExecute::Run()
 			dwRet = WaitForSingleObject(execinfo.hProcess, 500);
 		}
 	}
-	return true;
+
+	dwRet = 1;
+	GetExitCodeProcess(execinfo.hProcess, &dwRet);
+
+	if (dwRet == 0) return true;
+	return false;
 }
 
 bool FileExecute_CreateProcess::Run()
@@ -92,5 +97,9 @@ bool FileExecute_CreateProcess::Run()
 		DEF_OUT_CONSOLE(csTemp);
 	} while (res);
 
-	return true;
+	DWORD dwRet = 1;
+	GetExitCodeProcess(pInfo.hProcess, &dwRet);
+
+	if (dwRet == 0) return true;
+	return false;
 }

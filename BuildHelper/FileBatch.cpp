@@ -87,6 +87,7 @@ bool FileBatch::Run()
 		CString strTemp;
 		strTemp.Format(L"%d개의 작업 중 %d개가 실패하였습니다.", nTotalCnt, nTotalCnt - nSuccessCnt);
 		DEF_OUT(strTemp);
+		return false;
 	}
 
 	return true;
