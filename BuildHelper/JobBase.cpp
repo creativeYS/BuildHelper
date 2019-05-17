@@ -19,6 +19,8 @@
 #include "CopyFileSolutionDlg.h"
 #include "CancelJob.h"
 #include "CancelJobDlg.h"
+#include "SelectJob.h"
+#include "SelectJobDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -55,6 +57,9 @@ JobBase* JobBase::CreateImpl(int enType)
 	case EN_JOB_TYPE_CANCELJOB:
 		pImpl = new CancelJob();
 		break;
+	case EN_JOB_TYPE_SELECTJOB:
+		pImpl = new SelectJob();
+		break;
 	default:
 		ASSERT(0);
 	}
@@ -89,6 +94,10 @@ CString JobBase::GetJobTypeName(int enType, bool bDisplay)
 		break;
 	case EN_JOB_TYPE_CANCELJOB:
 		strTemp = bDisplay ? L"작업 취소 도구" : L"JOBCANCEL";
+		break;
+	case EN_JOB_TYPE_SELECTJOB:
+		strTemp = bDisplay ? L"작업 선택" : L"SELECTJOB";
+		break;
 	default:
 		ASSERT(0);
 	}
@@ -141,10 +150,15 @@ UINT JobBase::DoModal(int nType, void* pImpl)
 	{
 		CancelJobDlg dlg((CancelJob*)pImpl);
 		return (UINT)dlg.DoModal();
-		return IDOK;
+	} break;
+	case JobBase::EN_JOB_TYPE_SELECTJOB:
+	{
+		SelectJobDlg dlg((SelectJob*)pImpl);
+		return (UINT)dlg.DoModal();
 	} break;
 	default:
 		ASSERT(0);
+		return IDOK;
 		break;
 	}
 	return IDCANCEL;

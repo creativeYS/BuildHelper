@@ -204,6 +204,7 @@
     <ClInclude Include="FileCopy.h" />
     <ClInclude Include="FileExecute.h" />
     <ClInclude Include="FileExecute_SubTypes.h" />
+    <ClInclude Include="JobComboDlg.h" />
     <ClInclude Include="JobCreateFileListDlg.h" />
     <ClInclude Include="JobSetting.h" />
     <ClInclude Include="FileUtils.h" />
@@ -216,6 +217,8 @@
     <ClInclude Include="NameDlg.h" />
     <ClInclude Include="OutputControl.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SelectJob.h" />
+    <ClInclude Include="SelectJobDlg.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -232,6 +235,7 @@
     <ClCompile Include="FileCopy.cpp" />
     <ClCompile Include="FileExecute.cpp" />
     <ClCompile Include="FileExecute_SubTypes.cpp" />
+    <ClCompile Include="JobComboDlg.cpp" />
     <ClCompile Include="JobCreateFileListDlg.cpp" />
     <ClCompile Include="JobSetting.cpp" />
     <ClCompile Include="FileUtils.cpp" />
@@ -243,6 +247,8 @@
     <ClCompile Include="JobTypeDlg.cpp" />
     <ClCompile Include="NameDlg.cpp" />
     <ClCompile Include="OutputControl.cpp" />
+    <ClCompile Include="SelectJob.cpp" />
+    <ClCompile Include="SelectJobDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

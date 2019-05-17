@@ -103,6 +103,15 @@
     <ClInclude Include="FileExecute_SubTypes.h">
       <Filter>BuildHelper\Jobs</Filter>
     </ClInclude>
+    <ClInclude Include="SelectJob.h">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectJobDlg.h">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="JobComboDlg.h">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Job.cpp">
@@ -176,6 +185,15 @@
     </ClCompile>
     <ClCompile Include="FileExecute_SubTypes.cpp">
       <Filter>BuildHelper\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectJob.cpp">
+      <Filter>BuildHelper\Jobs</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectJobDlg.cpp">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="JobComboDlg.cpp">
+      <Filter>BuildHelper\Dialogs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
