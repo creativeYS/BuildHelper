@@ -57,11 +57,15 @@ void ProgressDlg::ShowProgress()
 
 void ProgressDlg::HideProgress()
 {
+	if (!IsWindow(GetDlgInstance()->m_hWnd)) return;
+
 	GetDlgInstance()->ShowWindow(SW_HIDE);
 }
 
 void ProgressDlg::SetProgressRange(bool bTotal, int nSum)
 {
+	if (!IsWindow(GetDlgInstance()->m_hWnd)) return;
+
 	if (!bTotal && nSum < 10) return;
 
 	CProgressCtrl* pProgress = bTotal ? (CProgressCtrl*)GetDlgInstance()->GetDlgItem(IDC_PROGRESS1) :
@@ -72,6 +76,8 @@ void ProgressDlg::SetProgressRange(bool bTotal, int nSum)
 
 void ProgressDlg::StepProgress(bool bTotal)
 {
+	if (!IsWindow(GetDlgInstance()->m_hWnd)) return;
+
 	CProgressCtrl* pProgress = bTotal ? (CProgressCtrl*)GetDlgInstance()->GetDlgItem(IDC_PROGRESS1) :
 		(CProgressCtrl*)GetDlgInstance()->GetDlgItem(IDC_PROGRESS2);
 
@@ -86,6 +92,8 @@ void ProgressDlg::StepProgress(bool bTotal)
 
 void ProgressDlg::DoneProgress()
 {
+	if (!IsWindow(GetDlgInstance()->m_hWnd)) return;
+
 	GetDlgInstance()->AddString(L"");
 	GetDlgInstance()->AddString(L"*** 작업이 완료되었습니다 ***");
 	GetDlgInstance()->GetDlgItem(IDOK)->EnableWindow(TRUE);
@@ -93,7 +101,6 @@ void ProgressDlg::DoneProgress()
 
 void ProgressDlg::AddString(const CString& strPrompt)
 {
-	
 	if (!IsWindow(GetDlgInstance()->m_hWnd)) return;
 
 	CString strTemp;
