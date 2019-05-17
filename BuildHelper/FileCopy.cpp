@@ -90,7 +90,6 @@ bool FileCopy::Run()
 					if (strExt.CompareNoCase(strFilterFile.Mid(1)) == 0)
 					{
 						bFind = true;
-						break;
 					}
 				}
 
