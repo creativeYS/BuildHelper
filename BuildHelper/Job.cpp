@@ -87,6 +87,8 @@ bool Job::Load(const TCHAR* pFilePath)
 	}
 
 	m_bSubJob = JobBase::rdInt(pFile) == 1 ? true : false;	
+	m_strDesc = JobBase::rdString(pFile);
+
 	m_pImpl = JobBase::CreateImpl(nType);
 
 	bool bRet = m_pImpl->Load(pFile);
@@ -121,6 +123,8 @@ bool Job::Save(const TCHAR* pFilePath)
 	JobBase::wrString(pFile, strName);
 
 	JobBase::wrInt(pFile, m_bSubJob ? 1 : 0);
+
+	JobBase::wrString(pFile, m_strDesc);
 
 	bool bRet = m_pImpl->Save(pFile);
 	JobBase::Close(pFile);

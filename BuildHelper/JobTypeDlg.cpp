@@ -29,6 +29,7 @@ void JobTypeDlg::data2dlg()
 	m_cbxType.SetCurSel(nSelIndex);
 
 	GetDlgItem(IDC_EDIT1)->SetWindowText(m_strJobName);
+	GetDlgItem(IDC_EDIT2)->SetWindowText(m_strJobDesc);
 
 	((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(m_bSubJob ? TRUE : FALSE);
 }
@@ -44,6 +45,7 @@ bool JobTypeDlg::dlg2data()
 	if (m_strJobName.FindOneOf(L"\\/:*?\"<>|") >= 0)
 		DEF_OUT_RETURN_FALSE(L"사용할 수 없는 문자가 포함되었습니다.");
 
+	GetDlgItem(IDC_EDIT2)->GetWindowText(m_strJobDesc);
 	m_bSubJob = ((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck() ? true : false;
 	return true;
 }

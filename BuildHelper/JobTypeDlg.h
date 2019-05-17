@@ -9,10 +9,12 @@ public:
 
 	int		GetType() { return m_enType; }
 	CString GetJobName() { return m_strJobName; }
+	CString GetJobDesc() { return m_strJobDesc; }
 	bool	GetSubJob() { return m_bSubJob; }
 
 	void	SetType(int nType) { m_enType = nType; }
 	void	SetJobName(const CString& strName) { m_strJobName = strName; }
+	void	SetJobDesc(const CString& strDesc) { m_strJobDesc = strDesc; }
 	void	SetSubJob(bool bSub) { m_bSubJob = bSub; }
 
 protected:
@@ -28,6 +30,7 @@ protected:
 
 	int			m_enType = 0;
 	CString		m_strJobName = L"작업";	
+	CString		m_strJobDesc = L"";
 	bool		m_bSubJob = true;
 
 	CComboBox	m_cbxType;

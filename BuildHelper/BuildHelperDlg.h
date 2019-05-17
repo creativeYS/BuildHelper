@@ -32,14 +32,15 @@ protected:
 
 // 구현입니다.
 protected:
-	HICON		m_hIcon;
-	CListCtrl	m_List;
-	CComboBox	m_cbxSetting;
-	Job*		m_pSettingJob = NULL;
-	JobSetting*	m_pSetting = NULL;
+	HICON			m_hIcon;
+	CListCtrl		m_List;
+	CComboBox		m_cbxSetting;
+	Job*			m_pSettingJob = NULL;
+	JobSetting*		m_pSetting = NULL;
 
 	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 		
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();

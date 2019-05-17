@@ -201,9 +201,11 @@ BOOL CBuildHelperDlg::OnInitDialog()
 		| LVS_EX_FULLROWSELECT
 		| TVS_SHOWSELALWAYS);
 
-	m_List.InsertColumn(0, _T("#"), LVCFMT_LEFT, 40);
-	m_List.InsertColumn(1, _T("작업 이름"), LVCFMT_LEFT, 240);
-	m_List.InsertColumn(2, _T("작업 종류"), LVCFMT_LEFT, 140);
+	int nWidth = 620;
+	m_List.InsertColumn(0, _T("#"), LVCFMT_CENTER, (int)(nWidth * 0.1));
+	m_List.InsertColumn(1, _T("작업 이름"), LVCFMT_LEFT, (int)(nWidth * 0.3));
+	m_List.InsertColumn(2, _T("작업 종류"), LVCFMT_CENTER, (int)(nWidth * 0.15));
+	m_List.InsertColumn(3, _T("설명"), LVCFMT_LEFT, (int)(nWidth * 0.45));
 
 	// 설정 읽기
 	static Job gSetting;
@@ -234,6 +236,11 @@ BOOL CBuildHelperDlg::OnInitDialog()
 	UpdateList();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
+}
+
+BOOL CBuildHelperDlg::PreTranslateMessage(MSG* pMsg)
+{
+	return CDialogEx::PreTranslateMessage(pMsg);
 }
 
 void CBuildHelperDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -342,6 +349,7 @@ void CBuildHelperDlg::UpdateList()
 		int nIndex = m_List.InsertItem(m_List.GetItemCount(), strTemp);
 		m_List.SetItemText(nIndex, 1, strItemName);
 		m_List.SetItemText(nIndex, 2, strItemType);
+		m_List.SetItemText(nIndex, 3, pJob->GetDesc());
 		m_List.SetItemData(nIndex, (DWORD_PTR)pJob);
 	}
 }
@@ -360,7 +368,7 @@ void CBuildHelperDlg::UpdateJobs()
 		Job* pJob = new Job();
 		
 		pJob->SetJobName(strName);
-		pJob->Load(str);
+		if (!pJob->Load(str)) continue;
 		
 		m_Jobs[strName] = pJob;
 	}
@@ -449,6 +457,7 @@ void CBuildHelperDlg::OnBnClickedNewJob()
 		jobNew.Init(dlg.GetType());
 		jobNew.SetJobName(dlg.GetJobName());
 		jobNew.SetSubJob(dlg.GetSubJob());
+		jobNew.SetDesc(dlg.GetJobDesc());
 		if (jobNew.DoModal() != IDOK)
 		{
 			return;
@@ -582,6 +591,7 @@ void CBuildHelperDlg::OnBnClickedJobModify()
 	dlg.SetType(pJob->GetJobType());
 	dlg.SetJobName(pJob->GetJobName());
 	dlg.SetSubJob(pJob->GetSubJob());
+	dlg.SetJobDesc(pJob->GetDesc());
 	if (dlg.DoModal() == IDOK)
 	{
 		Job jobTemp;
@@ -592,6 +602,7 @@ void CBuildHelperDlg::OnBnClickedJobModify()
 		}
 		jobTemp.SetJobName(dlg.GetJobName());
 		jobTemp.SetSubJob(dlg.GetSubJob());
+		jobTemp.SetDesc(dlg.GetJobDesc());
 
 		if (jobTemp.DoModal() == IDOK)
 		{
