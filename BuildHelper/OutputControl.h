@@ -14,6 +14,7 @@ public:
 		EN_TYPE_NONE,
 		EN_TYPE_CONSOLE,
 		EN_TYPE_MSGBOX,
+		EN_TYPE_PROGRESS,
 	};
 
 	// default 값이 지정된 bYes를 넘길것.

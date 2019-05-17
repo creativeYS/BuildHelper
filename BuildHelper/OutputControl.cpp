@@ -6,6 +6,7 @@
 #include "OutputControl.h"
 #include <iostream>
 #include <string>
+#include "ProgressDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -48,6 +49,15 @@ void OutputControl::PrintOut(const TCHAR* pStr)
 	else if (m_enType == OutputControl::EN_TYPE::EN_TYPE_MSGBOX)
 	{
 		AfxMessageBox(pStr);
+	}
+	else if (m_enType == OutputControl::EN_TYPE::EN_TYPE_PROGRESS)
+	{
+		ProgressDlg::AddString(pStr);
+		MSG msg;
+		while (::PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
+		{
+			::SendMessage(msg.hwnd, msg.message, msg.wParam, msg.lParam);
+		}
 	}
 }
 

@@ -7,10 +7,17 @@
 #include "OutputControl.h"
 #include "FileCopy.h"
 #include "FileExecute.h"
+#include "ProgressDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
+//////////////////////////////////////////////////////////////////////////
+// Total Count...
+bool	g_bTotalCountMode = false;
+int		g_nTotalCount = 0;
+
 
 //////////////////////////////////////////////////////////////////////////
 // Job
@@ -25,6 +32,21 @@ Job::~Job()
 
 bool Job::Run()
 {
+	if (g_bTotalCountMode)
+	{
+		g_nTotalCount++;
+		if (m_pImpl->GetType() == JobBase::EN_JOB_TYPE::EN_JOB_TYPE_FILEBATCH)
+		{
+			m_pImpl->Run();
+		}
+		return true;
+	}
+
+	ProgressDlg::StepProgress(true);
+	CString strPrompt;
+	strPrompt.Format(_T("현재 작업 : %s (%s)"), GetJobName(), m_pImpl->GetJobTypeName(m_pImpl->GetType(), true));
+	ProgressDlg::AddString(strPrompt);
+
 	if (m_pImpl) return m_pImpl->Run();
 	return false;
 }
@@ -69,6 +91,12 @@ bool Job::Load(const TCHAR* pFilePath)
 
 	bool bRet = m_pImpl->Load(pFile);
 	JobBase::Close(pFile);
+
+	if (m_strJobName.GetLength() <= 0)
+	{
+		CString strName = FileUtils::GetOnlyFileName(pFilePath, false, true);
+		SetJobName(strName);
+	}
 
 	return bRet;
 }
@@ -120,4 +148,18 @@ void Job::SetParamOption(const CString& strOption)
 	if (m_pImpl == nullptr) return;
 
 	m_pImpl->SetParamOption(strOption);
+}
+
+int Job::GetTotalCount()
+{
+	if (m_pImpl == nullptr) return 0;
+
+	g_bTotalCountMode = true;
+	g_nTotalCount = 0;
+
+	Run();
+
+	g_bTotalCountMode = false;
+
+	return g_nTotalCount;
 }

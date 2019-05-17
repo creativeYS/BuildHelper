@@ -17,9 +17,11 @@
 #define IDD_BUILDHELPER_JOB_CANCELJOB   114
 #define IDD_BUILDHELPER_SELECT          115
 #define IDD_BUILDHELPER_JOB_SELECTJOB   116
+#define IDD_BUILDHELPER_PROGRESS        117
 #define IDR_MAINFRAME                   128
 #define IDC_EDIT1                       1003
 #define IDC_CHECK1                      1004
+#define IDC_EDIT8                       1004
 #define IDC_EDIT2                       1005
 #define IDC_CHECK3                      1005
 #define IDC_EDIT3                       1006
@@ -49,6 +51,8 @@
 #define IDC_BUTTON7                     1016
 #define IDC_BUTTON8                     1017
 #define IDC_COMBO1                      1019
+#define IDC_PROGRESS1                   1020
+#define IDC_PROGRESS2                   1021
 #define IDC_STATIC2                     65535
 #define IDC_STATIC3                     65535
 
@@ -58,7 +62,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        130
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1020
+#define _APS_NEXT_CONTROL_VALUE         1021
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

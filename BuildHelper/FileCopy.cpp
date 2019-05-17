@@ -6,6 +6,7 @@
 #include "FileCopy.h"
 #include "OutputControl.h"
 #include "JobSetting.h"
+#include "ProgressDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -63,12 +64,18 @@ bool FileCopy::Run()
 
 	if (!FileUtils::MakeDir(strDestPath))  DEF_OUT_RETURN_FALSE(L"목표 폴더를 생성할 수 없습니다.");
 
+	ProgressDlg::SetProgressRange(false, (int)strResult.size());
+	CString strPrompt;
+	strPrompt.Format(_T("%d개의 파일복사를 시작합니다."), strResult.size());
+	DEF_OUT(strPrompt);
+
 	int nSuccessCnt = 0;
 	for (CString& strFileOrg : strResult)
 	{
 		CString strFile = strFileOrg.Right(strFileOrg.GetLength() - strSourcePath.GetLength() + 1);
 		CString strFileNameOnly = strFile.ReverseFind('\\') >= 0 ? strFile.Mid(strFile.ReverseFind('\\') + 1) : strFile;
-		
+		ProgressDlg::StepProgress(false);
+
 		if (bMultiFile)
 		{
 			bool bFind = false;
@@ -113,7 +120,6 @@ bool FileCopy::Run()
 		DEF_OUT_CONSOLE(strCopiedFilePath);
 	}
 
-	CString strPrompt;
 	strPrompt.Format(_T("%d개의 파일을 복사하였습니다."), nSuccessCnt);
 	DEF_OUT(strPrompt);
 

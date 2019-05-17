@@ -112,6 +112,9 @@
     <ClInclude Include="JobComboDlg.h">
       <Filter>BuildHelper\Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="ProgressDlg.h">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Job.cpp">
@@ -193,6 +196,9 @@
       <Filter>BuildHelper\Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="JobComboDlg.cpp">
+      <Filter>BuildHelper\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgressDlg.cpp">
       <Filter>BuildHelper\Dialogs</Filter>
     </ClCompile>
   </ItemGroup>

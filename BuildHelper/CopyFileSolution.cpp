@@ -8,6 +8,7 @@
 #include "JobSetting.h"
 #include "Job.h"
 #include "FileCopy.h"
+#include "ProgressDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -169,11 +170,18 @@ bool CopyFileSolution::Run_Solution(CString strTargetPath)
 	{
 		m_strDestCopyPath.AppendChar('\\');
 	}
+	
+	ProgressDlg::SetProgressRange(false, (int)mapProjects.size());
+	CString strPrompt;
+	strPrompt.Format(_T("%d개의 파일복사를 시작합니다."), mapProjects.size());
+	DEF_OUT(strPrompt);
 
 	int nCopiedCnt = 0;
 	int nCopyTargetCnt = 0;
 	for (auto& itr : mapProjects)
 	{
+		ProgressDlg::StepProgress(false);
+
 		if (!itr.second) continue;
 
 		const CString& strFile = itr.first;
@@ -190,7 +198,6 @@ bool CopyFileSolution::Run_Solution(CString strTargetPath)
 		if (FileUtils::FileExistOnly(strCopiedFilePath)) nCopiedCnt++;
 	}
 
-	CString strPrompt;
 	if(nCopyTargetCnt == nCopiedCnt)
 		strPrompt.Format(_T("%d개의 파일이 모두 복사되었습니다."), nCopiedCnt);
 	else

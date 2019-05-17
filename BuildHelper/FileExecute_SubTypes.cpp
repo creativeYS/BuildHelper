@@ -36,7 +36,7 @@ bool FileExecute_ShellExecute::Run()
 			{
 				::SendMessage(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 			}
-			dwRet = WaitForSingleObject(execinfo.hProcess, 500);
+			dwRet = WaitForSingleObject(execinfo.hProcess, 200);
 		}
 	}
 

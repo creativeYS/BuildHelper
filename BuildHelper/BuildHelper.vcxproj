@@ -216,6 +216,7 @@
     <ClInclude Include="JobTypeDlg.h" />
     <ClInclude Include="NameDlg.h" />
     <ClInclude Include="OutputControl.h" />
+    <ClInclude Include="ProgressDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SelectJob.h" />
     <ClInclude Include="SelectJobDlg.h" />
@@ -247,6 +248,7 @@
     <ClCompile Include="JobTypeDlg.cpp" />
     <ClCompile Include="NameDlg.cpp" />
     <ClCompile Include="OutputControl.cpp" />
+    <ClCompile Include="ProgressDlg.cpp" />
     <ClCompile Include="SelectJob.cpp" />
     <ClCompile Include="SelectJobDlg.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -16,6 +16,7 @@
 #include "JobBatchDlg.h"
 #include "NameDlg.h"
 #include <algorithm>
+#include "ProgressDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -490,7 +491,24 @@ void CBuildHelperDlg::OnBnClickedRunJob()
 	}
 
 	JobSetting::SetCurrentWorkingPath(strWorkingPath);
-	pJob->Run();
+
+	if (OutputControl::Instance()->GetType() == OutputControl::EN_TYPE_MSGBOX)
+	{
+		OutputControl::Instance()->SetType(OutputControl::EN_TYPE_PROGRESS);
+		
+		int nTotalCount = pJob->GetTotalCount();
+		ProgressDlg::ShowProgress();
+		ProgressDlg::SetProgressRange(true, nTotalCount);
+
+		pJob->Run();
+
+		ProgressDlg::DoneProgress();
+		OutputControl::Instance()->SetType(OutputControl::EN_TYPE_MSGBOX);
+	}
+	else
+	{
+		pJob->Run();
+	}
 
 	if (JobSetting::GetUIClosed())
 	{

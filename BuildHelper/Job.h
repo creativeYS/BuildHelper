@@ -30,6 +30,9 @@ public:
 	// Option
 	void		SetParamOption(const CString& strOption);
 
+	// Ect...
+	int			GetTotalCount();
+
 protected:
 	CString		m_strJobName;
 	bool		m_bSubJob = true;
