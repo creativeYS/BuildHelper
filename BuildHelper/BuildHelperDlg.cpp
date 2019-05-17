@@ -204,8 +204,8 @@ BOOL CBuildHelperDlg::OnInitDialog()
 	int nWidth = 620;
 	m_List.InsertColumn(0, _T("#"), LVCFMT_CENTER, (int)(nWidth * 0.1));
 	m_List.InsertColumn(1, _T("작업 이름"), LVCFMT_LEFT, (int)(nWidth * 0.3));
-	m_List.InsertColumn(2, _T("작업 종류"), LVCFMT_CENTER, (int)(nWidth * 0.15));
-	m_List.InsertColumn(3, _T("설명"), LVCFMT_LEFT, (int)(nWidth * 0.45));
+	m_List.InsertColumn(2, _T("작업 종류"), LVCFMT_CENTER, (int)(nWidth * 0.2));
+	m_List.InsertColumn(3, _T("설명"), LVCFMT_LEFT, (int)(nWidth * 0.4));
 
 	// 설정 읽기
 	static Job gSetting;
