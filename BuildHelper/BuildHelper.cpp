@@ -35,6 +35,10 @@ CBuildHelperApp::CBuildHelperApp()
 
 	int b = 3;
 	b++;
+
+
+	int c = 8;
+	c++;
 	// TODO: 여기에 생성 코드를 추가합니다.
 	// InitInstance에 모든 중요한 초기화 작업을 배치합니다.
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_ALL_ASPECTS;
