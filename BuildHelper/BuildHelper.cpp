@@ -380,6 +380,7 @@ bool ConsoleMode(bool& bRetValue)
 	double dTest = 1.0;
 	int aaaaaa = 30;
 	aaaaaa++;
+	// 한글 주석 테스트.
 
 	return true;
 	int a = 3;
