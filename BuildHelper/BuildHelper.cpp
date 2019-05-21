@@ -38,6 +38,8 @@ CBuildHelperApp::CBuildHelperApp()
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_ALL_ASPECTS;
 
 	SetAppID(_T("RTManager.AppID.NoVersion"));
+	double dd = 10.0;
+	dd += 10000.0;
 }
 
 
