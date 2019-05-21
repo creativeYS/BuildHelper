@@ -10,6 +10,7 @@
 #include "OutputControl.h"
 #include "Job.h"
 #include "JobSetting.h"
+#include <iostream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -40,6 +41,27 @@ CBuildHelperApp::CBuildHelperApp()
 	SetAppID(_T("RTManager.AppID.NoVersion"));
 	double dd = 10.0;
 	dd += 10000.0;
+
+	int ddd = 32;
+	int val1 = 1 << 32;
+	int val2 = 1 << ddd;
+	ddd = 1;
+	int val3 = 0x80000000 << ddd;
+// 	_asm
+// 	{
+// 		mov         eax, 1
+// 		mov         ecx, dword ptr[ddd]
+// 		shl         eax, cl
+// 		mov         dword ptr[val2], eax
+// 
+// 		mov         eax, 1
+// 		mov         ecx, dword ptr[ddd]
+// 		sal         eax, cl
+// 		mov         dword ptr[val2], eax
+// 	}
+
+	int a1 = 3;
+	a1++;
 }
 
 
@@ -357,4 +379,5 @@ bool ConsoleMode(bool& bRetValue)
 	return true;
 	int a = 3;
 	a++;
+
 }
