@@ -115,6 +115,9 @@ BOOL CBuildHelperApp::InitInstance()
 	if (pShellManager != nullptr)
 	{
 		delete pShellManager;
+		int a = 3;
+		a++;
+		a++;
 	}
 
 #if !defined(_AFXDLL) && !defined(_AFX_NO_MFC_CONTROLS_IN_DIALOGS)
