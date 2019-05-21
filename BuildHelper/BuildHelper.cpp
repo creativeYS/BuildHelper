@@ -47,6 +47,8 @@ CBuildHelperApp::CBuildHelperApp()
 	int val2 = 1 << ddd;
 	ddd = 1;
 	int val3 = 0x80000000 << ddd;
+	a++;
+	a++;
 // 	_asm
 // 	{
 // 		mov         eax, 1
