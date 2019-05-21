@@ -353,6 +353,8 @@ bool ConsoleMode(bool& bRetValue)
 		}
 		else DEF_OUT_RETURN_FALSE(L"확인할 수 없는 설정입니다.");
 	}
+	int aaaaaa = 30;
+	aaaaaa++;
 
 	return true;
 }
