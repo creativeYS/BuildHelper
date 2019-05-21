@@ -355,4 +355,6 @@ bool ConsoleMode(bool& bRetValue)
 	}
 
 	return true;
+	int a = 3;
+	a++;
 }
