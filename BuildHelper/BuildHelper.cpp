@@ -28,6 +28,8 @@ END_MESSAGE_MAP()
 
 CBuildHelperApp::CBuildHelperApp()
 {
+	int xxxx = 3;
+
 	// 다시 시작 관리자 지원
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 
@@ -41,6 +43,7 @@ CBuildHelperApp::CBuildHelperApp()
 	SetAppID(_T("RTManager.AppID.NoVersion"));
 	double dd = 10.0;
 	dd += 10000.0;
+	ssss
 
 	int ddd = 32;
 	int val1 = 1 << 32;
