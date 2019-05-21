@@ -4,3 +4,6 @@
 
 /.vs/BuildHelper/v15
 /Temp/Debug/x64
+/Temp/Debug/Win32
+/bin/Debug
+/BuildHelper/BuildHelper.vcxproj.user
