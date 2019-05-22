@@ -17,6 +17,7 @@
 
 // CBuildHelperApp
 
+
 BEGIN_MESSAGE_MAP(CBuildHelperApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
@@ -35,6 +36,10 @@ CBuildHelperApp::CBuildHelperApp()
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_ALL_ASPECTS;
 
 	SetAppID(_T("RTManager.AppID.NoVersion"));
+
+
+
+
 }
 
 
