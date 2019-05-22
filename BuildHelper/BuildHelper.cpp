@@ -157,6 +157,7 @@ BOOL CBuildHelperApp::InitInstance()
 	// 대화 상자가 닫혔으므로 응용 프로그램의 메시지 펌프를 시작하지 않고  응용 프로그램을 끝낼 수 있도록 FALSE를
 	// 반환합니다.
 	return FALSE;
+	a
 }
 
 int CBuildHelperApp::ExitInstance()
