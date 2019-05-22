@@ -31,6 +31,10 @@ public:
 
 public:
 	static bool CmdRun(int nNum, const CString* pParams);
+	sjdlfkjsd
+		fs
+		df
+
 
 protected:
 	int m_nExitCode = 0;
