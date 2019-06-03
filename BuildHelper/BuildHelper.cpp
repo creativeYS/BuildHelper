@@ -40,9 +40,14 @@ CBuildHelperApp::CBuildHelperApp()
 	// InitInstance에 모든 중요한 초기화 작업을 배치합니다.
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_ALL_ASPECTS;
 
+	ㄴㅇㄹㄴㅇㄹㄴㅇㄹ
 	SetAppID(_T("RTManager.AppID.NoVersion"));
 	double dd = 10.0;
 	dd += 10000.0;
+
+	ㄴㄴㄴ
+
+		ㄴㄴㄴㄴ
 
 	int ddd = 32;
 	int val1 = 1 << 32;
