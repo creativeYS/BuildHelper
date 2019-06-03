@@ -72,6 +72,7 @@ CString JobBase::GetJobTypeName(int enType, bool bDisplay)
 	CString strTemp;
 	switch (enType)
 
+		sdfsdf
 		dsfs
 
 	{
