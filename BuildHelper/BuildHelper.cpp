@@ -10,6 +10,7 @@
 #include "OutputControl.h"
 #include "Job.h"
 #include "JobSetting.h"
+
 #include <iostream>
 
 #ifdef _DEBUG
@@ -44,6 +45,7 @@ CBuildHelperApp::CBuildHelperApp()
 	SetAppID(_T("RTManager.AppID.NoVersion"));
 	double dd = 10.0;
 	dd += 10000.0;
+
 
 	ㄴㄴㄴ
 
