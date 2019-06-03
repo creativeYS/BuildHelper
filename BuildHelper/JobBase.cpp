@@ -45,6 +45,7 @@ JobBase* JobBase::CreateImpl(int enType)
 	case EN_JOB_TYPE_JOBSETTING:
 		pImpl = new JobSetting();
 		sdfsdf
+		sdfs
 		break;
 	case EN_JOB_TYPE_CREATEFILELIST:
 		pImpl = new CreateFileList();

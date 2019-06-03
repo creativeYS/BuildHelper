@@ -29,6 +29,7 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 
+	ㅇㄹㄴㅇㄹ
 public:
 	static bool CmdRun(int nNum, const CString* pParams);
 	sjdlfkjsd
