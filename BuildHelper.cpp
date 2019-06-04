@@ -10,6 +10,7 @@
 #include "OutputControl.h"
 #include "Job.h"
 #include "JobSetting.h"
+
 #include <iostream>
 
 #ifdef _DEBUG
@@ -40,18 +41,21 @@ CBuildHelperApp::CBuildHelperApp()
 	// InitInstance에 모든 중요한 초기화 작업을 배치합니다.
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_ALL_ASPECTS;
 
+	ㄴㅇㄹㄴㅇㄹㄴㅇㄹ
 	SetAppID(_T("RTManager.AppID.NoVersion"));
 	double dd = 10.0;
 	dd += 10000.0;
-	ssss
+
+
+	ㄴㄴㄴ
+
+		ㄴㄴㄴㄴ
 
 	int ddd = 32;
 	int val1 = 1 << 32;
 	int val2 = 1 << ddd;
 	ddd = 1;
 	int val3 = 0x80000000 << ddd;
-	a++;
-	a++;
 	a++;
 	a++;
 // 	_asm
@@ -158,6 +162,7 @@ BOOL CBuildHelperApp::InitInstance()
 	// 대화 상자가 닫혔으므로 응용 프로그램의 메시지 펌프를 시작하지 않고  응용 프로그램을 끝낼 수 있도록 FALSE를
 	// 반환합니다.
 	return FALSE;
+	a
 }
 
 int CBuildHelperApp::ExitInstance()
