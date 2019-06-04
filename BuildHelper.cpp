@@ -44,6 +44,7 @@ CBuildHelperApp::CBuildHelperApp()
 	ㄴㅇㄹㄴㅇㄹㄴㅇㄹ
 	SetAppID(_T("RTManager.AppID.NoVersion"));
 	double dd = 10.0;
+	AfxEnableControlContainer()
 	dd += 10000.0;
 
 
