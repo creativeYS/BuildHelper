@@ -28,7 +28,7 @@ END_MESSAGE_MAP()
 // CBuildHelperApp 생성
 
 CBuildHelperApp::CBuildHelperApp()
-{
+{111111111111111111111
 	111
 	int xxxx = 3;
 

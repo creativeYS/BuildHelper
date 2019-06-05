@@ -29,7 +29,7 @@ public:
 
 	DECLARE_MESSAGE_MAP()
 
-public:
+public:22222222222222222222
 	static bool CmdRun(int nNum, const CString* pParams);
 
 protected:
