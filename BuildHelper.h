@@ -27,6 +27,8 @@ public:
 
 // 구현입니다.
 
+	sdfsdfsdf
+
 	DECLARE_MESSAGE_MAP()
 
 public:22222222222222222222
