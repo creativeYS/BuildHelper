@@ -48,6 +48,7 @@ CBuildHelperApp::CBuildHelperApp()
 	AfxEnableControlContainer()
 	dd += 10000.0;
 
+	sdfsdfs
 
 	ㄴㄴㄴ
 

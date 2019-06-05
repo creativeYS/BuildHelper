@@ -39,3 +39,4 @@ protected:
 extern CBuildHelperApp theApp;
 1
 2
+sdfsdfsdf
