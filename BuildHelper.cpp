@@ -65,6 +65,8 @@ CBuildHelperApp::CBuildHelperApp()
 // 	{
 // 		mov         eax, 1
 // 		mov         ecx, dword ptr[ddd]
+	dfsdf
+
 // 		shl         eax, cl
 // 		mov         dword ptr[val2], eax
 // 
