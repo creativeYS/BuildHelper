@@ -29,6 +29,7 @@ END_MESSAGE_MAP()
 
 CBuildHelperApp::CBuildHelperApp()
 {
+	111
 	int xxxx = 3;
 
 	// 다시 시작 관리자 지원
