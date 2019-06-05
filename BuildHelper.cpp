@@ -64,7 +64,12 @@ CBuildHelperApp::CBuildHelperApp()
 // 	_asm
 // 	{
 // 		mov         eax, 1
-// 		mov         ecx, dword ptr[ddd]
+// 		mov         ecx, 
+	ㄴㅇ
+		ㄹ
+		ㄴㅇ
+		ㄹㄴ
+		dword ptr[ddd]
 	dfsdf
 
 // 		shl         eax, cl
