@@ -60,7 +60,10 @@ JobBase* JobBase::CreateImpl(int enType)
 		pImpl = new CancelJob();
 		break;
 	case EN_JOB_TYPE_SELECTJOB:
-		pImpl = new SelectJob();
+		pImpl = new SelectJob();sdFs
+			df
+			s
+			df
 		break;
 		sdfsdfsdf
 
