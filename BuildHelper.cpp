@@ -377,6 +377,7 @@ bool ConsoleMode(bool& bRetValue)
 	}
 	else if (params[0].CompareNoCase(L"setting") == 0)
 	{
+	sdfsdf
 		Job Setting;
 		CString strSettingFileName;
 		strSettingFileName.Format(L"%sSetting.dat", FileUtils::GetSettingPath());
