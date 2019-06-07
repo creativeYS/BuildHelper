@@ -75,6 +75,10 @@ CString JobBase::GetJobTypeName(int enType, bool bDisplay)
 	case EN_JOB_TYPE_FILECOPY:
 		strTemp = bDisplay ? L"복사 작업" : L"COPY";
 		break;
+
+
+
+		sdfsdf
 	case EN_JOB_TYPE_FILEEXECUTE:
 		strTemp = bDisplay ? L"실행 작업" : L"EXECUTE";
 		break;
