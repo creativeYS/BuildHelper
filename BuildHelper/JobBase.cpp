@@ -62,6 +62,8 @@ JobBase* JobBase::CreateImpl(int enType)
 	case EN_JOB_TYPE_SELECTJOB:
 		pImpl = new SelectJob();
 		break;
+		sdfsdfsdf
+
 	default:
 		ASSERT(0);
 	}
