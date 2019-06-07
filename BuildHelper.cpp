@@ -389,6 +389,7 @@ bool ConsoleMode(bool& bRetValue)
 		if (pSettingData)
 		{
 			pSetting->SetLastSetting(params[1]);
+			sdfsdfs
 			Setting.Save(strSettingFileName);
 		}
 		else DEF_OUT_RETURN_FALSE(L"확인할 수 없는 설정입니다.");
