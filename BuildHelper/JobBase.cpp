@@ -65,6 +65,7 @@ JobBase* JobBase::CreateImpl(int enType)
 	}
 	return pImpl;
 }
+1
 
 CString JobBase::GetJobTypeName(int enType, bool bDisplay)
 {
