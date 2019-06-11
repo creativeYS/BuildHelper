@@ -32,6 +32,10 @@ CBuildHelperApp::CBuildHelperApp()
 	111
 	int xxxx = 3;
 
+sdfsdfs
+fabss
+df
+
 	// 다시 시작 관리자 지원
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 
