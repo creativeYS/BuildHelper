@@ -15,6 +15,10 @@
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
+s
+df
+s
+df
 #endif
 
 // CBuildHelperApp
